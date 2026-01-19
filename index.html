@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Growth Catalyst Program</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/gilroy-offline" rel="stylesheet">
+    <style>
+      :root {
+        --swiggy: #FB5404;
+        --swiggy-dark: #E14A00;
+        --swiggy-light: #FFF2E6;
+        --swiggy-border: #FFD2B5;
+        --ink: #0F172A;
+        --muted: #475569;
+        --line: #E2E8F0;
+        --bg: #FFF7F0;
+        --card: #FFFFFF;
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Gilroy', 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        line-height: 1.55;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .font-black { font-weight: 900 !important; }
+      .font-extrabold { font-weight: 800 !important; }
+      .font-bold { font-weight: 700 !important; }
+      .font-semibold { font-weight: 600 !important; }
+      .font-medium { font-weight: 500 !important; }
+      .font-normal { font-weight: 400 !important; }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Gilroy', sans-serif;
+        letter-spacing: -0.01em;
+      }
+
+      .bg-swiggy-orange { background-color: var(--swiggy); }
+      .text-swiggy-orange { color: var(--swiggy); }
+      .border-swiggy-orange { border-color: var(--swiggy); }
+      .bg-swiggy-light { background-color: var(--swiggy-light); }
+      
+      .swiggy-shadow { 
+        box-shadow: 0 8px 30px rgba(251, 84, 4, 0.08); 
+      }
+
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94A3B8;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.3.1"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

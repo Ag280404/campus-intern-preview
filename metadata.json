@@ -1,0 +1,8 @@
+{
+  "name": "Campus Growth Catalyst Program",
+  "description": "A streamlined ambassador management tool for tracking student catalyst tasks, metrics, and leaderboards with a premium Swiggy-inspired aesthetic.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
