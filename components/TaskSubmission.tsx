@@ -404,7 +404,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
         <>
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-5 px-1 py-4">
             <div className="flex-1">
-              <h2 className="text-[28px] font-black text-slate-900 tracking-tight leading-none uppercase">PROGRAM ACTIVITIES</h2>
+              <h2 className="text-[28px] font-black text-slate-900 tracking-tight leading-none uppercase">TASKS</h2>
             </div>
           </header>
 
