@@ -59,8 +59,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
             <SwiggyLogo size={28} />
           </div>
           <div>
-            <h1 className="font-extrabold text-slate-900 leading-none text-sm tracking-tight">Campus Growth Catalyst</h1>
-            <p className="text-[10px] text-slate-400 mt-1 uppercase font-black tracking-widest">Dashboard</p>
+            <h1 className="font-extrabold text-slate-900 leading-none text-sm tracking-tight">Catalyst Portal</h1>
           </div>
         </div>
 

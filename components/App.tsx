@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { db } from '../services/mockDatabase';
 import Layout from './Layout';
@@ -98,57 +97,55 @@ const App: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-tr from-[#FFF8F2] via-[#FFF8F2] to-[#FFEBD6] flex items-center justify-center p-6 relative overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-swiggy-light/30 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-5%] right-[-5%] w-[30%] h-[30%] bg-[#FFD7BA]/20 rounded-full blur-[100px]"></div>
+      <div className="min-h-screen bg-[#FFF9F5] flex items-center justify-center p-6 relative overflow-hidden">
+        {/* Soft Modern Background Accents */}
+        <div className="absolute top-[-15%] left-[-15%] w-[50%] h-[50%] bg-swiggy-light/40 rounded-full blur-[140px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-swiggy-orange/5 rounded-full blur-[120px]"></div>
 
-        <div className="bg-white w-full max-w-[480px] rounded-[64px] p-12 md:p-16 premium-card-shadow relative z-10 border border-white/50 animate-in fade-in zoom-in-95 duration-500">
-          <div className="flex flex-col items-center mb-14">
-            <div className="w-24 h-24 bg-swiggy-orange rounded-[36px] flex items-center justify-center logo-inner-glow mb-10 overflow-hidden p-4 group cursor-default">
+        <div className="bg-white w-full max-w-[460px] rounded-[56px] p-12 md:p-14 premium-card-shadow relative z-10 border border-white/80 animate-in fade-in zoom-in-95 duration-700">
+          <div className="flex flex-col items-center mb-12">
+            <div className="w-22 h-22 bg-swiggy-orange rounded-[32px] flex items-center justify-center logo-inner-glow mb-8 overflow-hidden p-4.5 group cursor-default transition-transform hover:rotate-3 duration-500">
               <SwiggyLogo size={64} className="group-hover:scale-110 transition-transform duration-500" />
             </div>
-            <h1 className="text-[36px] font-black text-[#0F172A] text-center leading-[1] mb-3 tracking-tight">Catalyst Portal</h1>
-            <p className="text-slate-400 font-extrabold text-[12px] text-center uppercase tracking-[0.2em] leading-relaxed opacity-70">
-              Swiggy Campus Growth Program
-            </p>
+            <h1 className="text-[32px] font-black text-slate-900 text-center uppercase leading-[1.1] tracking-tight">CATALYST PORTAL</h1>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-8">
+          <form onSubmit={handleLogin} className="space-y-7">
             {error && (
-              <div className="bg-red-50 text-red-600 px-6 py-4 rounded-[24px] text-xs font-bold flex items-center gap-3 border border-red-100 animate-in slide-in-from-top-2 duration-300">
-                <AlertCircle size={20} />
+              <div className="bg-red-50 text-red-600 px-6 py-4 rounded-[22px] text-xs font-bold flex items-center gap-3.5 border border-red-100 animate-in slide-in-from-top-3 duration-500">
+                <AlertCircle size={18} strokeWidth={2.5} />
                 {error}
               </div>
             )}
             
-            <div className="space-y-3">
-              <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.18em] ml-2">User ID</label>
+            <div className="space-y-2.5">
+              <label className="block text-[10px] font-bold text-slate-400 ml-3 uppercase tracking-widest">User ID</label>
               <div className="relative group">
                 <input 
                   type="text" required 
-                  className="w-full pl-14 pr-7 py-5 rounded-[28px] border border-slate-100 outline-none transition-all bg-[#F8FAFC]/80 font-bold text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-swiggy-orange/60"
+                  className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-swiggy-orange/40 focus:shadow-[0_0_0_1px_rgba(251,84,4,0.1)]"
                   placeholder="e.g. catalyst_iitd"
                   value={loginData.identifier}
                   onChange={e => setLoginData({...loginData, identifier: e.target.value})}
                 />
-                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-swiggy-orange transition-colors duration-300">
-                  <UserIcon size={20} strokeWidth={2.5} />
+                <div className="absolute left-5.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-swiggy-orange transition-colors duration-300">
+                  <UserIcon size={19} strokeWidth={2.5} />
                 </div>
               </div>
             </div>
 
-            <div className="space-y-3">
-              <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.18em] ml-2">Password</label>
+            <div className="space-y-2.5">
+              <label className="block text-[10px] font-bold text-slate-400 ml-3 uppercase tracking-widest">Password</label>
               <div className="relative group">
                 <input 
                   type="password" required 
-                  className="w-full pl-14 pr-7 py-5 rounded-[28px] border border-slate-100 outline-none transition-all bg-[#F8FAFC]/80 font-bold text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-swiggy-orange/60"
+                  className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-swiggy-orange/40 focus:shadow-[0_0_0_1px_rgba(251,84,4,0.1)]"
                   placeholder="••••••••"
                   value={loginData.password}
                   onChange={e => setLoginData({...loginData, password: e.target.value})}
                 />
-                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-swiggy-orange transition-colors duration-300">
-                  <Lock size={20} strokeWidth={2.5} />
+                <div className="absolute left-5.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-swiggy-orange transition-colors duration-300">
+                  <Lock size={19} strokeWidth={2.5} />
                 </div>
               </div>
             </div>
@@ -156,16 +153,16 @@ const App: React.FC = () => {
             <button 
               type="submit"
               disabled={isLoggingIn}
-              className="w-full swiggy-btn-gradient text-white font-black py-6 rounded-[30px] transition-all flex items-center justify-center gap-3 mt-6 text-[16px] uppercase tracking-widest group"
+              className="w-full swiggy-btn-gradient text-white font-black py-5.5 rounded-[28px] transition-all flex items-center justify-center gap-3 mt-4 text-sm uppercase tracking-widest group"
             >
-              <span>{isLoggingIn ? "Signing in..." : "Sign In"}</span>
-              <ChevronRight size={22} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-              <div className="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] group-hover:left-[100%] transition-all duration-[800ms] ease-in-out"></div>
+              <span>{isLoggingIn ? "Verifying..." : "Sign in"}</span>
+              <ChevronRight size={20} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+              <div className="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] group-hover:left-[100%] transition-all duration-1000 ease-in-out"></div>
             </button>
           </form>
           
-          <div className="mt-14 pt-8 border-t border-slate-50 text-center">
-            <p className="text-[10px] text-slate-300 font-bold uppercase tracking-[0.15em] opacity-80">A secure portal for Swiggy Interns</p>
+          <div className="mt-12 pt-8 border-t border-slate-50 text-center">
+            <p className="text-[10px] text-slate-300 font-bold uppercase tracking-widest opacity-80">Secured Catalyst Portal • Swiggy Hub</p>
           </div>
         </div>
       </div>
@@ -175,27 +172,26 @@ const App: React.FC = () => {
   return (
     <Layout activeTab={activeTab} onTabChange={setActiveTab} user={user} onLogout={handleLogout}>
       {isAdmin && ['dashboard', 'tasks', 'admin'].includes(activeTab) && (
-        <div className="mb-6 flex items-center justify-between bg-white p-4 rounded-2xl swiggy-shadow border border-slate-100">
-           <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-swiggy-light text-swiggy-orange rounded-xl flex items-center justify-center">
-                <Users size={20} />
+        <div className="mb-8 flex items-center justify-between bg-white px-6 py-4.5 rounded-[28px] swiggy-shadow border border-slate-50/80">
+           <div className="flex items-center gap-4">
+              <div className="w-11 h-11 bg-swiggy-light text-swiggy-orange rounded-[14px] flex items-center justify-center shadow-inner shadow-orange-100/50">
+                <Users size={22} strokeWidth={2.5} />
               </div>
               <div className="hidden sm:block">
-                <h4 className="text-xs font-black text-slate-900 leading-tight">Catalyst Focus</h4>
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Switch context</p>
+                <h4 className="text-[13px] font-black text-slate-900 leading-none uppercase tracking-tight">Catalyst Context</h4>
               </div>
            </div>
            <div className="relative">
               <select 
                 value={selectedCatalystId}
                 onChange={(e) => setSelectedCatalystId(e.target.value)}
-                className="pl-4 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 outline-none focus:ring-2 focus:ring-swiggy-orange appearance-none min-w-[200px]"
+                className="pl-5 pr-12 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-800 outline-none focus:ring-4 focus:ring-swiggy-orange/5 appearance-none min-w-[240px] transition-all hover:bg-white"
               >
                 {allCatalysts.map(c => (
                   <option key={c.id} value={c.id}>{c.displayName}</option>
                 ))}
               </select>
-              <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
            </div>
         </div>
       )}

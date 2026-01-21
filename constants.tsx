@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Campus, Task } from './types';
 
@@ -34,7 +33,7 @@ export const TASKS: Task[] = [
   {
     id: 't4',
     type: 'referral',
-    name: 'Student Rewards Referral',
+    name: 'Student Rewards Referrals',
     description: 'Get your friends to sign up for the Student Rewards program.',
     instructions: 'Enter your friend’s details after they have successfully signed up. Each verified signup increases your score and improves your campus ranking.',
     points: 5,
@@ -43,7 +42,7 @@ export const TASKS: Task[] = [
   {
     id: 't5',
     type: 'student_rewards',
-    name: 'Coupon Sharing with NUs',
+    name: 'New User Coupon Distribution',
     description: 'Distribute coupons to students who haven\'t used Swiggy before.',
     instructions: 'Enter the details of the student who received the coupon. Verification will be done based on successful redemption.',
     points: 15,
@@ -61,7 +60,7 @@ export const TASKS: Task[] = [
   {
     id: 't1',
     type: 'offline_activation',
-    name: 'Flyers',
+    name: 'Flyer/Digital Poster Distribution',
     description: 'Place promotional posters and flyers across the campus.',
     instructions: 'Enter the total number of flyers or posters distributed in this session. Verified counts will be cross checked with campus leads.',
     points: 10,
@@ -70,7 +69,7 @@ export const TASKS: Task[] = [
   {
     id: 't2',
     type: 'streaks',
-    name: 'Activate Campus Streaks',
+    name: 'Monthly Campus Streak Day Selection',
     description: 'Plan and submit your campus streak activation day.',
     instructions: 'Select the target month and the preferred day for the campus streak. This is used for central planning and streak coordination.',
     points: 25,

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-// Added AlertCircle to imports
 import { ChevronRight, Camera, Link, MapPin, Hash, Send, Tag, ClipboardList, Clock, CheckCircle, XCircle, Info, Calendar as CalendarIcon, ChevronLeft, ChevronDown, AlertCircle } from 'lucide-react';
 import { TASKS } from '../constants';
 import { Task, TaskType, User, Submission } from '../types';
@@ -27,8 +26,6 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
   ];
 
-  // Logic: Submissions for next month must be completed by the 24th of current month.
-  // Starting from the 25th, the form is disabled.
   const isStreakDeadlinePassed = () => {
     const today = new Date();
     const currentDay = today.getDate();
@@ -47,18 +44,18 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (['referral', 'student_rewards'].includes(selectedTask?.type || '')) {
-      if (!formData.recipientName) newErrors.recipientName = "Please enter the referral’s full name.";
-      if (!formData.recipientEmail) newErrors.recipientEmail = "Please enter the referral’s email.";
-      if (!formData.recipientPhone) newErrors.recipientPhone = "Please enter the referral’s phone number.";
+      if (!formData.recipientName) newErrors.recipientName = "Full Name is required.";
+      if (!formData.recipientEmail) newErrors.recipientEmail = "Email ID is required.";
+      if (!formData.recipientPhone) newErrors.recipientPhone = "Phone Number is required.";
     }
     if (selectedTask?.type === 'social_media' && !formData.url) {
-      newErrors.url = "Please enter the content URL.";
+      newErrors.url = "Content URL is required.";
     }
     if (selectedTask?.type === 'offline_activation' && !formData.count) {
-      newErrors.count = "Please enter the distribution count.";
+      newErrors.count = "Distribution count is required.";
     }
     if (selectedTask?.type === 'streaks' && !formData.dayOfWeek) {
-      newErrors.dayOfWeek = "Please select a preferred day of the week.";
+      newErrors.dayOfWeek = "Activation day is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -105,100 +102,116 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
     switch (selectedTask.type) {
       case 'offline_activation':
         return (
-          <div className="space-y-4">
+          <div className="space-y-7">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Total Posters or Flyers Distributed</label>
+              <label className="block text-sm font-bold text-slate-700 mb-2.5 ml-1 uppercase tracking-tight">
+                TOTAL POSTERS OR FLYERS DISTRIBUTED <span className="text-swiggy-orange">*</span>
+              </label>
               <input 
                 type="number"
-                className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.count ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:ring-2 focus:ring-swiggy-orange'}`}
-                placeholder="Enter the total count distributed in one session."
+                required
+                className={`w-full px-6 py-5 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.count ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
+                placeholder="Enter total count (e.g. 50)"
                 onChange={e => {
                   setFormData({ ...formData, count: e.target.value });
                   if (errors.count) setErrors({ ...errors, count: '' });
                 }}
               />
-              {errors.count && <p className="mt-1.5 text-xs font-bold text-red-500">{errors.count}</p>}
+              {errors.count && <p className="mt-2 text-xs font-bold text-red-500 ml-1 uppercase tracking-widest">{errors.count}</p>}
             </div>
-            <div className="bg-slate-50 p-4 rounded-xl text-xs text-slate-500 italic">
-               Focus on high visibility zones such as hostel notice boards, mess entrances, library zones, and main gates.
+            <div className="bg-slate-50/80 p-5 rounded-[20px] border border-slate-100 flex gap-3 items-start">
+               <Info size={16} className="text-slate-400 shrink-0 mt-0.5" />
+               <p className="text-[11px] text-slate-500 font-bold italic leading-relaxed">
+                  Focus on high visibility zones such as hostel notice boards, mess entrances, and main library gates for maximum impact.
+               </p>
             </div>
           </div>
         );
       case 'social_media':
         return (
-          <div className="space-y-4">
+          <div className="space-y-7">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Content URL</label>
+              <label className="block text-sm font-bold text-slate-700 mb-2.5 ml-1 uppercase tracking-tight">
+                PUBLIC CONTENT URL <span className="text-swiggy-orange">*</span>
+              </label>
               <input 
                 type="url"
-                className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.url ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:ring-2 focus:ring-swiggy-orange'}`}
-                placeholder="Paste the public link to your Instagram reel, LinkedIn post, or public story highlight."
+                required
+                className={`w-full px-6 py-5 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.url ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
+                placeholder="https://instagram.com/reel/..."
                 onChange={e => {
                   setFormData({ ...formData, url: e.target.value });
                   if (errors.url) setErrors({ ...errors, url: '' });
                 }}
               />
-              {errors.url && <p className="mt-1.5 text-xs font-bold text-red-500">{errors.url}</p>}
+              {errors.url && <p className="mt-2 text-xs font-bold text-red-500 ml-1 uppercase tracking-widest">{errors.url}</p>}
             </div>
-            <div className="bg-slate-50 p-4 rounded-xl text-xs text-slate-500 italic">
-               Ensure your post clearly features Swiggy branding and communicates the Student Rewards or campus initiative properly.
+            <div className="bg-slate-50/80 p-5 rounded-[20px] border border-slate-100 flex gap-3 items-start">
+               <Info size={16} className="text-slate-400 shrink-0 mt-0.5" />
+               <p className="text-[11px] text-slate-500 font-bold italic leading-relaxed">
+                  Ensure your post clearly features Swiggy branding. Profiles must be public for verification purposes.
+               </p>
             </div>
           </div>
         );
       case 'referral':
       case 'student_rewards':
-        const isCoupon = selectedTask.type === 'student_rewards';
         return (
-          <div className="space-y-4">
-             <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-4">
-                <p className="text-sm font-bold text-slate-800">Enter the referral’s details below: Name, email, and phone number.</p>
-             </div>
-             
-             <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mt-2">Target User Details</h4>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-8">
+             <h4 className="text-[10px] font-bold text-slate-400 mt-2 px-1 uppercase tracking-widest">Target user details</h4>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-1">Full Name</label>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-2 ml-1 uppercase tracking-tight">
+                    Full name <span className="text-swiggy-orange">*</span>
+                  </label>
                   <input 
                     type="text"
-                    className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.recipientName ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:ring-2 focus:ring-swiggy-orange'}`}
-                    placeholder={isCoupon ? "Enter the recipient’s full name." : "Enter the full name of the student who signed up."}
+                    required
+                    className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientName ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
+                    placeholder="Referral full name"
                     onChange={e => {
                       setFormData({ ...formData, recipientName: e.target.value });
                       if (errors.recipientName) setErrors({ ...errors, recipientName: '' });
                     }}
                   />
-                  {errors.recipientName && <p className="mt-1.5 text-xs font-bold text-red-500">{errors.recipientName}</p>}
+                  {errors.recipientName && <p className="mt-2 text-xs font-bold text-red-500 ml-1 uppercase tracking-widest">{errors.recipientName}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-1">Phone Number</label>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-2 ml-1 uppercase tracking-tight">
+                    Phone number <span className="text-swiggy-orange">*</span>
+                  </label>
                   <input 
                     type="tel"
-                    className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.recipientPhone ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:ring-2 focus:ring-swiggy-orange'}`}
-                    placeholder={isCoupon ? "Enter the phone number used for redemption." : "Enter the phone number used during signup."}
+                    required
+                    className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientPhone ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
+                    placeholder="Contact number"
                     onChange={e => {
                       setFormData({ ...formData, recipientPhone: e.target.value });
                       if (errors.recipientPhone) setErrors({ ...errors, recipientPhone: '' });
                     }}
                   />
-                  {errors.recipientPhone && <p className="mt-1.5 text-xs font-bold text-red-500">{errors.recipientPhone}</p>}
+                  {errors.recipientPhone && <p className="mt-2 text-xs font-bold text-red-500 ml-1 uppercase tracking-widest">{errors.recipientPhone}</p>}
                 </div>
              </div>
              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Email ID</label>
+                <label className="block text-[11px] font-bold text-slate-700 mb-2 ml-1 uppercase tracking-tight">
+                  Email ID <span className="text-swiggy-orange">*</span>
+                </label>
                 <input 
                   type="email"
-                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.recipientEmail ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:ring-2 focus:ring-swiggy-orange'}`}
-                  placeholder={isCoupon ? "Enter the college email address of the recipient." : "Enter the college email address used during signup."}
+                  required
+                  className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientEmail ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
+                  placeholder="Referral email address"
                   onChange={e => {
                     setFormData({ ...formData, recipientEmail: e.target.value });
                     if (errors.recipientEmail) setErrors({ ...errors, recipientEmail: '' });
                   }}
                 />
-                {errors.recipientEmail && <p className="mt-1.5 text-xs font-bold text-red-500">{errors.recipientEmail}</p>}
+                {errors.recipientEmail && <p className="mt-2 text-xs font-bold text-red-500 ml-1 uppercase tracking-widest">{errors.recipientEmail}</p>}
              </div>
-             <div className="bg-slate-100 p-4 rounded-xl border border-slate-200">
-                <p className="text-xs text-slate-900 font-black tracking-tight leading-relaxed">
-                   Submitting incorrect or fake details may lead to point reversal.
+             <div className="bg-amber-50/50 px-6 py-5 rounded-[24px] border border-amber-100/50 my-6 text-center">
+                <p className="text-[12px] text-amber-700 font-bold tracking-tight leading-relaxed uppercase">
+                   Verified details only. Fake submissions will lead to immediate point reversal and account audit.
                 </p>
              </div>
           </div>
@@ -207,51 +220,54 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
         const target = getTargetMonth();
         const deadlinePassed = isStreakDeadlinePassed();
         return (
-          <div className={`space-y-6 ${deadlinePassed ? 'opacity-50 pointer-events-none' : ''}`}>
+          <div className={`space-y-7 ${deadlinePassed ? 'opacity-50 pointer-events-none' : ''}`}>
             <div>
-              <label className="block text-sm font-black text-slate-400 uppercase tracking-widest mb-1 ml-1">Target Planning Month</label>
-              <div className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-700 flex items-center justify-between">
-                <span>{target.name} {target.year}</span>
-                <Clock size={18} className="text-slate-300" />
+              <label className="block text-[10px] font-bold text-slate-400 mb-2.5 ml-1 uppercase tracking-widest">Target planning month</label>
+              <div className="w-full px-6 py-4.5 bg-slate-50 border border-slate-200 rounded-2xl font-black text-slate-900 flex items-center justify-between shadow-inner">
+                <span className="uppercase">{target.name} {target.year}</span>
+                <CalendarIcon size={18} className="text-slate-400" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Preferred Streak Day</label>
+              <label className="block text-[11px] font-bold text-slate-700 mb-2 ml-1 uppercase tracking-tight">
+                Preferred streak day <span className="text-swiggy-orange">*</span>
+              </label>
               <div className="relative">
                 <select
                   disabled={deadlinePassed}
-                  className={`w-full appearance-none px-4 py-3.5 bg-white border outline-none transition-all rounded-xl font-bold ${
-                    errors.dayOfWeek ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:ring-2 focus:ring-swiggy-orange'
-                  } ${formData.dayOfWeek ? 'text-slate-800' : 'text-slate-400'}`}
+                  required
+                  className={`w-full appearance-none px-6 py-4.5 bg-white border outline-none transition-all rounded-2xl font-black uppercase tracking-tight ${
+                    errors.dayOfWeek ? 'border-red-500 bg-red-50/50' : 'border-slate-100 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'
+                  } ${formData.dayOfWeek ? 'text-slate-900' : 'text-slate-400'}`}
                   onChange={e => {
                     setFormData({ ...formData, dayOfWeek: e.target.value, targetMonth: target.name });
                     if (errors.dayOfWeek) setErrors({ ...errors, dayOfWeek: '' });
                   }}
                   value={formData.dayOfWeek || ""}
                 >
-                  <option value="" disabled>Choose activation day (e.g. Monday)</option>
+                  <option value="" disabled>CHOOSE ACTIVATION DAY</option>
                   {daysOfWeek.map(day => (
-                    <option key={day} value={day}>{day}</option>
+                    <option key={day} value={day} className="uppercase">{day}</option>
                   ))}
                 </select>
-                <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <ChevronDown size={20} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
               </div>
-              {errors.dayOfWeek && <p className="mt-1.5 text-xs font-bold text-red-500">{errors.dayOfWeek}</p>}
+              {errors.dayOfWeek && <p className="mt-2 text-xs font-bold text-red-500 ml-1 uppercase tracking-widest">{errors.dayOfWeek}</p>}
             </div>
             
             {deadlinePassed ? (
-              <div className="bg-red-50 p-4 rounded-xl border border-red-200 flex gap-3">
-                <AlertCircle size={20} className="text-red-500 shrink-0" />
-                <p className="text-[10px] text-red-700 font-bold leading-relaxed uppercase tracking-tight">
-                  Submission Locked: Streak planning for {target.name} must be completed before the 25th of the current month.
+              <div className="bg-red-50 p-5 rounded-[24px] border border-red-100 flex gap-4 items-center">
+                <AlertCircle size={24} strokeWidth={2.5} className="text-red-500 shrink-0" />
+                <p className="text-[11px] text-red-700 font-bold leading-tight tracking-tight uppercase">
+                  Cycle locked: Streak planning for {target.name} is now closed. Submissions were due by the 25th.
                 </p>
               </div>
             ) : (
-              <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 flex gap-3">
-                <Clock size={20} className="text-amber-500 shrink-0" />
-                <p className="text-[10px] text-amber-700 font-bold leading-relaxed uppercase tracking-tight">
-                  Planning ends on the 24th. Submissions after that will be locked until the next cycle.
+              <div className="bg-swiggy-light/50 p-5 rounded-[24px] border border-swiggy-orange/10 flex gap-4 items-center">
+                <Clock size={24} strokeWidth={2.5} className="text-swiggy-orange shrink-0" />
+                <p className="text-[11px] text-swiggy-orange font-bold leading-tight tracking-tight uppercase">
+                  Act fast: Monthly planning window ends on the 24th at midnight. Secure your campus slot now.
                 </p>
               </div>
             )}
@@ -264,47 +280,49 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
 
   if (isAdmin && selectedCatalyst) {
     return (
-      <div className="space-y-6 animate-in fade-in duration-500">
+      <div className="space-y-8 animate-in fade-in duration-700">
         <header>
-          <h2 className="text-3xl font-black text-slate-900">Task Submission History</h2>
-          <p className="text-slate-500 mt-1">Reviewing submissions for {selectedCatalyst.displayName}.</p>
+          <h2 className="text-[28px] font-black text-slate-900 tracking-tight leading-none uppercase">SUBMISSION ARCHIVE</h2>
         </header>
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-5">
           {submissions.length > 0 ? (
             submissions.map(sub => {
               const task = TASKS.find(t => t.id === sub.taskId);
               return (
-                <div key={sub.id} className="bg-white p-6 rounded-2xl swiggy-shadow border border-slate-50 flex flex-col md:flex-row gap-6 md:items-center">
-                  <div className="flex-1 flex gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
-                       <ClipboardList size={24} className="text-swiggy-orange" />
+                <div key={sub.id} className="bg-white p-7 rounded-[32px] swiggy-shadow border border-slate-50 flex flex-col md:flex-row gap-8 md:items-center premium-card-shadow">
+                  <div className="flex-1 flex gap-5">
+                    <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 shadow-inner">
+                       <ClipboardList size={26} strokeWidth={2.5} className="text-swiggy-orange" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900">{task?.name || 'Unknown Task'}</h4>
-                      <p className="text-xs text-slate-400 font-medium">
-                        {new Date(sub.createdAt).toLocaleDateString()} at {new Date(sub.createdAt).toLocaleTimeString()}
+                      <h4 className="font-black text-slate-900 text-base tracking-tight mb-1 uppercase">{task?.name || 'Unknown activity'}</h4>
+                      <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest">
+                        Filed {new Date(sub.createdAt).toLocaleDateString()}
                       </p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                          sub.status === 'approved' ? 'bg-green-100 text-green-600' :
-                          sub.status === 'rejected' ? 'bg-red-100 text-red-600' :
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1.5 shadow-sm uppercase tracking-widest ${
+                          sub.status === 'approved' ? 'bg-emerald-50 text-emerald-600' :
+                          sub.status === 'rejected' ? 'bg-red-50 text-red-600' :
                           'bg-swiggy-light text-swiggy-orange'
                         }`}>
-                          {sub.status === 'approved' && <CheckCircle size={10} className="inline mr-1" />}
-                          {sub.status === 'rejected' && <XCircle size={10} className="inline mr-1" />}
-                          {sub.status === 'submitted' && <Clock size={10} className="inline mr-1" />}
+                          {sub.status === 'approved' && <CheckCircle size={12} strokeWidth={3} />}
+                          {sub.status === 'rejected' && <XCircle size={12} strokeWidth={3} />}
+                          {sub.status === 'submitted' && <Clock size={12} strokeWidth={3} />}
                           {sub.status}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-slate-50 p-4 rounded-xl flex-1 border border-slate-100 min-w-[200px]">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Payload Details</p>
-                    <div className="text-xs font-medium text-slate-700 space-y-1">
+                  <div className="bg-slate-50/50 p-5 rounded-[24px] flex-1 border border-slate-100 min-w-[240px]">
+                    <p className="text-[10px] font-bold text-slate-400 mb-2.5 opacity-70 uppercase tracking-widest">Payload parameters</p>
+                    <div className="text-[11px] font-bold text-slate-700 space-y-1.5 uppercase tracking-tight">
                       {Object.entries(sub.payload).map(([k, v]) => (
-                        <p key={k}><span className="text-slate-400 capitalize">{k}:</span> {String(v)}</p>
+                        <div key={k} className="flex justify-between items-center border-b border-slate-100/50 pb-1.5 last:border-0 last:pb-0">
+                          <span className="text-slate-400 capitalize">{k}</span>
+                          <span className="font-black text-slate-900">{String(v)}</span>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -312,10 +330,12 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
               );
             })
           ) : (
-            <div className="p-20 text-center bg-white rounded-3xl swiggy-shadow border border-slate-50">
-              <ClipboardList size={48} className="mx-auto text-slate-200 mb-4" />
-              <h3 className="text-lg font-bold text-slate-900">No submissions yet</h3>
-              <p className="text-slate-400 text-sm">This intern hasn't submitted any tasks for review.</p>
+            <div className="p-24 text-center bg-white rounded-[48px] swiggy-shadow border border-slate-100/50 premium-card-shadow">
+              <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200 shadow-inner">
+                <ClipboardList size={40} />
+              </div>
+              <h3 className="text-xl font-black text-slate-900 tracking-tight uppercase">Zero activity recorded</h3>
+              <p className="text-slate-400 text-sm mt-2 max-w-xs mx-auto uppercase tracking-tight font-bold">This intern has not submitted any campaign materials for verification yet.</p>
             </div>
           )}
         </div>
@@ -326,87 +346,104 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   const streakLock = selectedTask?.type === 'streaks' && isStreakDeadlinePassed();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {selectedTask ? (
-        <div className="animate-in slide-in-from-right duration-300">
-          <button 
-            onClick={() => setSelectedTask(null)}
-            className="mb-6 text-sm font-bold text-slate-400 hover:text-swiggy-orange flex items-center gap-1"
-          >
-            ← Back to Mandatory List
-          </button>
-          <form onSubmit={handleSubmit} className={`bg-white p-8 rounded-[32px] swiggy-shadow border border-slate-100 ${streakLock ? 'opacity-75 grayscale-[0.5]' : ''}`}>
-            <div className="flex items-center gap-4 mb-6">
-              <div>
-                <h3 className="text-xl font-black text-slate-900 uppercase">Submission Instructions</h3>
-                <p className="text-sm text-slate-500 font-medium leading-relaxed mt-1">
-                  Submissions must contain accurate details and valid proof. Points are subject to successful system verification.
-                </p>
-              </div>
+        <div className="animate-in slide-in-from-right duration-500">
+          <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
+             <div>
+                <button 
+                  onClick={() => setSelectedTask(null)}
+                  className="mb-5 px-6 py-2 rounded-full bg-white border border-slate-100 text-[10px] font-black text-slate-400 hover:text-swiggy-orange hover:swiggy-shadow transition-all flex items-center gap-2 group uppercase tracking-widest"
+                >
+                  <ChevronLeft size={14} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" /> BACK TO TASK GRID
+                </button>
+                <div className="flex items-center gap-3 mb-2">
+                   <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none uppercase">{selectedTask.name}</h2>
+                   <div className="px-3 py-1 bg-swiggy-light text-swiggy-orange rounded-full text-[9px] font-black uppercase tracking-widest">
+                      {selectedTask.type.replace('_', ' ')}
+                   </div>
+                </div>
+             </div>
+             <div className="bg-white px-6 py-4 rounded-[28px] swiggy-shadow border border-slate-50 flex items-center gap-4 premium-card-shadow">
+                <div className="text-right">
+                   <span className="text-[15px] font-black text-slate-900 block uppercase">{selectedTask.deadlineDays} Days</span>
+                   <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Time remaining</p>
+                </div>
+                <div className="w-10 h-10 bg-swiggy-light text-swiggy-orange rounded-xl flex items-center justify-center">
+                   <Clock size={20} strokeWidth={2.5} />
+                </div>
+             </div>
+          </div>
+          
+          <form onSubmit={handleSubmit} className={`bg-white p-10 md:p-14 rounded-[56px] swiggy-shadow border border-slate-50 premium-card-shadow relative overflow-hidden ${streakLock ? 'opacity-75 grayscale-[0.4]' : ''}`}>
+            <div className="absolute top-0 right-0 p-16 opacity-[0.02] text-swiggy-orange pointer-events-none">
+              <Send size={240} strokeWidth={1} />
             </div>
 
-            {renderForm()}
-
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 mt-8 mb-4 flex gap-3">
-               <Info size={20} className="text-swiggy-orange shrink-0" />
-               <div className="space-y-1">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Verification note</p>
-                  <p className="text-xs text-slate-600 font-medium leading-relaxed">Verification will be done once a week. Submissions are processed through system data where available.</p>
-               </div>
+            <div className="mb-10 relative">
+              <h3 className="text-[26px] font-black text-slate-900 tracking-tight leading-none uppercase">SUBMISSION INSTRUCTIONS</h3>
             </div>
 
-            <div className="mt-8 pt-6 border-t">
+            <div className="space-y-10 relative">
+              {renderForm()}
+            </div>
+
+            <div className="mt-10 pt-12 border-t border-slate-50 relative">
               <button
                 type="submit"
                 disabled={loading || streakLock}
-                className="w-full bg-swiggy-orange hover:bg-[#E14A00] text-white font-black py-4 rounded-2xl shadow-lg shadow-orange-200 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm uppercase tracking-widest"
+                className="w-full swiggy-btn-gradient text-white font-black py-6 rounded-[30px] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed text-sm group uppercase tracking-widest"
               >
-                {loading ? 'Submitting...' : streakLock ? 'Planning Period Closed' : <><Send size={18} /> Submit for Review</>}
+                {loading ? 'PROCESSING...' : streakLock ? 'PLANNING PERIOD CLOSED' : <><Send size={20} strokeWidth={3} className="group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform" /> FINALIZE SUBMISSION</>}
               </button>
-              <p className="text-[10px] text-slate-400 text-center mt-3 font-bold">Once submitted, you cannot edit the entry. Please double-check all fields.</p>
+              <p className="text-[10px] text-slate-300 text-center mt-6 font-bold uppercase tracking-widest opacity-70">Read-only after submission • Permanent record</p>
             </div>
           </form>
         </div>
       ) : (
         <>
-          <header>
-            <h2 className="text-3xl font-black text-slate-900 uppercase">Tasks</h2>
-            <p className="text-slate-500 mt-1 font-medium">Tasks that drive user acquisition and campus visibility. Submissions are verified and scores are awarded based on impact, consistency, and quality.</p>
+          <header className="flex flex-col md:flex-row md:items-end justify-between gap-5 px-1 py-4">
+            <div className="flex-1">
+              <h2 className="text-[28px] font-black text-slate-900 tracking-tight leading-none uppercase">PROGRAM ACTIVITIES</h2>
+            </div>
           </header>
 
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-5">
             {TASKS.map(task => (
               <button
                 key={task.id}
                 onClick={() => setSelectedTask(task)}
-                className="bg-white p-6 rounded-2xl swiggy-shadow border border-slate-50 text-left hover:border-swiggy-orange transition-all group flex items-center justify-between"
+                className="bg-white p-8 rounded-[32px] swiggy-shadow border border-slate-50/80 text-left hover:border-swiggy-orange/30 hover:-translate-y-1 transition-all group flex items-center justify-between premium-card-shadow"
               >
-                <div className="flex items-center gap-6">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-swiggy-light group-hover:text-swiggy-orange transition-all">
-                    <ClipboardList size={24} />
+                <div className="flex items-center gap-8 flex-1">
+                  <div className="w-14 h-14 rounded-[22px] bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-swiggy-light group-hover:text-swiggy-orange transition-all shadow-inner">
+                    <ClipboardList size={28} strokeWidth={2.5} />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-black text-slate-900">{task.name}</h3>
-                      <div className="px-2 py-0.5 bg-swiggy-light text-swiggy-orange rounded-lg text-[8px] font-black tracking-widest uppercase">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-lg font-black text-slate-900 group-hover:text-swiggy-orange transition-colors uppercase tracking-tight">{task.name}</h3>
+                      <div className="px-3 py-1 bg-slate-100 text-slate-500 group-hover:bg-swiggy-light group-hover:text-swiggy-orange rounded-full text-[9px] font-black uppercase tracking-widest">
                         {task.type.replace('_', ' ')}
                       </div>
                     </div>
-                    <p className="text-xs text-slate-400 font-medium line-clamp-1">{task.description}</p>
+                    <p className="text-xs text-slate-400 font-medium line-clamp-1 max-w-xl group-hover:text-slate-500 transition-colors uppercase tracking-tight">{task.description}</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-8 shrink-0">
                   <div className="text-right hidden sm:block">
-                      <span className="text-xs font-black text-slate-900">{task.deadlineDays} Days Left</span>
-                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Time Remaining</p>
+                      <span className="text-[13px] font-black text-slate-900 block group-hover:text-swiggy-orange transition-colors uppercase">{task.deadlineDays} Days</span>
+                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Remaining</p>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:text-swiggy-orange group-hover:bg-white transition-all">
-                      <ChevronRight size={20} />
+                  <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:text-swiggy-orange group-hover:bg-white transition-all shadow-sm">
+                      <ChevronRight size={22} strokeWidth={3} className="group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </div>
               </button>
             ))}
+          </div>
+          <div className="pt-8 text-center">
+            <p className="text-[10px] text-slate-300 font-black opacity-60 uppercase tracking-widest">Verified catalyst network • Core missions</p>
           </div>
         </>
       )}
