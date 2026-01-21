@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ExternalLink, RefreshCw, HelpCircle } from 'lucide-react';
+import { ExternalLink, RefreshCw, Info } from 'lucide-react';
 import { Submission, MetricRollup, User } from '../types';
 import { db } from '../services/mockDatabase';
 import { TASKS } from '../constants';
@@ -43,12 +43,9 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin }) => 
 
     return (
       <div className="space-y-8 animate-in fade-in duration-500 pb-10">
-        <header className="flex flex-col md:flex-row md:items-start justify-between gap-4 px-2">
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2 py-4">
           <div className="flex-1">
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Intern analytics dashboard</h2>
-            <p className="text-sm text-slate-500 mt-1 font-medium max-w-2xl leading-relaxed">
-              This dashboard shows how your campus is performing and how you are progressing on your assigned tasks. All updates are synced in real time based on submissions and verification.
-            </p>
+            <h2 className="text-2xl font-black text-slate-900 tracking-tight uppercase">CAMPUS GROWTH CATALYST DASHBOARD</h2>
           </div>
           <div className="flex gap-2 shrink-0 pt-1">
             <button 
@@ -126,6 +123,11 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin }) => 
               </table>
             </div>
           </div>
+          <div className="mt-8 text-center">
+            <p className="text-[10px] text-slate-400 font-medium italic">
+              Submissions refresh in real time. Validation happens weekly (every Monday).
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -133,12 +135,9 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin }) => 
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-10">
-      <header className="flex flex-col md:flex-row md:items-start justify-between gap-4 px-2">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2 py-4">
         <div className="flex-1">
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Intern analytics dashboard</h2>
-          <p className="text-sm text-slate-500 mt-1 font-medium max-w-2xl leading-relaxed">
-            This dashboard shows how your campus is performing and how you are progressing on your assigned tasks. All updates are synced in real time based on submissions and verification.
-          </p>
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight uppercase">CAMPUS GROWTH CATALYST DASHBOARD</h2>
         </div>
         <div className="flex gap-2 shrink-0 pt-1">
           <button 
@@ -181,7 +180,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin }) => 
       <div className="grid grid-cols-1 gap-4">
         <div className="bg-swiggy-light p-5 rounded-[24px] border border-swiggy-orange/10 flex gap-4 items-start">
           <div className="p-2.5 bg-white text-swiggy-orange rounded-xl shadow-sm shrink-0">
-            <HelpCircle size={20} />
+            <Info size={20} />
           </div>
           <div>
             <h4 className="font-black text-swiggy-orange text-[11px] mb-1 uppercase tracking-tight">Viewing Tip</h4>
@@ -189,6 +188,11 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin }) => 
               If the dashboard appears cut off on mobile, please use the <b>"View Full"</b> button at the top to open the interactive version with date filters.
             </p>
           </div>
+        </div>
+        <div className="text-center mt-2">
+          <p className="text-[10px] text-slate-400 font-medium italic">
+            Submissions refresh in real time. Validation happens weekly (every Monday).
+          </p>
         </div>
       </div>
 

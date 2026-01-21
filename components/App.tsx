@@ -1,14 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { db } from './services/mockDatabase';
-import Layout from './components/Layout';
-import Dashboard from './components/Dashboard';
-import TaskSubmission from './components/TaskSubmission';
-import Leaderboard from './components/Leaderboard';
-import Profile from './components/Profile';
-import AdminReview from './components/AdminReview';
-import Notifications from './components/Notifications';
-import { User, Submission, MetricRollup } from './types';
+import { db } from '../services/mockDatabase';
+import Layout from './Layout';
+import Dashboard from './Dashboard';
+import TaskSubmission from './TaskSubmission';
+import Leaderboard from './Leaderboard';
+import Profile from './Profile';
+import AdminReview from './AdminReview';
+import Notifications from './Notifications';
+import { User, Submission, MetricRollup } from '../types';
 import { ChevronRight, Lock, User as UserIcon, AlertCircle, Users, ChevronDown } from 'lucide-react';
 
 const SwiggyLogo = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
@@ -99,20 +99,15 @@ const App: React.FC = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-tr from-[#FFF8F2] via-[#FFF8F2] to-[#FFEBD6] flex items-center justify-center p-6 relative overflow-hidden">
-        {/* Modern high-fidelity background elements */}
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-swiggy-light/30 rounded-full blur-[120px]"></div>
         <div className="absolute bottom-[-5%] right-[-5%] w-[30%] h-[30%] bg-[#FFD7BA]/20 rounded-full blur-[100px]"></div>
 
         <div className="bg-white w-full max-w-[480px] rounded-[64px] p-12 md:p-16 premium-card-shadow relative z-10 border border-white/50 animate-in fade-in zoom-in-95 duration-500">
-          
-          {/* Header Section */}
           <div className="flex flex-col items-center mb-14">
             <div className="w-24 h-24 bg-swiggy-orange rounded-[36px] flex items-center justify-center logo-inner-glow mb-10 overflow-hidden p-4 group cursor-default">
               <SwiggyLogo size={64} className="group-hover:scale-110 transition-transform duration-500" />
             </div>
-            <h1 className="text-[36px] font-black text-[#0F172A] text-center leading-[1] mb-3 tracking-tight">
-              Catalyst Portal
-            </h1>
+            <h1 className="text-[36px] font-black text-[#0F172A] text-center leading-[1] mb-3 tracking-tight">Catalyst Portal</h1>
             <p className="text-slate-400 font-extrabold text-[12px] text-center uppercase tracking-[0.2em] leading-relaxed opacity-70">
               Swiggy Campus Growth Program
             </p>
@@ -165,8 +160,6 @@ const App: React.FC = () => {
             >
               <span>{isLoggingIn ? "Signing in..." : "Sign In"}</span>
               <ChevronRight size={22} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-              
-              {/* Dynamic Shine Animation */}
               <div className="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] group-hover:left-[100%] transition-all duration-[800ms] ease-in-out"></div>
             </button>
           </form>

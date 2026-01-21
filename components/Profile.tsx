@@ -199,7 +199,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
       />
 
       <header>
-        <h2 className="text-3xl font-black text-slate-900 tracking-tight">Intern Profile</h2>
+        <h2 className="text-3xl font-black text-slate-900 tracking-tight">My Profile</h2>
         <p className="text-slate-500 mt-1 font-medium">Manage your identity and access your unique program codes.</p>
       </header>
 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Home, ClipboardList, Trophy, User as UserIcon, LogOut, ShieldCheck, Bell } from 'lucide-react';
 import { db } from '../services/mockDatabase';
@@ -40,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
           <div className="w-8 h-8 bg-swiggy-orange rounded-lg flex items-center justify-center overflow-hidden p-1">
             <SwiggyLogo size={20} />
           </div>
-          <span className="font-bold text-swiggy-orange text-lg tracking-tight">Intern Analytics</span>
+          <span className="font-bold text-swiggy-orange text-lg tracking-tight">Campus Growth Catalyst</span>
         </div>
         <div className="flex items-center gap-3">
           <button onClick={() => onTabChange('notifications')} className="relative p-2 text-slate-500">
@@ -60,8 +59,8 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
             <SwiggyLogo size={28} />
           </div>
           <div>
-            <h1 className="font-extrabold text-slate-900 leading-none text-sm tracking-tight">Intern Portal</h1>
-            <p className="text-[10px] text-slate-400 mt-1 uppercase font-black tracking-widest">Analytics Dashboard</p>
+            <h1 className="font-extrabold text-slate-900 leading-none text-sm tracking-tight">Campus Growth Catalyst</h1>
+            <p className="text-[10px] text-slate-400 mt-1 uppercase font-black tracking-widest">Dashboard</p>
           </div>
         </div>
 
@@ -105,8 +104,9 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
             onClick={onLogout}
             className="w-full flex items-center justify-center gap-2 text-slate-400 hover:text-red-500 text-xs font-bold py-2 transition-colors uppercase tracking-widest"
           >
-            <LogOut size={16} /> Logout
+            <LogOut size={16} /> Log out
           </button>
+          <p className="text-[8px] text-slate-300 text-center mt-1 font-bold uppercase">Log out especially on shared devices.</p>
         </div>
       </aside>
 

@@ -32,43 +32,48 @@ export const CAMPUSES: Campus[] = [
 
 export const TASKS: Task[] = [
   {
+    id: 't4',
+    type: 'referral',
+    name: 'Student Rewards Referral',
+    description: 'Get your friends to sign up for the Student Rewards program.',
+    instructions: 'Enter your friend’s details after they have successfully signed up. Each verified signup increases your score and improves your campus ranking.',
+    points: 5,
+    deadlineDays: 2
+  },
+  {
     id: 't5',
     type: 'student_rewards',
-    name: 'Share New User Coupons',
+    name: 'Coupon Sharing with NUs',
     description: 'Distribute coupons to students who haven\'t used Swiggy before.',
     instructions: 'Enter the details of the student who received the coupon. Verification will be done based on successful redemption.',
-    points: 15
+    points: 15,
+    deadlineDays: 3
   },
   {
     id: 't3',
     type: 'social_media',
-    name: 'Post on Social Media',
+    name: 'Social Media Post',
     description: 'Create and post engaging content about Swiggy on your social platforms.',
-    instructions: 'Provide a link to your public post or reel. Quality and engagement will determine the final score.',
-    points: 50
-  },
-  {
-    id: 't4',
-    type: 'referral',
-    name: 'Invite Friends to Student Rewards',
-    description: 'Get your friends to sign up for the Student Rewards program.',
-    instructions: 'Enter your friend\'s details. Each unique signup earns you points.',
-    points: 5
-  },
-  {
-    id: 't2',
-    type: 'streaks',
-    name: 'Activate Campus Streak Day',
-    description: 'Plan and submit your campus streak activation day.',
-    instructions: 'Select the month and day. Note: Submissions for a month must be completed by the 25th of the previous month.',
-    points: 25
+    instructions: 'Submit the link to your public post or reel. Your score will depend on quality, relevance, and engagement.',
+    points: 50,
+    deadlineDays: 5
   },
   {
     id: 't1',
     type: 'offline_activation',
-    name: 'Distribute Posters / Flyers',
+    name: 'Flyers',
     description: 'Place promotional posters and flyers across the campus.',
-    instructions: 'Submit the total count of flyers/posters distributed in this session.',
-    points: 10
+    instructions: 'Enter the total number of flyers or posters distributed in this session. Verified counts will be cross checked with campus leads.',
+    points: 10,
+    deadlineDays: 7
+  },
+  {
+    id: 't2',
+    type: 'streaks',
+    name: 'Activate Campus Streaks',
+    description: 'Plan and submit your campus streak activation day.',
+    instructions: 'Select the target month and the preferred day for the campus streak. This is used for central planning and streak coordination.',
+    points: 25,
+    deadlineDays: 10
   },
 ];

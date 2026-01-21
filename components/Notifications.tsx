@@ -1,6 +1,5 @@
-
 import React, { useEffect } from 'react';
-import { Bell, Clock, Calendar, Mail, CheckCircle, Info, MessageSquare } from 'lucide-react';
+import { Bell, Clock, Calendar, Mail, CheckCircle, Info, MessageSquare, ChevronLeft } from 'lucide-react';
 import { Notification } from '../types';
 import { db } from '../services/mockDatabase';
 
@@ -31,7 +30,6 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
     <div className="space-y-6 animate-in fade-in duration-500 pb-12">
       <header>
         <h2 className="text-3xl font-black text-slate-900">Notifications</h2>
-        <p className="text-slate-500 mt-1">Official updates from the Swiggy Campus Team.</p>
       </header>
 
       <div className="max-w-3xl space-y-4">
@@ -76,19 +74,13 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-200">
                <MessageSquare size={32} />
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Inbox is empty!</h3>
-            <p className="text-slate-400 text-sm">No notifications yet. Check back later.</p>
+            <h3 className="text-lg font-bold text-slate-900">You’re all caught up 🎉</h3>
+            <div className="text-slate-400 text-sm mt-2 font-medium">
+              <p>No updates right now.</p>
+              <p>We’ll notify you here when there’s something new from the Swiggy Campus team.</p>
+            </div>
           </div>
         )}
-      </div>
-
-      <div className="bg-swiggy-light p-6 rounded-[28px] border border-swiggy-orange/10 max-w-3xl">
-        <h4 className="text-[10px] font-black text-swiggy-orange uppercase tracking-widest mb-2 flex items-center gap-2">
-          <Info size={14} /> System Note
-        </h4>
-        <p className="text-[11px] text-slate-600 font-medium italic">
-          Notifications are automatically sent to your registered college email address and verified phone number. Keep your profile updated to stay in the loop!
-        </p>
       </div>
     </div>
   );

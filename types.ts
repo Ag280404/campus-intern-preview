@@ -39,6 +39,7 @@ export interface Task {
   description: string;
   points: number;
   instructions?: string;
+  deadlineDays?: number; // Days left for the task completion
 }
 
 export interface Submission {
