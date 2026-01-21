@@ -410,7 +410,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
               <Users size={28} strokeWidth={2.5} />
             </div>
             <div>
-              <h3 className="text-[28px] font-black text-slate-900 tracking-tight leading-none mb-2 uppercase tracking-tighter">Intern Directory</h3>
+              <h3 className="text-[28px] font-black text-slate-900 tracking-tight leading-none mb-2 uppercase tracking-tighter">Catalyst Contact Directory</h3>
             </div>
           </div>
           {!user.shareContactInfo && (
