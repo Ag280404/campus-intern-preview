@@ -72,7 +72,7 @@ const ShareModal = ({ isOpen, onClose, shareUrl, title = "Share" }: { isOpen: bo
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
       <div className="bg-white w-full max-w-lg rounded-[48px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-white/20">
         <div className="px-10 pt-10 pb-4 flex justify-between items-center">
-          <h3 className="text-2xl font-black text-slate-900 tracking-tight">Distribute asset</h3>
+          <h3 className="text-2xl font-black text-slate-900 tracking-tight">Share</h3>
           <button onClick={onClose} className="p-3 hover:bg-slate-50 rounded-2xl transition-all">
             <X size={28} className="text-slate-400" />
           </button>
@@ -346,8 +346,8 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
               <div className="w-16 h-16 bg-swiggy-light text-swiggy-orange rounded-[24px] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-inner">
                  <Ticket size={32} strokeWidth={2.5} />
               </div>
-              <h4 className="text-base font-black text-slate-900 mb-1.5 tracking-tight">Student Rewards asset</h4>
-              <p className="text-[11px] text-slate-400 font-bold mb-10 tracking-widest">Campaign specific QR • Dynamic link mapping</p>
+              <h4 className="text-base font-black text-slate-900 mb-1.5 tracking-tight">Student Rewards QR</h4>
+              <p className="text-[11px] text-slate-400 font-bold mb-10 tracking-widest">Share your unique QR code.</p>
               
               <div className="bg-slate-50/50 p-8 rounded-[44px] border-[3px] border-dashed border-slate-100 w-fit mx-auto mb-10 shadow-inner group-hover:bg-white group-hover:border-swiggy-orange/10 transition-colors">
                  <div className="bg-white p-5 rounded-[32px] shadow-sm border border-slate-50">
@@ -364,7 +364,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
               onClick={() => openShare("Join Swiggy Student Rewards!", rewardsLink)}
               className="w-full bg-slate-900 text-white py-5 rounded-[26px] font-black text-[11px] flex items-center justify-center gap-3 transition-all hover:bg-black active:scale-95 shadow-xl shadow-slate-100 tracking-widest"
             >
-              <Share2 size={20} strokeWidth={3} /> Distribute asset
+              <Share2 size={20} strokeWidth={3} /> Share
             </button>
          </div>
 
@@ -376,8 +376,8 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
               <div className="w-16 h-16 bg-swiggy-light text-swiggy-orange rounded-[24px] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shadow-inner">
                  <Zap size={32} strokeWidth={2.5} />
               </div>
-              <h4 className="text-base font-black text-slate-900 mb-1.5 tracking-tight">Campus Streaks asset</h4>
-              <p className="text-[11px] text-slate-400 font-bold mb-10 tracking-widest">Real-time activation QR • Cloud-updated</p>
+              <h4 className="text-base font-black text-slate-900 mb-1.5 tracking-tight">Campus Streaks QR</h4>
+              <p className="text-[11px] text-slate-400 font-bold mb-10 tracking-widest">Share your unique QR code.</p>
               
               <div className="bg-slate-50/50 p-8 rounded-[44px] border-[3px] border-dashed border-slate-100 w-fit mx-auto mb-10 shadow-inner group-hover:bg-white group-hover:border-swiggy-orange/10 transition-colors">
                  <div className="bg-white p-5 rounded-[32px] shadow-sm border border-slate-50">
@@ -394,7 +394,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
               onClick={() => openShare("Activate your Campus Streak!", streaksLink)}
               className="w-full bg-swiggy-orange text-white py-5 rounded-[26px] font-black text-[11px] flex items-center justify-center gap-3 transition-all hover:bg-[#E14A00] active:scale-95 shadow-xl shadow-orange-100 tracking-widest"
             >
-              <Share2 size={20} strokeWidth={3} /> Distribute asset
+              <Share2 size={20} strokeWidth={3} />Share
             </button>
          </div>
       </section>
@@ -407,7 +407,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
               <Users size={28} strokeWidth={2.5} />
             </div>
             <div>
-              <h3 className="text-[28px] font-black text-slate-900 tracking-tight leading-none tracking-tighter">Intern Directory</h3>
+              <h3 className="text-[28px] font-black text-slate-900 tracking-tight leading-none tracking-tighter">Catalyst contact directory</h3>
             </div>
           </div>
           {!user.shareContactInfo && (
@@ -463,19 +463,19 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
       <section className="space-y-10 pt-6">
         <div className="flex items-center gap-4">
           <div className="w-2.5 h-10 bg-swiggy-orange rounded-full shadow-lg shadow-orange-100"></div>
-          <h3 className="text-[28px] font-black text-slate-900 tracking-tight leading-none tracking-tighter">Core Campus Missions</h3>
+          <h3 className="text-[28px] font-black text-slate-900 tracking-tight leading-none tracking-tighter">Swiggy Initiatives for Students</h3>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl">
           <InitiativeCard 
-            title="Student Rewards Hub"
-            description="High-velocity student acquisition engine. Leverage exclusive Swiggy One discounts and category-first rewards."
+            title="Student Rewards"
+            description="Unlock exclusive discounts on Swiggy One, Food Delivery, Dineout and more."
             image="https://i.postimg.cc/Fzyq3L0m/1000173235.jpg"
             href="https://swiggy.onelink.me/888564224/u631l8dw"
           />
           <InitiativeCard 
-            title="Campus Streak Engine"
-            description="Community-driven ordering streaks. Activate collective college targets to unlock tiered regional cashbacks."
+            title="Campus Streaks"
+            description="Order with your college to hit the target on streak days and unlock cashback."
             image="https://i.postimg.cc/DymLWThp/1000173233-1.jpg"
             href="https://swiggy.onelink.me/888564224/h6btndnt"
           />
