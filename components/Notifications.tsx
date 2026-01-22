@@ -29,7 +29,7 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
   return (
     <div className="space-y-10 animate-in fade-in duration-700 pb-16">
       <header>
-        <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">Communications</h2>
+        <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">Notifications</h2>
       </header>
 
       <div className="max-w-4xl space-y-6">
@@ -76,9 +76,9 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
             <div className="w-22 h-22 bg-slate-50/80 rounded-[32px] flex items-center justify-center mx-auto mb-8 text-slate-200 shadow-inner group-hover:scale-110 transition-transform duration-500">
                <Inbox size={44} strokeWidth={1.5} />
             </div>
-            <h3 className="text-[24px] font-black text-slate-900 tracking-tight leading-none mb-4">Inbox zero 🎉</h3>
+            <h3 className="text-[24px] font-black text-slate-900 tracking-tight leading-none mb-4">You’re all caught up🎉</h3>
             <div className="text-slate-400 text-sm font-bold max-w-sm mx-auto leading-relaxed">
-              <p>Everything is handled. We’ll push important alerts and mission updates here in real-time.</p>
+              <p>No updates right now. We’ll notify you here when there’s something new from the Swiggy Campus team.</p>
             </div>
           </div>
         )}
