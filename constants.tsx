@@ -35,7 +35,7 @@ export const TASKS: Task[] = [
     type: 'referral',
     name: 'Student Rewards Referrals',
     description: 'Get your friends to sign up for the Student Rewards program.',
-    instructions: 'Enter your friend’s details after they have successfully signed up. Each verified signup increases your score and improves your campus ranking.',
+    instructions: "Refer your peers to sign up for Swiggy's Student Rewards. Enter accurate details. Points will be awarded only after successful verification.",
     points: 5,
     deadlineDays: 2
   },

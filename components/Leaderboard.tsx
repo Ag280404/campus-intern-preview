@@ -14,12 +14,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
   const topThree = leaderboardData.slice(0, 3);
 
   const growthData = [
-    { month: 'Jan', performance: 45 },
-    { month: 'Feb', performance: 52 },
-    { month: 'Mar', performance: 48 },
-    { month: 'Apr', performance: 61 },
-    { month: 'May', performance: 75 },
-    { month: 'Jun', performance: 88 },
+    { month: 'Jan', score: 45 },
+    { month: 'Feb', score: 52 },
+    { month: 'Mar', score: 48 },
+    { month: 'Apr', score: 61 },
+    { month: 'May', score: 75 },
+    { month: 'Jun', score: 88 },
   ];
 
   const Avatar = ({ userId, size = 20 }: { userId: string, size?: number }) => {
@@ -39,8 +39,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
     <div className="space-y-12 animate-in fade-in duration-700 pb-20">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
         <div>
-          <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none uppercase">
-            RANKS
+          <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">
+            Ranks
           </h2>
         </div>
       </header>
@@ -56,8 +56,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                   <TrendingUp size={24} strokeWidth={2.5} />
                </div>
                <div>
-                  <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1.5 uppercase">MoM Aggregate Performance</h3>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Aggregate scoring across all active catalysts</p>
+                  <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1.5">Growth Velocity</h3>
+                  <p className="text-[10px] text-slate-400 font-bold">Aggregate scoring across all active catalysts</p>
                </div>
             </div>
          </div>
@@ -66,7 +66,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
             <ResponsiveContainer width="100%" height="100%">
                <AreaChart data={growthData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
-                    <linearGradient id="colorPerformance" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#FB5404" stopOpacity={0.15}/>
                       <stop offset="95%" stopColor="#FB5404" stopOpacity={0}/>
                     </linearGradient>
@@ -88,14 +88,16 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                       fontWeight: 900,
                       padding: '12px 20px'
                     }} 
+                    itemStyle={{ textTransform: 'capitalize' }}
                   />
                   <Area 
                     type="monotone" 
-                    dataKey="performance" 
+                    dataKey="score" 
+                    name="score"
                     stroke="#FB5404" 
                     strokeWidth={4} 
                     fillOpacity={1} 
-                    fill="url(#colorPerformance)" 
+                    fill="url(#colorScore)" 
                   />
                </AreaChart>
             </ResponsiveContainer>
@@ -107,8 +109,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
           <Clock size={32} strokeWidth={2.5} />
         </div>
         <div>
-          <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-2.5 uppercase">LEADERBOARD CALCULATION</h3>
-          <p className="text-sm text-slate-500 font-bold leading-relaxed max-w-4xl uppercase tracking-tight">
+          <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-2.5">Leaderboard Calculation</h3>
+          <p className="text-sm text-slate-500 font-bold leading-relaxed max-w-4xl tracking-tight">
             Your rank is calculated based on the impact you create on campus, your consistency across tasks, and the quality of your submissions. Focus on driving real results to climb the leaderboard.
           </p>
         </div>
@@ -127,12 +129,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                   <span className="text-white font-black text-[13px]">2</span>
                 </div>
               </div>
-              <h4 className="font-black text-slate-900 text-lg mb-1 uppercase tracking-tight">{db.getUserById(topThree[1].userId)?.displayName}</h4>
-              <p className="text-[11px] text-slate-400 font-bold flex items-center justify-center gap-1.5 uppercase tracking-widest">
+              <h4 className="font-black text-slate-900 text-lg mb-1 tracking-tight">{db.getUserById(topThree[1].userId)?.displayName}</h4>
+              <p className="text-[11px] text-slate-400 font-bold flex items-center justify-center gap-1.5 tracking-tight">
                 <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(db.getUserById(topThree[1].userId)?.campusId || '')}
               </p>
               <div className="mt-6 bg-white px-8 py-3 rounded-[24px] shadow-lg border border-slate-100 group-hover:swiggy-shadow transition-all">
-                <span className="font-black text-slate-400 text-lg uppercase tracking-widest">Silver rank</span>
+                <span className="font-black text-slate-400 text-lg tracking-tight">Silver Rank</span>
               </div>
             </div>
           )}
@@ -151,12 +153,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                   <span className="text-white font-black text-lg leading-none">1</span>
                 </div>
               </div>
-              <h4 className="font-black text-2xl text-slate-900 mb-1.5 tracking-tighter uppercase">{db.getUserById(topThree[0].userId)?.displayName}</h4>
-              <p className="text-xs text-slate-400 font-bold flex items-center justify-center gap-2 uppercase tracking-widest">
+              <h4 className="font-black text-2xl text-slate-900 mb-1.5 tracking-tighter">{db.getUserById(topThree[0].userId)?.displayName}</h4>
+              <p className="text-xs text-slate-400 font-bold flex items-center justify-center gap-2 tracking-tight">
                 <MapPin size={14} strokeWidth={3} className="text-swiggy-orange" /> {db.getCampusName(db.getUserById(topThree[0].userId)?.campusId || '')}
               </p>
               <div className="mt-8 swiggy-btn-gradient px-10 py-4 rounded-[28px] shadow-2xl shadow-orange-200 scale-110 active:scale-105 transition-transform cursor-default">
-                <span className="font-black text-white text-xl uppercase tracking-widest">Champion</span>
+                <span className="font-black text-white text-xl tracking-tight">Champion</span>
               </div>
             </div>
           )}
@@ -172,12 +174,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                   <span className="text-white font-black text-[13px]">3</span>
                 </div>
               </div>
-              <h4 className="font-black text-slate-900 text-lg mb-1 uppercase tracking-tight">{db.getUserById(topThree[2].userId)?.displayName}</h4>
-              <p className="text-[11px] text-slate-400 font-bold flex items-center justify-center gap-1.5 uppercase tracking-widest">
+              <h4 className="font-black text-slate-900 text-lg mb-1 tracking-tight">{db.getUserById(topThree[2].userId)?.displayName}</h4>
+              <p className="text-[11px] text-slate-400 font-bold flex items-center justify-center gap-1.5 tracking-tight">
                 <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(db.getUserById(topThree[2].userId)?.campusId || '')}
               </p>
               <div className="mt-6 bg-white px-8 py-3 rounded-[24px] shadow-lg border border-slate-100 group-hover:swiggy-shadow transition-all">
-                <span className="font-black text-slate-400 text-lg uppercase tracking-widest">Bronze rank</span>
+                <span className="font-black text-slate-400 text-lg tracking-tight">Bronze Rank</span>
               </div>
             </div>
           )}
@@ -185,7 +187,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
       </div>
 
       <div className="bg-white rounded-[56px] swiggy-shadow border border-slate-50/80 overflow-hidden premium-card-shadow">
-        <div className="grid grid-cols-12 px-10 py-6 bg-slate-50/50 text-[11px] font-bold text-slate-400 border-b border-slate-100 uppercase tracking-widest">
+        <div className="grid grid-cols-12 px-10 py-6 bg-slate-50/50 text-[11px] font-bold text-slate-400 border-b border-slate-100">
           <div className="col-span-2">Position</div>
           <div className="col-span-7">Catalyst identity</div>
           <div className="col-span-3 text-right">Cumulative score</div>
@@ -205,8 +207,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <h5 className="text-base font-black text-slate-900 truncate mb-0.5 uppercase tracking-tight">{u?.displayName}</h5>
-                    <p className="text-[10px] text-slate-400 font-bold truncate uppercase tracking-widest">{db.getCampusName(u?.campusId || '')}</p>
+                    <h5 className="text-base font-black text-slate-900 truncate mb-0.5 tracking-tight">{u?.displayName}</h5>
+                    <p className="text-[10px] text-slate-400 font-bold truncate">{db.getCampusName(u?.campusId || '')}</p>
                   </div>
                 </div>
                 <div className="col-span-3 text-right">

@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, FileSearch, Filter, Send, Users, Mail, Bell, Check, Settings, Ticket, Zap, Link as LinkIcon, Save, RefreshCw, QrCode as QrIcon } from 'lucide-react';
+import { CheckCircle, XCircle, FileSearch, Filter, Send, Users, Mail, Bell, Check, Settings, Ticket, Zap, Link as LinkIcon, Save, RefreshCw, QrCode as QrIcon, Target } from 'lucide-react';
 import { Submission, User } from '../types';
 import { db } from '../services/mockDatabase';
+import { TASKS } from '../constants';
 
 interface AdminReviewProps {
   submissions: Submission[];
@@ -22,9 +22,10 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
   const [isSending, setIsSending] = useState(false);
   const [sendSuccess, setSendSuccess] = useState(false);
 
-  // Config States (Editing Onelinks)
+  // Config States (Editing Onelinks & Targets)
   const [configRewardsLink, setConfigRewardsLink] = useState('');
   const [configStreaksLink, setConfigStreaksLink] = useState('');
+  const [taskTargets, setTaskTargets] = useState<Record<string, number>>({});
   const [isSavingConfig, setIsSavingConfig] = useState(false);
 
   const filtered = submissions.filter(s => filter === 'all' ? true : s.status === filter);
@@ -34,6 +35,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
     if (selectedCatalyst) {
       setConfigRewardsLink(selectedCatalyst.rewardsOnelink || `https://swiggy.onelink.me/888564224/u631l8dw?code=${selectedCatalyst.rewardsQrCode || 'SWIGGY'}`);
       setConfigStreaksLink(selectedCatalyst.streaksOnelink || `https://swiggy.onelink.me/888564224/h6btndnt?code=${selectedCatalyst.streaksQrCode || 'STREAK'}`);
+      setTaskTargets(selectedCatalyst.taskTargets || {});
     }
   }, [selectedCatalyst, activeView]);
 
@@ -68,12 +70,13 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
     setTimeout(() => {
       const updated = db.updateUser(selectedCatalyst.id, {
         rewardsOnelink: configRewardsLink,
-        streaksOnelink: configStreaksLink
+        streaksOnelink: configStreaksLink,
+        taskTargets: taskTargets
       });
       
       if (updated) {
         onUserUpdate(updated);
-        alert(`Configuration saved successfully! The generated QR codes are now active for ${updated.displayName}.`);
+        alert(`Configuration and targets saved successfully for ${updated.displayName}.`);
       }
       setIsSavingConfig(false);
     }, 600);
@@ -85,19 +88,23 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
     );
   };
 
+  const updateTarget = (taskId: string, val: string) => {
+    const num = parseInt(val) || 0;
+    setTaskTargets(prev => ({ ...prev, [taskId]: num }));
+  };
+
   const getQrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(data)}`;
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-black text-slate-900">Admin Portal</h2>
-          <p className="text-slate-500 mt-1">Manage submissions, communications, and intern settings.</p>
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-none">Admin Portal</h2>
         </div>
         <div className="flex bg-white p-1 rounded-xl border border-slate-200 shadow-sm overflow-x-auto no-scrollbar">
           <button
             onClick={() => setActiveView('review')}
-            className={`whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+            className={`whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-black transition-all ${
               activeView === 'review' ? 'bg-swiggy-orange text-white' : 'text-slate-400 hover:text-slate-600'
             }`}
           >
@@ -105,7 +112,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
           </button>
           <button
             onClick={() => setActiveView('config')}
-            className={`whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+            className={`whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-black transition-all ${
               activeView === 'config' ? 'bg-swiggy-orange text-white' : 'text-slate-400 hover:text-slate-600'
             }`}
           >
@@ -113,7 +120,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
           </button>
           <button
             onClick={() => setActiveView('notifications')}
-            className={`whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+            className={`whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-black transition-all ${
               activeView === 'notifications' ? 'bg-swiggy-orange text-white' : 'text-slate-400 hover:text-slate-600'
             }`}
           >
@@ -158,7 +165,6 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                         <h4 className="font-bold text-slate-900">{user?.displayName}</h4>
                         <p className="text-xs text-slate-400 font-medium">{db.getCampusName(user?.campusId || '')} • {new Date(sub.createdAt).toLocaleDateString()}</p>
                         <div className="mt-2 flex flex-wrap gap-2">
-                          <span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] font-bold uppercase">{sub.taskId}</span>
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                             sub.status === 'approved' ? 'bg-green-100 text-green-600' :
                             sub.status === 'rejected' ? 'bg-red-100 text-red-600' :
@@ -169,7 +175,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                     </div>
 
                     <div className="bg-slate-50 p-4 rounded-xl flex-1 border border-slate-100">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Submission Data</p>
+                      <p className="text-[10px] font-bold text-slate-400 mb-1">Submission Data</p>
                       <div className="text-xs font-medium text-slate-700 space-y-1">
                         {Object.entries(sub.payload).map(([k, v]) => (
                           <p key={k}><span className="text-slate-400 capitalize">{k}:</span> {String(v)}</p>
@@ -199,7 +205,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
             ) : (
               <div className="p-20 text-center bg-white rounded-2xl swiggy-shadow border border-slate-50">
                 <FileSearch size={48} className="mx-auto text-slate-200 mb-4" />
-                <h3 className="text-lg font-bold text-slate-900">Queue Clear!</h3>
+                <h3 className="text-lg font-bold text-slate-900">Queue clear!</h3>
                 <p className="text-slate-400 text-sm">No submissions found for the current filter.</p>
               </div>
             )}
@@ -215,21 +221,46 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                   <Settings size={28} />
                </div>
                <div>
-                  <h3 className="text-2xl font-black text-slate-900">Program Configuration</h3>
-                  <p className="text-sm text-slate-400 font-medium">Auto-generate tracking assets for <b>{selectedCatalyst?.displayName}</b></p>
+                  <h3 className="text-2xl font-black text-slate-900">Intern Configuration</h3>
                </div>
             </div>
 
             {!selectedCatalyst ? (
-              <div className="p-16 text-center bg-slate-50 rounded-[32px] border border-dashed border-slate-200 text-slate-400 font-black uppercase tracking-widest text-xs">
+              <div className="p-16 text-center bg-slate-50 rounded-[32px] border border-dashed border-slate-200 text-slate-400 font-bold text-xs">
                  Please select an intern from the dropdown above
               </div>
             ) : (
               <div className="space-y-12">
-                {/* Student Rewards Config */}
+                {/* Task Targets Configuration */}
+                <div className="space-y-6">
+                   <div className="flex items-center gap-2 text-[10px] font-bold text-swiggy-orange uppercase tracking-widest">
+                      <Target size={14} /> Mission Targets
+                   </div>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {TASKS.map(task => (
+                        <div key={task.id} className="p-5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
+                           <div>
+                              <p className="text-[11px] font-black text-slate-800 tracking-tight">{task.name}</p>
+                              <p className="text-[9px] text-slate-400 font-bold uppercase">Required Units</p>
+                           </div>
+                           <input 
+                              type="number"
+                              disabled={task.type === 'streaks'}
+                              value={task.type === 'streaks' ? 1 : (taskTargets[task.id] || 0)}
+                              onChange={(e) => updateTarget(task.id, e.target.value)}
+                              className="w-20 px-3 py-2 text-center bg-white border border-slate-200 rounded-xl font-black text-xs outline-none focus:ring-2 focus:ring-swiggy-orange disabled:opacity-50"
+                           />
+                        </div>
+                      ))}
+                   </div>
+                </div>
+
+                <div className="h-px bg-slate-100 w-full"></div>
+
+                {/* Asset Links Configuration */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                    <div className="lg:col-span-2 space-y-4">
-                      <div className="flex items-center gap-2 text-[10px] font-black text-swiggy-orange uppercase tracking-widest">
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-swiggy-orange uppercase tracking-widest">
                         <Ticket size={14} /> Student Rewards Onelink
                       </div>
                       <div className="relative">
@@ -242,26 +273,21 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                           placeholder="Paste Onelink URL here..."
                         />
                       </div>
-                      <p className="text-[10px] text-slate-400 font-medium">The QR code below updates in real-time as you modify the link.</p>
                    </div>
                    <div className="flex flex-col items-center gap-3 p-4 bg-slate-50 rounded-[32px] border border-slate-100">
                       <div className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100">
                         <img 
                           src={getQrUrl(configRewardsLink)} 
                           alt="QR Preview" 
-                          className="w-32 h-32 object-contain"
+                          className="w-24 h-24 object-contain"
                         />
                       </div>
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Auto-Generated QR</span>
                    </div>
                 </div>
 
-                <div className="h-px bg-slate-100 w-full"></div>
-
-                {/* Campus Streaks Config */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                    <div className="lg:col-span-2 space-y-4">
-                      <div className="flex items-center gap-2 text-[10px] font-black text-swiggy-orange uppercase tracking-widest">
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-swiggy-orange uppercase tracking-widest">
                         <Zap size={14} /> Campus Streaks Onelink
                       </div>
                       <div className="relative">
@@ -274,17 +300,15 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                           placeholder="Paste Onelink URL here..."
                         />
                       </div>
-                      <p className="text-[10px] text-slate-400 font-medium">Changes here will reflect instantly on the Intern's profile.</p>
                    </div>
                    <div className="flex flex-col items-center gap-3 p-4 bg-slate-50 rounded-[32px] border border-slate-100">
                       <div className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100">
                         <img 
                           src={getQrUrl(configStreaksLink)} 
                           alt="QR Preview" 
-                          className="w-32 h-32 object-contain"
+                          className="w-24 h-24 object-contain"
                         />
                       </div>
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Auto-Generated QR</span>
                    </div>
                 </div>
 
@@ -292,10 +316,10 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                   <button 
                     onClick={handleSaveConfig}
                     disabled={isSavingConfig}
-                    className="w-full bg-slate-900 text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 active:scale-[0.98]"
+                    className="w-full bg-slate-900 text-white py-5 rounded-[24px] font-black text-xs flex items-center justify-center gap-3 hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 active:scale-[0.98] uppercase tracking-widest"
                   >
                     {isSavingConfig ? <RefreshCw className="animate-spin" size={20} /> : <Save size={20} />}
-                    Save Intern Configuration
+                    Apply Intern Configuration
                   </button>
                 </div>
               </div>
@@ -316,7 +340,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
               
               <div className="space-y-6">
                 <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Broadcast Target</label>
+                  <label className="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest">Broadcast Target</label>
                   <div className="flex gap-3">
                     <button 
                       onClick={() => setTargetType('all')}
@@ -338,7 +362,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Notification Content</label>
+                  <label className="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest">Notification Content</label>
                   <textarea 
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
@@ -351,7 +375,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                   <button 
                     disabled={isSending || !message.trim() || (targetType === 'specific' && selectedUsers.length === 0)}
                     onClick={handleSendNotification}
-                    className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-2xl font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 uppercase tracking-widest"
                   >
                     {isSending ? (
                       <span className="animate-pulse">Broadcasting...</span>
@@ -367,7 +391,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
           </div>
 
           <div className={`space-y-4 ${targetType === 'all' ? 'opacity-40 pointer-events-none grayscale' : ''}`}>
-             <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Select Recipients ({selectedUsers.length})</h4>
+             <h4 className="text-[10px] font-bold text-slate-400 px-2 uppercase tracking-widest">Select Recipients ({selectedUsers.length})</h4>
              <div className="bg-white rounded-[32px] p-4 swiggy-shadow border border-slate-50 max-h-[500px] overflow-y-auto space-y-1">
                 {allCatalysts.map(c => (
                   <button 
@@ -384,7 +408,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                     </div>
                     <div className="text-left overflow-hidden">
                       <p className={`text-xs font-black truncate ${selectedUsers.includes(c.id) ? 'text-swiggy-orange' : 'text-slate-900'}`}>{c.displayName}</p>
-                      <p className="text-[9px] text-slate-400 font-bold uppercase">{db.getCampusName(c.campusId)}</p>
+                      <p className="text-[9px] text-slate-400 font-bold">{db.getCampusName(c.campusId)}</p>
                     </div>
                   </button>
                 ))}

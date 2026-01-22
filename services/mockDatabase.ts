@@ -1,6 +1,14 @@
-
 import { User, Submission, Campus, MetricRollup, Target, Notification } from '../types';
 import { CAMPUSES, TASKS } from '../constants';
+
+// Default targets for tasks
+const DEFAULT_TARGETS: Record<string, number> = {
+  't1': 50, // Flyer distribution
+  't2': 1,  // Streak (binary)
+  't3': 5,  // Social Media
+  't4': 10, // Referrals
+  't5': 10, // Coupons
+};
 
 // Pre-defined credentials mapping User ID -> { password, name, campusId }
 const VALID_CREDENTIALS: Record<string, { p: string, n: string, c: string, e?: string, ph?: string, rqr?: string, sqr?: string }> = {
@@ -38,7 +46,8 @@ const getInitialUsers = (): User[] => {
       qrCodeId: 'QR-IITD-1',
       rewardsQrCode: 'RQR-IITD-99',
       streaksQrCode: 'SQR-IITD-99',
-      shareContactInfo: true
+      shareContactInfo: true,
+      taskTargets: { ...DEFAULT_TARGETS }
     },
     {
       id: 'catalyst_bits',
@@ -51,7 +60,8 @@ const getInitialUsers = (): User[] => {
       qrCodeId: 'QR-BITS-5',
       rewardsQrCode: 'RQR-BITS-22',
       streaksQrCode: 'SQR-BITS-22',
-      shareContactInfo: true
+      shareContactInfo: true,
+      taskTargets: { ...DEFAULT_TARGETS }
     },
     {
       id: 'catalyst_iitb',
@@ -64,7 +74,8 @@ const getInitialUsers = (): User[] => {
       qrCodeId: 'QR-IITB-9',
       rewardsQrCode: 'RQR-IITB-11',
       streaksQrCode: 'SQR-IITB-11',
-      shareContactInfo: true
+      shareContactInfo: true,
+      taskTargets: { ...DEFAULT_TARGETS }
     }
   ];
 };
@@ -85,7 +96,7 @@ const getInitialSubmissions = (): Submission[] => {
         campusId: uid === 'catalyst_iitd' ? 'c2' : uid === 'catalyst_bits' ? 'c3' : 'c1',
         taskId: tid,
         status: 'approved',
-        payload: { count: (i + 1) * 5, scans: (j + 1) * 10, url: 'https://demo.com' },
+        payload: { count: (i + 1) * 5, scans: (j + 1) * 1, url: 'https://demo.com' },
         createdAt: Date.now() - (86400000 * (i + j)),
         reviewerNote: 'Seed data verified'
       });
@@ -158,11 +169,15 @@ class MockDatabase {
         lastLoginAt: Date.now(),
         qrCodeId: `QR-${id.split('_')[1]?.toUpperCase() || 'ADMIN'}`,
         rewardsQrCode: cred.rqr || `RQR-${id.toUpperCase()}`,
-        streaksQrCode: cred.sqr || `SQR-${id.toUpperCase()}`
+        streaksQrCode: cred.sqr || `SQR-${id.toUpperCase()}`,
+        taskTargets: id === 'admin' ? undefined : { ...DEFAULT_TARGETS }
       };
       this.users.push(user);
     } else {
       user.lastLoginAt = Date.now();
+      if (!user.taskTargets && id !== 'admin') {
+        user.taskTargets = { ...DEFAULT_TARGETS };
+      }
     }
     
     this.currentUser = user;
@@ -265,8 +280,8 @@ class MockDatabase {
 
       if (task.type === 'offline_activation') rollups[s.userId].metrics.flyers += Number(s.payload.count || 0);
       if (task.type === 'social_media') rollups[s.userId].metrics.content += 1;
-      if (task.type === 'referral') rollups[s.userId].metrics.scans += Number(s.payload.scans || 0);
-      if (task.type === 'student_rewards') rollups[s.userId].metrics.coupons += Number(s.payload.coupons || 0);
+      if (task.type === 'referral') rollups[s.userId].metrics.scans += 1;
+      if (task.type === 'student_rewards') rollups[s.userId].metrics.coupons += 1;
     });
     
     return Object.values(rollups).sort((a, b) => b.score - a.score);
@@ -289,7 +304,8 @@ class MockDatabase {
       lastLoginAt: 0,
       qrCodeId: `QR-${id.split('_')[1]?.toUpperCase() || 'UNKNOWN'}`,
       rewardsQrCode: cred?.rqr || `RQR-${id.toUpperCase()}`,
-      streaksQrCode: cred?.sqr || `SQR-${id.toUpperCase()}`
+      streaksQrCode: cred?.sqr || `SQR-${id.toUpperCase()}`,
+      taskTargets: { ...DEFAULT_TARGETS }
     };
   }
 }
