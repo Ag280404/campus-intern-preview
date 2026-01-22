@@ -188,7 +188,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
       <div className="bg-white rounded-[56px] swiggy-shadow border border-slate-50/80 overflow-hidden premium-card-shadow">
         <div className="grid grid-cols-12 px-10 py-6 bg-slate-50/50 text-[11px] font-bold text-slate-400 border-b border-slate-100">
           <div className="col-span-2">Position</div>
-          <div className="col-span-7">Catalyst identity</div>
+          <div className="col-span-7">Name</div>
           <div className="col-span-3 text-right">Cumulative score</div>
         </div>
         <div className="divide-y divide-slate-50">
