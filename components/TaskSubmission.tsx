@@ -266,7 +266,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
              </div>
              <div className="bg-amber-50/50 px-6 py-5 rounded-[24px] border border-amber-100/50 my-6 text-center">
                 <p className="text-[12px] text-amber-700 font-bold tracking-tight leading-relaxed">
-                   Verified details only. Fake submissions will lead to immediate point reversal and account audit.
+                   Please ensure all details are accurate. Fake submissions will result in point reversal and account review.
                 </p>
              </div>
           </div>
