@@ -56,8 +56,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                   <TrendingUp size={24} strokeWidth={2.5} />
                </div>
                <div>
-                  <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1.5">Growth Velocity</h3>
-                  <p className="text-[10px] text-slate-400 font-bold">Aggregate scoring across all active catalysts</p>
+                  <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1.5">Monthly Score</h3>
                </div>
             </div>
          </div>
