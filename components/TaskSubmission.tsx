@@ -455,7 +455,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 disabled={loading || streakLock}
                 className="w-full swiggy-btn-gradient text-white font-black py-6 rounded-[30px] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed text-sm group uppercase tracking-widest"
               >
-                {loading ? 'Processing...' : streakLock ? 'Planning period closed' : <><Send size={20} strokeWidth={3} className="group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform" /> Finalize Submission</>}
+                {loading ? 'Processing...' : streakLock ? 'Planning period closed' : <><Send size={20} strokeWidth={3} className="group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform" />Submit</>}
               </button>
             </div>
           </form>
