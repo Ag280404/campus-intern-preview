@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Camera, Link, MapPin, Hash, Send, Tag, ClipboardList, Clock, CheckCircle, XCircle, Info, Calendar as CalendarIcon, ChevronLeft, ChevronDown, AlertCircle, Users, Ticket, Share2, FileText, Flame } from 'lucide-react';
+import { ChevronRight, Camera, Link, MapPin, Hash, Send, Tag, ClipboardList, Clock, CheckCircle, XCircle, Info, Calendar as CalendarIcon, ChevronLeft, ChevronDown, AlertCircle, Users, Ticket, Share2, FileText, Flame, Check } from 'lucide-react';
 import { TASKS } from '../constants';
 import { Task, TaskType, User, Submission } from '../types';
 import { db } from '../services/mockDatabase';
@@ -14,6 +14,7 @@ interface TaskSubmissionProps {
 const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, selectedCatalyst, submissions = [] }) => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [formData, setFormData] = useState<any>({});
+  const [hasConsent, setHasConsent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
@@ -74,11 +75,6 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
 
   /**
    * Returns a task-specific icon based on the task type.
-   * referral -> Users (People Group)
-   * student_rewards -> Ticket (Coupon)
-   * social_media -> Share2 (Social)
-   * offline_activation -> FileText (Flyer/Poster)
-   * streaks -> Flame (Streak)
    */
   const getTaskIcon = (type: TaskType, size: number = 28, className: string = "") => {
     const props = { size, strokeWidth: 2.5, className };
@@ -104,6 +100,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
       if (!formData.recipientName) newErrors.recipientName = "Full Name is required.";
       if (!formData.recipientEmail) newErrors.recipientEmail = "Email ID is required.";
       if (!formData.recipientPhone) newErrors.recipientPhone = "Phone Number is required.";
+      if (!hasConsent) newErrors.hasConsent = "Consent is mandatory to proceed.";
     }
     if (selectedTask?.type === 'social_media' && !formData.url) {
       newErrors.url = "Content URL is required.";
@@ -111,7 +108,6 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
     if (selectedTask?.type === 'offline_activation' && !formData.count) {
       newErrors.count = "Distribution count is required.";
     }
-    // Task 'streaks' inputs are now optional as requested.
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -132,13 +128,13 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
       (pos) => {
         onSubmit({ 
           taskId: selectedTask?.id, 
-          payload: formData, 
+          payload: { ...formData, consent: hasConsent }, 
           location: { lat: pos.coords.latitude, lng: pos.coords.longitude } 
         });
         resetForm();
       },
       () => {
-        onSubmit({ taskId: selectedTask?.id, payload: formData });
+        onSubmit({ taskId: selectedTask?.id, payload: { ...formData, consent: hasConsent } });
         resetForm();
       }
     );
@@ -147,6 +143,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   const resetForm = () => {
     setSelectedTask(null);
     setFormData({});
+    setHasConsent(false);
     setErrors({});
     setLoading(false);
   };
@@ -174,12 +171,6 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
               />
               {errors.count && <p className="mt-2 text-xs font-bold text-red-500 ml-1">{errors.count}</p>}
             </div>
-            <div className="bg-slate-50/80 p-5 rounded-[20px] border border-slate-100 flex gap-3 items-start">
-               <Info size={16} className="text-slate-400 shrink-0 mt-0.5" />
-               <p className="text-[11px] text-slate-500 font-bold italic leading-relaxed">
-                  Focus on high visibility zones such as hostel notice boards, mess entrances, and main library gates for maximum impact.
-               </p>
-            </div>
           </div>
         );
       case 'social_media':
@@ -200,12 +191,6 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 }}
               />
               {errors.url && <p className="mt-2 text-xs font-bold text-red-500 ml-1">{errors.url}</p>}
-            </div>
-            <div className="bg-slate-50/80 p-5 rounded-[20px] border border-slate-100 flex gap-3 items-start">
-               <Info size={16} className="text-slate-400 shrink-0 mt-0.5" />
-               <p className="text-[11px] text-slate-500 font-bold italic leading-relaxed">
-                  Ensure your post clearly features Swiggy branding. Profiles must be public for verification purposes.
-               </p>
             </div>
           </div>
         );
@@ -263,11 +248,25 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                   }}
                 />
                 {errors.recipientEmail && <p className="mt-2 text-xs font-bold text-red-500 ml-1">{errors.recipientEmail}</p>}
-             </div>
-             <div className="bg-amber-50/50 px-6 py-5 rounded-[24px] border border-amber-100/50 my-6 text-center">
-                <p className="text-[12px] text-amber-700 font-bold tracking-tight leading-relaxed">
-                   Please ensure all details are accurate. Fake submissions will result in point reversal and account review.
-                </p>
+
+                {/* Consent Section */}
+                <div 
+                  className="mt-6 flex items-start gap-4 px-1 group cursor-pointer" 
+                  onClick={() => {
+                    setHasConsent(!hasConsent);
+                    if (errors.hasConsent) setErrors({ ...errors, hasConsent: '' });
+                  }}
+                >
+                  <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all shrink-0 mt-0.5 ${hasConsent ? 'bg-swiggy-orange border-swiggy-orange text-white shadow-lg shadow-orange-100' : 'bg-slate-50 border-slate-200 group-hover:border-slate-300'}`}>
+                    {hasConsent && <Check size={16} strokeWidth={4} />}
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold text-slate-600 leading-normal tracking-tight select-none">
+                      I confirm that the referred user has consented to sharing their phone number and other required details for this submission.
+                    </p>
+                    {errors.hasConsent && <p className="mt-1.5 text-[10px] font-black text-red-500 uppercase tracking-widest">{errors.hasConsent}</p>}
+                  </div>
+                </div>
              </div>
           </div>
         );
@@ -309,26 +308,9 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     </select>
                     <ChevronDown size={20} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   </div>
-                  {errors[`dayOfWeek${num}`] && <p className="mt-2 text-xs font-bold text-red-500 ml-1">{errors[`dayOfWeek${num}`]}</p>}
                 </div>
               ))}
             </div>
-            
-            {deadlinePassed ? (
-              <div className="bg-red-50 p-5 rounded-[24px] border border-red-100 flex gap-4 items-center">
-                <AlertCircle size={24} strokeWidth={2.5} className="text-red-500 shrink-0" />
-                <p className="text-[11px] text-red-700 font-bold leading-tight tracking-tight">
-                  Cycle locked: Streak planning for {target.name} is now closed. Submissions were due by the 25th.
-                </p>
-              </div>
-            ) : (
-              <div className="bg-swiggy-light/50 p-5 rounded-[24px] border border-swiggy-orange/10 flex gap-4 items-center">
-                <Clock size={24} strokeWidth={2.5} className="text-swiggy-orange shrink-0" />
-                <p className="text-[11px] text-swiggy-orange font-bold leading-tight tracking-tight">
-                  Act fast: Monthly planning window ends on the 24th at midnight. Secure your campus slot now.
-                </p>
-              </div>
-            )}
           </div>
         );
       default:
@@ -388,7 +370,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
               );
             })
           ) : (
-            <div className="p-24 text-center bg-white rounded-[48px] swiggy-shadow border border-slate-100/50 premium-card-shadow">
+            <div className="p-24 text-center bg-white rounded-[48px] swiggy-shadow border border-slate-100/50 premium-card-shadow relative overflow-hidden">
               <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200 shadow-inner">
                 <ClipboardList size={40} />
               </div>
@@ -417,6 +399,23 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 </button>
                 <div className="flex items-center gap-3 mb-2">
                    <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">{selectedTask.name}</h2>
+                   {(selectedTask.id === 't4' || selectedTask.id === 't5') && (
+                     <div className="relative group cursor-help">
+                        <div className="w-8 h-8 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-swiggy-light group-hover:text-swiggy-orange transition-all duration-300">
+                           <Info size={16} strokeWidth={3} />
+                        </div>
+                        {/* Tooltip Content - Positioned below icon */}
+                        <div className="absolute left-0 top-full mt-4 w-80 p-6 bg-slate-900 text-white rounded-[32px] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
+                           <p className="text-[12px] font-bold leading-relaxed tracking-tight">
+                              {selectedTask.id === 't4' 
+                                ? "Student Rewards Program is a youth-focused initiative that offers never-before, exclusive discounts and benefits for the student community"
+                                : "A student who has never placed an order on Swiggy using their phone number."}
+                           </p>
+                           {/* Tooltip arrow at top */}
+                           <div className="absolute -top-1.5 left-8 w-3 h-3 bg-slate-900 rotate-45"></div>
+                        </div>
+                     </div>
+                   )}
                 </div>
              </div>
              <div className="bg-white px-6 py-4 rounded-[28px] swiggy-shadow border border-slate-50 flex items-center gap-4 premium-card-shadow">
@@ -436,9 +435,9 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
             </div>
 
             <div className="mb-10 relative">
-              <h3 className="text-[26px] font-black text-slate-900 tracking-tight leading-none uppercase">Submission Instructions</h3>
+              <h3 className="text-[11px] font-black text-slate-400 mb-4 uppercase tracking-[0.2em]">Submission Instructions</h3>
               {selectedTask.instructions && (
-                <div className="mt-6 p-6 bg-slate-50/50 rounded-[28px] border border-slate-100/50">
+                <div className="p-6 bg-slate-50/50 rounded-[28px] border border-slate-100/50">
                    <p className="text-[13px] text-slate-600 font-bold leading-relaxed tracking-tight">
                      {selectedTask.instructions}
                    </p>
@@ -456,9 +455,8 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 disabled={loading || streakLock}
                 className="w-full swiggy-btn-gradient text-white font-black py-6 rounded-[30px] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed text-sm group uppercase tracking-widest"
               >
-                {loading ? 'Processing...' : streakLock ? 'Planning period closed' : <><Send size={20} strokeWidth={3} className="group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform" />Submit</>}
+                {loading ? 'Processing...' : streakLock ? 'Planning period closed' : <><Send size={20} strokeWidth={3} className="group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform" /> Finalize Submission</>}
               </button>
-              <p className="text-[10px] text-slate-300 text-center mt-6 font-bold opacity-70 uppercase tracking-widest">Read-only after submission • Permanent record</p>
             </div>
           </form>
         </div>
@@ -503,9 +501,6 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 </button>
               );
             })}
-          </div>
-          <div className="pt-8 text-center">
-            <p className="text-[10px] text-slate-300 font-black opacity-60 uppercase tracking-widest">Verified catalyst network • Core missions</p>
           </div>
         </>
       )}

@@ -72,7 +72,7 @@ const ShareModal = ({ isOpen, onClose, shareUrl, title = "Share" }: { isOpen: bo
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
       <div className="bg-white w-full max-w-lg rounded-[48px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-white/20">
         <div className="px-10 pt-10 pb-4 flex justify-between items-center">
-          <h3 className="text-2xl font-black text-slate-900 tracking-tight">Share</h3>
+          <h3 className="text-2xl font-black text-slate-900 tracking-tight">Distribute asset</h3>
           <button onClick={onClose} className="p-3 hover:bg-slate-50 rounded-2xl transition-all">
             <X size={28} className="text-slate-400" />
           </button>
@@ -364,7 +364,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
               onClick={() => openShare("Join Swiggy Student Rewards!", rewardsLink)}
               className="w-full bg-slate-900 text-white py-5 rounded-[26px] font-black text-[11px] flex items-center justify-center gap-3 transition-all hover:bg-black active:scale-95 shadow-xl shadow-slate-100 tracking-widest"
             >
-              <Share2 size={20} strokeWidth={3} /> Share
+              <Share2 size={20} strokeWidth={3} /> Distribute asset
             </button>
          </div>
 
@@ -394,7 +394,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
               onClick={() => openShare("Activate your Campus Streak!", streaksLink)}
               className="w-full bg-swiggy-orange text-white py-5 rounded-[26px] font-black text-[11px] flex items-center justify-center gap-3 transition-all hover:bg-[#E14A00] active:scale-95 shadow-xl shadow-orange-100 tracking-widest"
             >
-              <Share2 size={20} strokeWidth={3} />Share
+              <Share2 size={20} strokeWidth={3} /> Distribute asset
             </button>
          </div>
       </section>
