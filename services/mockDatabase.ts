@@ -225,6 +225,11 @@ class MockDatabase {
     this.save();
   }
 
+  deleteNotification(id: string) {
+    this.notifications = this.notifications.filter(n => n.id !== id);
+    this.save();
+  }
+
   submitTask(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Submission {
     const newSub: Submission = {
       ...submission,

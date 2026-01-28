@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Bell, Clock, Calendar, Mail, CheckCircle, Info, MessageSquare, ChevronLeft, Inbox } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Bell, Clock, Calendar, Mail, CheckCircle, Info, MessageSquare, ChevronLeft, Inbox, X } from 'lucide-react';
 import { Notification } from '../types';
 import { db } from '../services/mockDatabase';
 
@@ -9,13 +9,23 @@ interface NotificationsProps {
 }
 
 const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
-  const notifications = db.getNotifications(userId);
+  const [localNotifications, setLocalNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
+    // Initial fetch
+    const fetched = db.getNotifications(userId);
+    setLocalNotifications(fetched);
+    
     // Mark as read when component mounts
     db.markAllNotificationsRead(userId);
     onRead();
   }, [userId]);
+
+  const handleDelete = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    db.deleteNotification(id);
+    setLocalNotifications(prev => prev.filter(n => n.id !== id));
+  };
 
   const formatDate = (ts: number) => {
     const d = new Date(ts);
@@ -33,27 +43,35 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
       </header>
 
       <div className="max-w-4xl space-y-6">
-        {notifications.length > 0 ? (
-          notifications.map(n => {
+        {localNotifications.length > 0 ? (
+          localNotifications.map(n => {
             const fd = formatDate(n.createdAt);
             const isUnread = !n.isRead;
             return (
               <div 
                 key={n.id} 
-                className={`bg-white p-8 md:p-10 rounded-[44px] swiggy-shadow border-l-[6px] transition-all duration-500 premium-card-shadow hover:-translate-y-1 ${
+                className={`bg-white p-8 md:p-10 rounded-[44px] swiggy-shadow border-l-[6px] transition-all duration-500 premium-card-shadow hover:-translate-y-1 relative ${
                   isUnread ? 'border-l-swiggy-orange' : 'border-l-slate-200 opacity-90'
                 }`}
               >
+                {/* Clear off button */}
+                <button 
+                  onClick={(e) => handleDelete(n.id, e)}
+                  className="absolute top-8 right-8 p-2 rounded-xl text-slate-300 hover:text-swiggy-orange hover:bg-swiggy-light transition-all duration-300"
+                >
+                  <X size={20} strokeWidth={3} />
+                </button>
+
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-8">
                   <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
                     <Calendar size={14} className="text-swiggy-orange/60" strokeWidth={3} /> {fd.day}, {fd.date}
                   </div>
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-300 bg-slate-50 px-3 py-1 rounded-lg">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-300 bg-slate-50 px-3 py-1 rounded-lg mr-10 sm:mr-0">
                     <Clock size={14} strokeWidth={3} /> {fd.time}
                   </div>
                 </div>
                 
-                <p className="text-slate-800 text-[15px] font-bold leading-relaxed whitespace-pre-wrap tracking-tight">
+                <p className="text-slate-800 text-[15px] font-bold leading-relaxed whitespace-pre-wrap tracking-tight pr-10 sm:pr-0">
                   {n.content}
                 </p>
 
