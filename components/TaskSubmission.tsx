@@ -151,25 +151,38 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   const renderForm = () => {
     if (!selectedTask) return null;
 
+    const isCouponTask = selectedTask.type === 'student_rewards';
+    const isReferralTask = selectedTask.type === 'referral';
+
     switch (selectedTask.type) {
       case 'offline_activation':
         return (
           <div className="space-y-7">
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2.5 ml-1 tracking-tight">
-                Total posters or flyers distributed <span className="text-swiggy-orange">*</span>
+                Total flyers / posters distributed in this activity <span className="text-swiggy-orange">*</span>
               </label>
               <input 
                 type="number"
                 required
                 className={`w-full px-6 py-5 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.count ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                placeholder="Enter total count (e.g. 50)"
+                placeholder="Enter total count placed or shared (e.g. 30)"
                 onChange={e => {
                   setFormData({ ...formData, count: e.target.value });
                   if (errors.count) setErrors({ ...errors, count: '' });
                 }}
               />
               {errors.count && <p className="mt-2 text-xs font-bold text-red-500 ml-1">{errors.count}</p>}
+            </div>
+
+            {/* Task Specific Info Box for Offline Activation Task */}
+            <div className="mt-8 p-6 bg-amber-50 rounded-[28px] border border-amber-100 flex items-start gap-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                <Info size={16} strokeWidth={3} />
+              </div>
+              <p className="text-[11px] font-bold text-amber-700 leading-relaxed tracking-tight">
+                Focus on high-visibility campus zones such as hostel notice boards, mess entrances, and library gates to maximise impact. Counts will be verified with campus leads or spot checks. Inflated submissions may not be approved.
+              </p>
             </div>
           </div>
         );
@@ -184,13 +197,23 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 type="url"
                 required
                 className={`w-full px-6 py-5 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.url ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                placeholder="https://instagram.com/reel/..."
+                placeholder="Paste the link to your public Instagram / LinkedIn post or reel."
                 onChange={e => {
                   setFormData({ ...formData, url: e.target.value });
                   if (errors.url) setErrors({ ...errors, url: '' });
                 }}
               />
               {errors.url && <p className="mt-2 text-xs font-bold text-red-500 ml-1">{errors.url}</p>}
+            </div>
+
+            {/* Task Specific Info Box for Social Media Task */}
+            <div className="mt-8 p-6 bg-amber-50 rounded-[28px] border border-amber-100 flex items-start gap-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                <Info size={16} strokeWidth={3} />
+              </div>
+              <p className="text-[11px] font-bold text-amber-700 leading-relaxed tracking-tight">
+                Ensure your post clearly features Swiggy or Student Rewards branding. Your profile must be public at the time of review for verification.
+              </p>
             </div>
           </div>
         );
@@ -208,7 +231,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     type="text"
                     required
                     className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientName ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                    placeholder="Referral full name"
+                    placeholder={isCouponTask ? "Student’s full name (coupon shared with)" : "Referral full name"}
                     onChange={e => {
                       setFormData({ ...formData, recipientName: e.target.value });
                       if (errors.recipientName) setErrors({ ...errors, recipientName: '' });
@@ -224,7 +247,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     type="tel"
                     required
                     className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientPhone ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                    placeholder="Contact number"
+                    placeholder={isCouponTask ? "Student’s Phone number (coupon shared with)" : "Contact number"}
                     onChange={e => {
                       setFormData({ ...formData, recipientPhone: e.target.value });
                       if (errors.recipientPhone) setErrors({ ...errors, recipientPhone: '' });
@@ -241,7 +264,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                   type="email"
                   required
                   className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientEmail ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                  placeholder="Referral email address"
+                  placeholder={isCouponTask ? "Student’s Email ID (coupon shared with)" : "Referral email address"}
                   onChange={e => {
                     setFormData({ ...formData, recipientEmail: e.target.value });
                     if (errors.recipientEmail) setErrors({ ...errors, recipientEmail: '' });
@@ -267,6 +290,30 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     {errors.hasConsent && <p className="mt-1.5 text-[10px] font-black text-red-500 uppercase tracking-widest">{errors.hasConsent}</p>}
                   </div>
                 </div>
+
+                {/* Task Specific Info Box for Referral task */}
+                {isReferralTask && (
+                  <div className="mt-8 p-6 bg-amber-50 rounded-[28px] border border-amber-100 flex items-start gap-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                      <Info size={16} strokeWidth={3} />
+                    </div>
+                    <p className="text-[11px] font-bold text-amber-700 leading-relaxed tracking-tight">
+                      Please ensure all submitted details are accurate. Incorrect or unverifiable submissions may result in point reversal and further review.
+                    </p>
+                  </div>
+                )}
+
+                {/* Task Specific Info Box for Coupon Distribution */}
+                {isCouponTask && (
+                  <div className="mt-8 p-6 bg-amber-50 rounded-[28px] border border-amber-100 flex items-start gap-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                      <Info size={16} strokeWidth={3} />
+                    </div>
+                    <p className="text-[11px] font-bold text-amber-700 leading-relaxed tracking-tight">
+                      Please ensure all details are accurate. Points are credited only if the coupon is successfully redeemed. Incorrect or unverifiable submissions may result in point reversal.
+                    </p>
+                  </div>
+                )}
              </div>
           </div>
         );
@@ -274,42 +321,53 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
         const target = getTargetMonth();
         const deadlinePassed = isStreakDeadlinePassed();
         return (
-          <div className={`space-y-7 ${deadlinePassed ? 'opacity-50 pointer-events-none' : ''}`}>
-            <div>
-              <label className="block text-[10px] font-bold text-slate-400 mb-2.5 ml-1 uppercase tracking-wider">Target planning month</label>
-              <div className="w-full px-6 py-4.5 bg-slate-50 border border-slate-200 rounded-2xl font-black text-slate-900 flex items-center justify-between shadow-inner">
-                <span>{target.name} {target.year}</span>
-                <CalendarIcon size={18} className="text-slate-400" />
-              </div>
+          <div className="space-y-7">
+            {/* Streak Deadline Box */}
+            <div className="p-6 bg-swiggy-light border border-swiggy-orange/20 rounded-[28px] shadow-sm animate-in fade-in duration-500">
+              <p className="text-[12px] font-black text-swiggy-orange leading-relaxed tracking-tight">
+                Deadline: Submit streak days by 25th of the previous month
+                <br />
+                <span className="text-[10px] font-bold opacity-80">(Example: February streak days must be submitted by 25th January)</span>
+              </p>
             </div>
 
-            <div className="space-y-6">
-              {[1, 2, 3].map((num) => (
-                <div key={num}>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-2 ml-1 tracking-tight">
-                    Preferred streak day {num}
-                  </label>
-                  <div className="relative">
-                    <select
-                      disabled={deadlinePassed}
-                      className={`w-full appearance-none px-6 py-4.5 bg-white border outline-none transition-all rounded-2xl font-black tracking-tight ${
-                        errors[`dayOfWeek${num}`] ? 'border-red-500 bg-red-50/50' : 'border-slate-100 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'
-                      } ${formData[`dayOfWeek${num}`] ? 'text-slate-900' : 'text-slate-400'}`}
-                      onChange={e => {
-                        setFormData({ ...formData, [`dayOfWeek${num}`]: e.target.value, targetMonth: target.name });
-                        if (errors[`dayOfWeek${num}`]) setErrors({ ...errors, [`dayOfWeek${num}`]: '' });
-                      }}
-                      value={formData[`dayOfWeek${num}`] || ""}
-                    >
-                      <option value="" disabled>Choose activation day</option>
-                      {daysOfWeek.map(day => (
-                        <option key={day} value={day}>{day}</option>
-                      ))}
-                    </select>
-                    <ChevronDown size={20} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                  </div>
+            <div className={deadlinePassed ? 'opacity-50 pointer-events-none' : ''}>
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 mb-2.5 ml-1 uppercase tracking-wider">Target planning month</label>
+                <div className="w-full px-6 py-4.5 bg-slate-50 border border-slate-200 rounded-2xl font-black text-slate-900 flex items-center justify-between shadow-inner">
+                  <span>{target.name} {target.year}</span>
+                  <CalendarIcon size={18} className="text-slate-400" />
                 </div>
-              ))}
+              </div>
+
+              <div className="space-y-6 mt-6">
+                {[1, 2, 3].map((num) => (
+                  <div key={num}>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-2 ml-1 tracking-tight">
+                      Preferred streak day {num}
+                    </label>
+                    <div className="relative">
+                      <select
+                        disabled={deadlinePassed}
+                        className={`w-full appearance-none px-6 py-4.5 bg-white border outline-none transition-all rounded-2xl font-black tracking-tight ${
+                          errors[`dayOfWeek${num}`] ? 'border-red-500 bg-red-50/50' : 'border-slate-100 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'
+                        } ${formData[`dayOfWeek${num}`] ? 'text-slate-900' : 'text-slate-400'}`}
+                        onChange={e => {
+                          setFormData({ ...formData, [`dayOfWeek${num}`]: e.target.value, targetMonth: target.name });
+                          if (errors[`dayOfWeek${num}`]) setErrors({ ...errors, [`dayOfWeek${num}`]: '' });
+                        }}
+                        value={formData[`dayOfWeek${num}`] || ""}
+                      >
+                        <option value="" disabled>Choose activation day</option>
+                        {daysOfWeek.map(day => (
+                          <option key={day} value={day}>{day}</option>
+                        ))}
+                      </select>
+                      <ChevronDown size={20} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         );
@@ -384,6 +442,8 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   }
 
   const streakLock = selectedTask?.type === 'streaks' && isStreakDeadlinePassed();
+  const targetMonth = getTargetMonth();
+  const currentMonthName = months[new Date().getMonth()];
 
   return (
     <div className="space-y-8">
@@ -450,12 +510,24 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
             </div>
 
             <div className="mt-10 pt-12 border-t border-slate-50 relative">
+              {/* Planning window closed alert box */}
+              {streakLock && (
+                <div className="mb-8 p-6 bg-red-50 border border-red-100 rounded-[32px] animate-in slide-in-from-bottom-2 duration-500">
+                  <h4 className="text-sm font-black text-red-600 mb-1 flex items-center gap-2">
+                    <XCircle size={18} /> Planning window closed
+                  </h4>
+                  <p className="text-[12px] font-bold text-red-500/80 leading-relaxed tracking-tight">
+                    Streak day submissions for {targetMonth.name} have closed as of 25th {currentMonthName}. Please plan upcoming months before the deadline.
+                  </p>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={loading || streakLock}
                 className="w-full swiggy-btn-gradient text-white font-black py-6 rounded-[30px] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed text-sm group uppercase tracking-widest"
               >
-                {loading ? 'Processing...' : streakLock ? 'Planning period closed' : <><Send size={20} strokeWidth={3} className="group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform" />Submit</>}
+                {loading ? 'Processing...' : <><Send size={20} strokeWidth={3} className="group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform" />Submit</>}
               </button>
             </div>
           </form>

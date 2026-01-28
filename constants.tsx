@@ -35,7 +35,7 @@ export const TASKS: Task[] = [
     type: 'referral',
     name: 'Student Rewards Referrals',
     description: 'Get your friends to sign up for the Student Rewards program.',
-    instructions: "Refer your peers to sign up for Swiggy's Student Rewards. Enter accurate details. Points will be awarded only after successful verification.",
+    instructions: "Refer your peers to sign up for Swiggy Student Rewards. Enter your peer’s signup details (name, phone number, and college email). Points will be credited only after successful verification.",
     points: 5,
     deadlineDays: 2
   },
@@ -44,7 +44,7 @@ export const TASKS: Task[] = [
     type: 'student_rewards',
     name: 'New User Coupon Distribution',
     description: 'Distribute coupons to students who haven\'t used Swiggy before.',
-    instructions: 'Enter the details of the student who received the coupon. Verification will be done based on successful redemption.',
+    instructions: 'Enter the details of the student with whom you shared the new user coupon. Points will be credited only if the coupon is successfully redeemed later.',
     points: 15,
     deadlineDays: 3
   },
@@ -53,7 +53,7 @@ export const TASKS: Task[] = [
     type: 'social_media',
     name: 'Social Media Post',
     description: 'Create and post engaging content about Swiggy on your social platforms.',
-    instructions: 'Submit the link to your public post or reel. Your score will depend on quality, relevance, and engagement.',
+    instructions: 'Submit the link to your public social media post or reel promoting Swiggy or Student Rewards. Your score will be based on content quality, relevance to students, and engagement received.',
     points: 50,
     deadlineDays: 5
   },
@@ -62,7 +62,7 @@ export const TASKS: Task[] = [
     type: 'offline_activation',
     name: 'Flyer/Digital Poster Distribution',
     description: 'Place promotional posters and flyers across the campus.',
-    instructions: 'Enter the total number of flyers or posters distributed in this session. Verified counts will be cross checked with campus leads.',
+    instructions: 'Enter the total number of physical flyers or digital posters distributed during this activity. Submissions will be verified with campus leads and on-ground checks.',
     points: 10,
     deadlineDays: 7
   },
@@ -71,7 +71,7 @@ export const TASKS: Task[] = [
     type: 'streaks',
     name: 'Monthly Campus Streak Day Selection',
     description: 'Plan and submit your campus streak activation day.',
-    instructions: 'Select the target month and the preferred day for the campus streak. This is used for central planning and streak coordination.',
+    instructions: 'Select the days on which Campus Streaks should run on your campus for the selected month. These inputs are used for central planning and cannot be changed once submitted.',
     points: 25,
     deadlineDays: 10
   },
