@@ -160,7 +160,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
           <div className="space-y-7">
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2.5 ml-1 tracking-tight">
-                Total flyers / posters distributed in this activity <span className="text-swiggy-orange">*</span>
+                Total flyers / posters distributed <span className="text-swiggy-orange">*</span>
               </label>
               <input 
                 type="number"
@@ -181,7 +181,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 <Info size={16} strokeWidth={3} />
               </div>
               <p className="text-[11px] font-bold text-amber-700 leading-relaxed tracking-tight">
-                Focus on high-visibility campus zones such as hostel notice boards, mess entrances, and library gates to maximise impact. Counts will be verified with campus leads or spot checks. Inflated submissions may not be approved.
+                Please focus on high-visibility campus zones such as hostel notice boards, mess entrances, and library gates, as well as digital channels like WhatsApp and social media to maximize impact
               </p>
             </div>
           </div>
@@ -191,13 +191,13 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
           <div className="space-y-7">
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2.5 ml-1 tracking-tight">
-                Public content URL <span className="text-swiggy-orange">*</span>
+                Social Media Post URL <span className="text-swiggy-orange">*</span>
               </label>
               <input 
                 type="url"
                 required
                 className={`w-full px-6 py-5 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.url ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                placeholder="Paste the link to your public Instagram / LinkedIn post or reel."
+                placeholder=""
                 onChange={e => {
                   setFormData({ ...formData, url: e.target.value });
                   if (errors.url) setErrors({ ...errors, url: '' });
@@ -212,7 +212,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 <Info size={16} strokeWidth={3} />
               </div>
               <p className="text-[11px] font-bold text-amber-700 leading-relaxed tracking-tight">
-                Ensure your post clearly features Swiggy or Student Rewards branding. Your profile must be public at the time of review for verification.
+                Ensure your post clearly features Swiggy branding. Your profile must be set to public for verification purpose.
               </p>
             </div>
           </div>
@@ -221,7 +221,9 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
       case 'student_rewards':
         return (
           <div className="space-y-8">
-             <h4 className="text-[10px] font-bold text-slate-400 mt-2 px-1 uppercase tracking-wider">Target user details</h4>
+             <h4 className="text-[10px] font-bold text-slate-400 mt-2 px-1 uppercase tracking-wider">
+               {isReferralTask ? "Referral Details" : "Coupon Recipient Details"}
+             </h4>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-[11px] font-bold text-slate-700 mb-2 ml-1 tracking-tight">
@@ -231,7 +233,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     type="text"
                     required
                     className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientName ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                    placeholder={isCouponTask ? "Student’s full name (coupon shared with)" : "Referral full name"}
+                    placeholder="Full name"
                     onChange={e => {
                       setFormData({ ...formData, recipientName: e.target.value });
                       if (errors.recipientName) setErrors({ ...errors, recipientName: '' });
@@ -241,13 +243,13 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold text-slate-700 mb-2 ml-1 tracking-tight">
-                    Phone number <span className="text-swiggy-orange">*</span>
+                    Contact Details <span className="text-swiggy-orange">*</span>
                   </label>
                   <input 
                     type="tel"
                     required
                     className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientPhone ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                    placeholder={isCouponTask ? "Student’s Phone number (coupon shared with)" : "Contact number"}
+                    placeholder="Contact Details"
                     onChange={e => {
                       setFormData({ ...formData, recipientPhone: e.target.value });
                       if (errors.recipientPhone) setErrors({ ...errors, recipientPhone: '' });
@@ -264,7 +266,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                   type="email"
                   required
                   className={`w-full px-5 py-4 rounded-2xl border transition-all text-slate-800 font-bold outline-none placeholder:text-slate-300 ${errors.recipientEmail ? 'border-red-500 bg-red-50/50' : 'border-slate-100 bg-slate-50/50 focus:bg-white focus:border-swiggy-orange/40 focus:ring-4 focus:ring-swiggy-orange/5'}`}
-                  placeholder={isCouponTask ? "Student’s Email ID (coupon shared with)" : "Referral email address"}
+                  placeholder="Email ID"
                   onChange={e => {
                     setFormData({ ...formData, recipientEmail: e.target.value });
                     if (errors.recipientEmail) setErrors({ ...errors, recipientEmail: '' });
@@ -298,7 +300,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                       <Info size={16} strokeWidth={3} />
                     </div>
                     <p className="text-[11px] font-bold text-amber-700 leading-relaxed tracking-tight">
-                      Please ensure all submitted details are accurate. Incorrect or unverifiable submissions may result in point reversal and further review.
+                      Please ensure submissions are accurate and verifiable to facilitate smooth assessment. Submissions will be verified every Wednesday.
                     </p>
                   </div>
                 )}
@@ -310,7 +312,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                       <Info size={16} strokeWidth={3} />
                     </div>
                     <p className="text-[11px] font-bold text-amber-700 leading-relaxed tracking-tight">
-                      Please ensure all details are accurate. Points are credited only if the coupon is successfully redeemed. Incorrect or unverifiable submissions may result in point reversal.
+                      Please ensure submissions are accurate and verifiable to facilitate smooth assessment. Submissions will be verified every Wednesday.
                     </p>
                   </div>
                 )}
@@ -322,18 +324,9 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
         const deadlinePassed = isStreakDeadlinePassed();
         return (
           <div className="space-y-7">
-            {/* Streak Deadline Box */}
-            <div className="p-6 bg-swiggy-light border border-swiggy-orange/20 rounded-[28px] shadow-sm animate-in fade-in duration-500">
-              <p className="text-[12px] font-black text-swiggy-orange leading-relaxed tracking-tight">
-                Deadline: Submit streak days by 25th of the previous month
-                <br />
-                <span className="text-[10px] font-bold opacity-80">(Example: February streak days must be submitted by 25th January)</span>
-              </p>
-            </div>
-
             <div className={deadlinePassed ? 'opacity-50 pointer-events-none' : ''}>
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 mb-2.5 ml-1 uppercase tracking-wider">Target planning month</label>
+                <label className="block text-[10px] font-bold text-slate-400 mb-2.5 ml-1 uppercase tracking-wider">Month</label>
                 <div className="w-full px-6 py-4.5 bg-slate-50 border border-slate-200 rounded-2xl font-black text-slate-900 flex items-center justify-between shadow-inner">
                   <span>{target.name} {target.year}</span>
                   <CalendarIcon size={18} className="text-slate-400" />
@@ -443,7 +436,6 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
 
   const streakLock = selectedTask?.type === 'streaks' && isStreakDeadlinePassed();
   const targetMonth = getTargetMonth();
-  const currentMonthName = months[new Date().getMonth()];
 
   return (
     <div className="space-y-8">
@@ -468,8 +460,8 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                         <div className="absolute left-0 top-full mt-4 w-80 p-6 bg-slate-900 text-white rounded-[32px] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
                            <p className="text-[12px] font-bold leading-relaxed tracking-tight">
                               {selectedTask.id === 't4' 
-                                ? "Student Rewards Program is a youth-focused initiative that offers never-before, exclusive discounts and benefits for the student community"
-                                : "A student who has never placed an order on Swiggy using their phone number."}
+                                ? "Student Rewards Program is a student-focused initiative that offers never-before, exclusive discounts and benefits for the student community"
+                                : "To be shared with a student who has never placed an order on Swiggy"}
                            </p>
                            {/* Tooltip arrow at top */}
                            <div className="absolute -top-1.5 left-8 w-3 h-3 bg-slate-900 rotate-45"></div>
@@ -517,14 +509,14 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     <XCircle size={18} /> Planning window closed
                   </h4>
                   <p className="text-[12px] font-bold text-red-500/80 leading-relaxed tracking-tight">
-                    Streak day submissions for {targetMonth.name} have closed as of 25th {currentMonthName}. Please plan upcoming months before the deadline.
+                    Submissions for {targetMonth.name} streak days are closed. Please plan upcoming months schedule before the timeline.
                   </p>
                 </div>
               )}
 
               <button
                 type="submit"
-                disabled={loading || streakLock}
+                disabled={loading || (selectedTask?.type === 'streaks' && streakLock)}
                 className="w-full swiggy-btn-gradient text-white font-black py-6 rounded-[30px] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed text-sm group uppercase tracking-widest"
               >
                 {loading ? 'Processing...' : <><Send size={20} strokeWidth={3} className="group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform" />Submit</>}

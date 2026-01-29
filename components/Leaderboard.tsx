@@ -110,7 +110,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
         <div>
           <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-2.5">Leaderboard Calculation</h3>
           <p className="text-sm text-slate-500 font-bold leading-relaxed max-w-4xl tracking-tight">
-            Your rank is calculated based on the impact you create on campus, your consistency across tasks, and the quality of your submissions. Focus on driving real results to climb the leaderboard.
+            Your rank is determined based on the impact you create on campus, your consistency across tasks, and the quality of your submissions. Focus on driving real results to climb the leaderboard.
           </p>
         </div>
       </section>
