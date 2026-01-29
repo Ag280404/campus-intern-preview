@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trophy, Medal, Crown, MapPin, Search, TrendingUp, User as UserIcon, ChevronRight, Calculator, PieChart, Activity, Star, Clock, ChevronDown } from 'lucide-react';
+import { Trophy, Medal, Crown, MapPin, Search, TrendingUp, User as UserIcon, ChevronRight, Calculator, PieChart, Activity, Star, Clock, ChevronDown, BarChart3 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { MetricRollup } from '../types';
 import { db } from '../services/mockDatabase';
@@ -105,7 +105,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
 
       <section className="bg-white p-10 rounded-[48px] swiggy-shadow border border-slate-50 flex flex-col md:flex-row items-center gap-8 premium-card-shadow">
         <div className="w-16 h-16 bg-orange-50 text-swiggy-orange rounded-[22px] flex items-center justify-center shrink-0 shadow-inner">
-          <Clock size={32} strokeWidth={2.5} />
+          <BarChart3 size={32} strokeWidth={2.5} />
         </div>
         <div>
           <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-2.5">Leaderboard Calculation</h3>

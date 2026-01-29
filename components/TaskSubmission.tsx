@@ -546,10 +546,9 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                       {getTaskIcon(task.type)}
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
+                      <div className="flex items-center gap-3">
                         <h3 className="text-lg font-black text-slate-900 group-hover:text-swiggy-orange transition-colors tracking-tight">{task.name}</h3>
                       </div>
-                      <p className="text-xs text-slate-400 font-medium line-clamp-1 max-w-xl group-hover:text-slate-500 transition-colors tracking-tight">{task.description}</p>
                     </div>
                   </div>
                   
