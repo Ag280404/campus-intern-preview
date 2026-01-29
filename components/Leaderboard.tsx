@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Trophy, Medal, Crown, MapPin, Search, TrendingUp, User as UserIcon, ChevronRight, Calculator, PieChart, Activity, Star, Clock, ChevronDown, BarChart3 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -133,7 +134,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                 <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(db.getUserById(topThree[1].userId)?.campusId || '')}
               </p>
               <div className="mt-6 bg-white px-8 py-3 rounded-[24px] shadow-lg border border-slate-100 group-hover:swiggy-shadow transition-all">
-                <span className="font-black text-slate-400 text-lg tracking-tight">Silver Rank</span>
+                <span className="font-black text-slate-400 text-lg tracking-tight">Second position</span>
               </div>
             </div>
           )}
@@ -178,7 +179,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                 <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(db.getUserById(topThree[2].userId)?.campusId || '')}
               </p>
               <div className="mt-6 bg-white px-8 py-3 rounded-[24px] shadow-lg border border-slate-100 group-hover:swiggy-shadow transition-all">
-                <span className="font-black text-slate-400 text-lg tracking-tight">Bronze Rank</span>
+                <span className="font-black text-slate-400 text-lg tracking-tight">Third position</span>
               </div>
             </div>
           )}
