@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { Share2, MapPin, Mail, Phone, ChevronDown, ChevronUp, MessageCircle, User as UserIcon, Camera, Save, Users, X, ShieldCheck, Facebook, Linkedin, Twitter, Ticket, Zap, Check, Info } from 'lucide-react';
+
+import React, { useState, useRef, useEffect } from 'react';
+import { Share2, MapPin, Mail, Phone, User as UserIcon, Camera, Save, Users, X, ShieldCheck, Facebook, Linkedin, Twitter, Ticket, Zap, Check } from 'lucide-react';
 import { User } from '../types';
 import { db } from '../services/mockDatabase';
 
@@ -129,12 +130,19 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
   const [editEmail, setEditEmail] = useState(user.email || '');
   const [editPhone, setEditPhone] = useState(user.phoneNumber || '');
   const [editShare, setEditShare] = useState(user.shareContactInfo || false);
+  const [allPeers, setAllPeers] = useState<User[]>([]);
   
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareTitle, setShareTitle] = useState('');
   const [shareUrl, setShareUrl] = useState('');
 
-  const allPeers = db.getAllUsers().filter(u => u.id !== user.id && u.shareContactInfo);
+  useEffect(() => {
+    const fetchPeers = async () => {
+      const users = await db.getAllUsers();
+      setAllPeers(users.filter(u => u.id !== user.id && u.shareContactInfo));
+    };
+    fetchPeers();
+  }, [user.id]);
 
   const openShare = (title: string, finalUrl: string) => {
     setShareTitle(title);
@@ -142,13 +150,13 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
     setShowShareModal(true);
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const base64String = reader.result as string;
-        const updatedUser = db.updateUserAvatar(user.id, base64String);
+        const updatedUser = await db.updateUserAvatar(user.id, base64String);
         if (updatedUser) {
           onUserUpdate(updatedUser);
         }
@@ -157,8 +165,8 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
     }
   };
 
-  const handleSaveContact = () => {
-    const updatedUser = db.updateUser(user.id, {
+  const handleSaveContact = async () => {
+    const updatedUser = await db.updateUser(user.id, {
       displayName: editName,
       email: editEmail,
       phoneNumber: editPhone,
@@ -170,8 +178,8 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
     }
   };
 
-  const handleQuickOptIn = () => {
-    const updated = db.updateUser(user.id, { shareContactInfo: true });
+  const handleQuickOptIn = async () => {
+    const updated = await db.updateUser(user.id, { shareContactInfo: true });
     if (updated) {
       onUserUpdate(updated);
       setEditShare(true);
@@ -198,7 +206,6 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
         <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">Profile</h2>
       </header>
 
-      {/* Identity Card */}
       <div className="bg-white p-8 md:p-12 rounded-[56px] swiggy-shadow border border-slate-50 premium-card-shadow relative overflow-hidden">
         <div className="absolute top-0 right-0 p-16 opacity-[0.02] text-swiggy-orange pointer-events-none">
           <UserIcon size={240} strokeWidth={1} />
@@ -336,7 +343,6 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
         </div>
       </div>
 
-      {/* QR Codes Section */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
          <div className="bg-white p-10 rounded-[56px] swiggy-shadow border border-slate-50 text-center flex flex-col justify-between items-center group premium-card-shadow relative overflow-hidden">
             <div className="absolute top-0 right-0 p-10 opacity-[0.015] text-swiggy-orange pointer-events-none">
@@ -399,7 +405,6 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
          </div>
       </section>
 
-      {/* Intern Directory */}
       <section className="bg-white rounded-[56px] p-10 md:p-14 swiggy-shadow border border-slate-50 premium-card-shadow">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
           <div className="flex items-center gap-5">
@@ -452,14 +457,12 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
           </div>
         ) : (
           <div className="p-20 text-center bg-slate-50/50 rounded-[44px] border-2 border-dashed border-slate-200">
-            <MessageCircle size={56} className="mx-auto text-slate-200 mb-6" strokeWidth={1.5} />
             <h4 className="font-black text-slate-900 text-xl tracking-tight">Syncing network...</h4>
             <p className="text-[11px] text-slate-400 mt-3 font-bold tracking-widest">Catalyst directory populates as peers opt-in.</p>
           </div>
         )}
       </section>
 
-      {/* Swiggy Initiatives for Students */}
       <section className="space-y-10 pt-6">
         <div className="flex items-center gap-4">
           <div className="w-2.5 h-10 bg-swiggy-orange rounded-full shadow-lg shadow-orange-100"></div>

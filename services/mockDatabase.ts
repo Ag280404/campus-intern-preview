@@ -1,275 +1,169 @@
-import { User, Submission, Campus, MetricRollup, Target, Notification } from '../types';
-import { CAMPUSES, TASKS } from '../constants';
 
-// Default targets for tasks
-const DEFAULT_TARGETS: Record<string, number> = {
-  't1': 50, // Flyer distribution
-  't2': 1,  // Streak (binary)
-  't3': 5,  // Social Media
-  't4': 10, // Referrals
-  't5': 10, // Coupons
-};
+import { createClient } from '@supabase/supabase-js';
+import { User, Submission, Campus, MetricRollup, Notification, Task } from '../types';
+import { CAMPUSES } from '../constants';
 
-// Pre-defined credentials mapping User ID -> { password, name, campusId }
-const VALID_CREDENTIALS: Record<string, { p: string, n: string, c: string, e?: string, ph?: string, rqr?: string, sqr?: string }> = {
+const SUPABASE_URL = 'https://vecxlslkdyqtuxhrvcuz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlY3hsc2xrZHlxdHV4aHJ2Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDY2OTAsImV4cCI6MjA4NTY4MjY5MH0.ldSCs5ebGeki_3Ik_X7JRaVlb4sj0GH_u76izRMNKdA'; 
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const DEFAULT_PROFILES: Record<string, any> = {
   'admin': { p: 'swiggy_admin', n: 'Super Admin', c: 'c1', e: 'admin@campus.swiggy.com' },
-  'catalyst_iitd': { 
-    p: 'swiggy_iitd', n: 'Agniswar Das', c: 'c2', 
-    e: 'agniswardas28042004@gmail.com', ph: '8335028828',
-    rqr: 'RQR-IITD-99', sqr: 'SQR-IITD-99'
-  },
-  'catalyst_bits': { 
-    p: 'swiggy_bits', n: 'Rahul Sharma', c: 'c3', 
-    e: 'rahul.bits@campus.com', ph: '9876543210',
-    rqr: 'RQR-BITS-22', sqr: 'SQR-BITS-22'
-  },
-  'catalyst_iitb': { 
-    p: 'swiggy_iitb', n: 'Priya Singh', c: 'c1', 
-    e: 'priya.iitb@campus.com', ph: '9988776655',
-    rqr: 'RQR-IITB-11', sqr: 'SQR-IITB-11'
-  },
-};
-
-const getInitialUsers = (): User[] => {
-  const stored = localStorage.getItem('cg_users');
-  if (stored) return JSON.parse(stored);
-  
-  return [
-    {
-      id: 'catalyst_iitd',
-      displayName: 'Agniswar Das',
-      campusId: 'c2',
-      email: 'agniswardas28042004@gmail.com',
-      phoneNumber: '8335028828',
-      createdAt: Date.now() - 10000000,
-      lastLoginAt: Date.now(),
-      qrCodeId: 'QR-IITD-1',
-      rewardsQrCode: 'RQR-IITD-99',
-      streaksQrCode: 'SQR-IITD-99',
-      shareContactInfo: true,
-      taskTargets: { ...DEFAULT_TARGETS }
-    },
-    {
-      id: 'catalyst_bits',
-      displayName: 'Rahul Sharma',
-      campusId: 'c3',
-      email: 'rahul.bits@campus.com',
-      phoneNumber: '9876543210',
-      createdAt: Date.now() - 20000000,
-      lastLoginAt: Date.now(),
-      qrCodeId: 'QR-BITS-5',
-      rewardsQrCode: 'RQR-BITS-22',
-      streaksQrCode: 'SQR-BITS-22',
-      shareContactInfo: true,
-      taskTargets: { ...DEFAULT_TARGETS }
-    },
-    {
-      id: 'catalyst_iitb',
-      displayName: 'Priya Singh',
-      campusId: 'c1',
-      email: 'priya.iitb@campus.com',
-      phoneNumber: '9988776655',
-      createdAt: Date.now() - 5000000,
-      lastLoginAt: Date.now(),
-      qrCodeId: 'QR-IITB-9',
-      rewardsQrCode: 'RQR-IITB-11',
-      streaksQrCode: 'SQR-IITB-11',
-      shareContactInfo: true,
-      taskTargets: { ...DEFAULT_TARGETS }
-    }
-  ];
-};
-
-const getInitialSubmissions = (): Submission[] => {
-  const stored = localStorage.getItem('cg_submissions');
-  if (stored) return JSON.parse(stored);
-
-  const subs: Submission[] = [];
-  const taskIds = ['t1', 't3', 't4', 't5'];
-  const userIds = ['catalyst_iitd', 'catalyst_bits', 'catalyst_iitb'];
-
-  userIds.forEach((uid, i) => {
-    taskIds.forEach((tid, j) => {
-      subs.push({
-        id: `seed_${uid}_${tid}`,
-        userId: uid,
-        campusId: uid === 'catalyst_iitd' ? 'c2' : uid === 'catalyst_bits' ? 'c3' : 'c1',
-        taskId: tid,
-        status: 'approved',
-        payload: { count: (i + 1) * 5, scans: (j + 1) * 1, url: 'https://demo.com' },
-        createdAt: Date.now() - (86400000 * (i + j)),
-        reviewerNote: 'Seed data verified'
-      });
-    });
-  });
-
-  return subs;
+  'catalyst_iitd': { p: 'swiggy_iitd', n: 'Agniswar Das', c: 'c2', e: 'agniswardas28042004@gmail.com' },
+  'catalyst_bits': { p: 'swiggy_bits', n: 'BITS Catalyst', c: 'c3', e: 'catalyst.bits@campus.com' },
+  'catalyst_iitb': { p: 'swiggy_iitb', n: 'Priya Singh', c: 'c1', e: 'priya.iitb@campus.com' },
 };
 
 class MockDatabase {
-  private users: User[] = getInitialUsers();
-  private submissions: Submission[] = getInitialSubmissions();
-  private notifications: Notification[] = JSON.parse(localStorage.getItem('cg_notifications') || '[]');
   private currentUser: User | null = JSON.parse(localStorage.getItem('cg_currentUser') || 'null');
 
-  constructor() {
-    this.save();
-  }
-
-  private save() {
-    localStorage.setItem('cg_users', JSON.stringify(this.users));
-    localStorage.setItem('cg_submissions', JSON.stringify(this.submissions));
-    localStorage.setItem('cg_notifications', JSON.stringify(this.notifications));
-    localStorage.setItem('cg_currentUser', JSON.stringify(this.currentUser));
-  }
-
   getCurrentUser(): User | null {
-    if (this.currentUser) {
-      const latest = this.users.find(u => u.id === this.currentUser?.id);
-      if (latest) this.currentUser = latest;
-      this.save();
-    }
     return this.currentUser;
-  }
-
-  getAllUsers(): User[] {
-    return this.users;
-  }
-
-  updateUser(userId: string, updates: Partial<User>): User | null {
-    const userIndex = this.users.findIndex(u => u.id === userId);
-    if (userIndex !== -1) {
-      this.users[userIndex] = { ...this.users[userIndex], ...updates };
-      if (this.currentUser?.id === userId) {
-        this.currentUser = { ...this.currentUser, ...updates };
-      }
-      this.save();
-      return this.users[userIndex];
-    }
-    return null;
-  }
-
-  updateUserAvatar(userId: string, avatarUrl: string): User | null {
-    return this.updateUser(userId, { avatarUrl });
-  }
-
-  login(id: string, password?: string): User | null {
-    const cred = VALID_CREDENTIALS[id];
-    if (!cred || cred.p !== password) return null;
-
-    let user = this.users.find(u => u.id === id);
-    if (!user) {
-      user = {
-        id: id,
-        displayName: cred.n,
-        campusId: cred.c,
-        email: cred.e || `${id}@campus.swiggy.com`,
-        phoneNumber: cred.ph,
-        createdAt: Date.now(),
-        lastLoginAt: Date.now(),
-        qrCodeId: `QR-${id.split('_')[1]?.toUpperCase() || 'ADMIN'}`,
-        rewardsQrCode: cred.rqr || `RQR-${id.toUpperCase()}`,
-        streaksQrCode: cred.sqr || `SQR-${id.toUpperCase()}`,
-        taskTargets: id === 'admin' ? undefined : { ...DEFAULT_TARGETS }
-      };
-      this.users.push(user);
-    } else {
-      user.lastLoginAt = Date.now();
-      if (!user.taskTargets && id !== 'admin') {
-        user.taskTargets = { ...DEFAULT_TARGETS };
-      }
-    }
-    
-    this.currentUser = user;
-    this.save();
-    return user;
   }
 
   logout() {
     this.currentUser = null;
-    this.save();
+    localStorage.removeItem('cg_currentUser');
   }
 
-  sendNotification(recipientId: string, content: string) {
-    const newNotif: Notification = {
-      id: Math.random().toString(36).substr(2, 9),
-      recipientId,
-      content,
-      createdAt: Date.now(),
-      isRead: false
-    };
-    this.notifications.push(newNotif);
-    this.save();
-    return newNotif;
+  async getAllUsers(): Promise<User[]> {
+    const { data, error } = await supabase.from('users').select('*');
+    if (error) throw error;
+    return (data || []).map(u => this.mapUser(u));
   }
 
-  getNotifications(userId: string): Notification[] {
-    return this.notifications.filter(n => n.recipientId === 'all' || n.recipientId === userId)
-      .sort((a, b) => b.createdAt - a.createdAt);
+  async getTasks(): Promise<Task[]> {
+    const { data, error } = await supabase.from('tasks').select('*');
+    if (error) throw error;
+    return (data || []).map(t => ({
+      id: t.id,
+      type: t.type,
+      name: t.name,
+      description: t.description,
+      points: t.points,
+      instructions: t.instructions,
+      deadlineDays: t.deadline_days
+    }));
   }
 
-  markNotificationAsRead(id: string) {
-    const n = this.notifications.find(notif => notif.id === id);
-    if (n) {
-      n.isRead = true;
-      this.save();
-    }
-  }
-
-  markAllNotificationsRead(userId: string) {
-    this.notifications.forEach(n => {
-      if (n.recipientId === 'all' || n.recipientId === userId) {
-        n.isRead = true;
-      }
-    });
-    this.save();
-  }
-
-  deleteNotification(id: string) {
-    this.notifications = this.notifications.filter(n => n.id !== id);
-    this.save();
-  }
-
-  submitTask(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Submission {
-    const newSub: Submission = {
-      ...submission,
-      id: Math.random().toString(36).substr(2, 9),
-      createdAt: Date.now(),
-      status: 'submitted'
-    };
-    this.submissions.push(newSub);
-    this.save();
-    return newSub;
-  }
-
-  getSubmissions(userId?: string): Submission[] {
-    if (userId) return this.submissions.filter(s => s.userId === userId);
-    return this.submissions;
-  }
-
-  approveSubmission(id: string, note?: string) {
-    const sub = this.submissions.find(s => s.id === id);
-    if (sub) {
-      sub.status = 'approved';
-      sub.reviewerNote = note;
-      this.save();
-    }
-  }
-
-  rejectSubmission(id: string, note?: string) {
-    const sub = this.submissions.find(s => s.id === id);
-    if (sub) {
-      sub.status = 'rejected';
-      sub.reviewerNote = note;
-      this.save();
-    }
-  }
-
-  getLeaderboard(): MetricRollup[] {
-    const rollups: Record<string, MetricRollup> = {};
+  async login(id: string, password?: string): Promise<User | null> {
+    if (!id || !password) throw new Error("Credentials required.");
     
-    this.users.forEach(u => {
-      if (u.id === 'admin') return;
+    const { data: dbUser, error } = await supabase.from('users').select('*').eq('id', id).maybeSingle();
+    if (error) throw error;
+
+    let userToMap = dbUser;
+
+    if (!dbUser) {
+      const profile = DEFAULT_PROFILES[id];
+      if (!profile || profile.p !== password) throw new Error("Invalid credentials or user not found.");
+      
+      const newUser = {
+        id, password: profile.p, display_name: profile.n, campus_id: profile.c,
+        email: profile.e, created_at: Date.now(), last_login_at: Date.now(),
+        task_targets: { 't1': 50, 't2': 1, 't3': 5, 't4': 10, 't5': 10 }
+      };
+      const { data: seeded, error: iErr } = await supabase.from('users').insert(newUser).select().single();
+      if (iErr) throw iErr;
+      userToMap = seeded;
+    } else {
+      if (dbUser.password !== password) throw new Error("Invalid password.");
+      await supabase.from('users').update({ last_login_at: Date.now() }).eq('id', id);
+    }
+
+    const mapped = this.mapUser(userToMap);
+    this.currentUser = mapped;
+    localStorage.setItem('cg_currentUser', JSON.stringify(mapped));
+    return mapped;
+  }
+
+  private mapUser(dbUser: any): User {
+    return {
+      id: dbUser.id,
+      displayName: dbUser.display_name,
+      campusId: dbUser.campus_id,
+      email: dbUser.email,
+      phoneNumber: dbUser.phone_number,
+      createdAt: dbUser.created_at,
+      lastLoginAt: dbUser.last_login_at,
+      qrCodeId: dbUser.qr_code_id,
+      rewardsQrCode: dbUser.rewards_qr_code,
+      streaksQrCode: dbUser.streaks_qr_code,
+      rewardsOnelink: dbUser.rewards_onelink,
+      streaksOnelink: dbUser.streaks_onelink,
+      avatarUrl: dbUser.avatar_url,
+      shareContactInfo: dbUser.share_contact_info,
+      taskTargets: dbUser.task_targets
+    };
+  }
+
+  async submitTask(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Promise<Submission> {
+    const dbSub = {
+      user_id: submission.userId,
+      campus_id: submission.campusId,
+      task_id: submission.taskId,
+      status: 'submitted',
+      // Map individual fields to dedicated columns
+      recipient_name: submission.payload?.recipientName || null,
+      recipient_phone: submission.payload?.recipientPhone || null,
+      recipient_email: submission.payload?.recipientEmail || null,
+      payload: submission.payload,
+      location: submission.location,
+      created_at: Date.now()
+    };
+    const { data, error } = await supabase.from('submissions').insert(dbSub).select().single();
+    if (error) throw error;
+    return {
+      id: data.id,
+      userId: data.user_id,
+      campusId: data.campus_id,
+      taskId: data.task_id,
+      status: data.status,
+      payload: data.payload,
+      location: data.location,
+      createdAt: data.created_at
+    };
+  }
+
+  async getSubmissions(userId?: string): Promise<Submission[]> {
+    let query = supabase.from('submissions').select('*').order('created_at', { ascending: false });
+    if (userId) query = query.eq('user_id', userId);
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    return (data || []).map(s => {
+      // Re-map dedicated columns back into the payload for frontend compatibility
+      const extendedPayload = {
+        ...s.payload,
+        recipientName: s.recipient_name || s.payload?.recipientName,
+        recipientPhone: s.recipient_phone || s.payload?.recipientPhone,
+        recipientEmail: s.recipient_email || s.payload?.recipientEmail
+      };
+
+      return {
+        id: s.id,
+        userId: s.user_id,
+        campusId: s.campus_id,
+        taskId: s.task_id,
+        status: s.status,
+        payload: extendedPayload,
+        location: s.location,
+        createdAt: s.created_at,
+        reviewerNote: s.reviewer_note
+      };
+    });
+  }
+
+  async getLeaderboard(): Promise<MetricRollup[]> {
+    const [users, tasks, subs] = await Promise.all([
+      this.getAllUsers(),
+      this.getTasks(),
+      this.getSubmissions()
+    ]);
+    
+    const rollups: Record<string, MetricRollup> = {};
+    users.filter(u => u.id !== 'admin').forEach(u => {
       rollups[u.id] = {
         userId: u.id,
         score: 0,
@@ -277,12 +171,11 @@ class MockDatabase {
       };
     });
 
-    this.submissions.filter(s => s.status === 'approved').forEach(s => {
-      const task = TASKS.find(t => t.id === s.taskId);
+    subs.filter(s => s.status === 'approved').forEach(s => {
+      const task = tasks.find(t => t.id === s.taskId);
       if (!task || !rollups[s.userId]) return;
 
       rollups[s.userId].score += task.points;
-
       if (task.type === 'offline_activation') rollups[s.userId].metrics.flyers += Number(s.payload.count || 0);
       if (task.type === 'social_media') rollups[s.userId].metrics.content += 1;
       if (task.type === 'referral') rollups[s.userId].metrics.scans += 1;
@@ -292,26 +185,71 @@ class MockDatabase {
     return Object.values(rollups).sort((a, b) => b.score - a.score);
   }
 
-  getCampusName(id: string) {
-    return CAMPUSES.find(c => c.id === id)?.name || 'Unknown';
+  async updateUser(userId: string, updates: Partial<User>) {
+    const dbUpdates: any = {};
+    if (updates.displayName !== undefined) dbUpdates.display_name = updates.displayName;
+    if (updates.email !== undefined) dbUpdates.email = updates.email;
+    if (updates.phoneNumber !== undefined) dbUpdates.phone_number = updates.phoneNumber;
+    if (updates.shareContactInfo !== undefined) dbUpdates.share_contact_info = updates.shareContactInfo;
+    if (updates.taskTargets !== undefined) dbUpdates.task_targets = updates.taskTargets;
+    if (updates.rewardsOnelink !== undefined) dbUpdates.rewards_onelink = updates.rewardsOnelink;
+    if (updates.streaksOnelink !== undefined) dbUpdates.streaks_onelink = updates.streaksOnelink;
+    
+    const { data, error } = await supabase.from('users').update(dbUpdates).eq('id', userId).select().single();
+    if (error) throw error;
+    const mapped = this.mapUser(data);
+    if (this.currentUser?.id === userId) {
+      this.currentUser = mapped;
+      localStorage.setItem('cg_currentUser', JSON.stringify(mapped));
+    }
+    return mapped;
   }
 
-  getUserById(id: string): User {
-    const user = this.users.find(u => u.id === id);
-    if (user) return user;
-    const cred = VALID_CREDENTIALS[id];
-    return { 
-      id: id,
-      displayName: cred?.n || 'Catalyst', 
-      campusId: cred?.c || 'c1',
-      email: cred?.e || `${id}@campus.swiggy.com`,
-      createdAt: 0,
-      lastLoginAt: 0,
-      qrCodeId: `QR-${id.split('_')[1]?.toUpperCase() || 'UNKNOWN'}`,
-      rewardsQrCode: cred?.rqr || `RQR-${id.toUpperCase()}`,
-      streaksQrCode: cred?.sqr || `SQR-${id.toUpperCase()}`,
-      taskTargets: { ...DEFAULT_TARGETS }
-    };
+  async updateUserAvatar(userId: string, avatarUrl: string): Promise<User> {
+    const { data, error } = await supabase.from('users').update({ avatar_url: avatarUrl }).eq('id', userId).select().single();
+    if (error) throw error;
+    const mapped = this.mapUser(data);
+    if (this.currentUser?.id === userId) {
+      this.currentUser = mapped;
+      localStorage.setItem('cg_currentUser', JSON.stringify(mapped));
+    }
+    return mapped;
+  }
+
+  async approveSubmission(id: string, note?: string) {
+    await supabase.from('submissions').update({ status: 'approved', reviewer_note: note }).eq('id', id);
+  }
+
+  async rejectSubmission(id: string, note?: string) {
+    await supabase.from('submissions').update({ status: 'rejected', reviewer_note: note }).eq('id', id);
+  }
+
+  async getNotifications(userId: string) {
+    const { data, error } = await supabase.from('notifications').select('*').or(`recipient_id.eq.all,recipient_id.eq.${userId}`).order('created_at', { ascending: false });
+    if (error) throw error;
+    return (data || []).map(n => ({ id: n.id, recipientId: n.recipient_id, content: n.content, createdAt: n.created_at, isRead: n.is_read }));
+  }
+
+  async markAllNotificationsRead(userId: string) {
+    await supabase.from('notifications').update({ is_read: true }).or(`recipient_id.eq.all,recipient_id.eq.${userId}`);
+  }
+
+  async sendNotification(recipientId: string, content: string) {
+    await supabase.from('notifications').insert({ recipient_id: recipientId, content, created_at: Date.now(), is_read: false });
+  }
+
+  async deleteNotification(id: string) {
+    await supabase.from('notifications').delete().eq('id', id);
+  }
+
+  getCampusName(id: string) {
+    return CAMPUSES.find(c => c.id === id)?.name || 'Unknown Campus';
+  }
+
+  async getUserById(id: string) {
+    const { data, error } = await supabase.from('users').select('*').eq('id', id).maybeSingle();
+    if (error || !data) return null;
+    return this.mapUser(data);
   }
 }
 

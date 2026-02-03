@@ -8,7 +8,7 @@ import Leaderboard from './components/Leaderboard';
 import Profile from './components/Profile';
 import AdminReview from './components/AdminReview';
 import Notifications from './components/Notifications';
-import { User, Submission, MetricRollup } from './types';
+import { User, Submission, MetricRollup, Task } from './types';
 import { ChevronRight, Lock, User as UserIcon, AlertCircle, Users, ChevronDown } from 'lucide-react';
 
 const SwiggyLogo = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
@@ -25,58 +25,86 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [leaderboard, setLeaderboard] = useState<MetricRollup[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCatalystId, setSelectedCatalystId] = useState<string>('catalyst_iitd');
+  const [selectedCatalyst, setSelectedCatalyst] = useState<User | null>(null);
+  const [allCatalysts, setAllCatalysts] = useState<User[]>([]);
   
   const [loginData, setLoginData] = useState({ identifier: '', password: '' });
 
   const isAdmin = user?.email === 'admin@campus.swiggy.com' || user?.id === 'admin';
-  const allCatalysts = db.getAllUsers().filter(u => u.id !== 'admin');
-  const selectedCatalyst = db.getUserById(selectedCatalystId);
 
-  const refreshData = () => {
+  // Fetch all necessary data asynchronously
+  const refreshData = async () => {
     if (!user) return;
     
-    const userId = user.id || '';
-    const effectiveUserId = (isAdmin && ['dashboard', 'tasks', 'admin'].includes(activeTab)) 
-      ? selectedCatalystId 
-      : (userId === 'admin' ? undefined : userId);
+    try {
+      const [allUsers, fetchedTasks] = await Promise.all([
+        db.getAllUsers(),
+        db.getTasks()
+      ]);
       
-    setSubmissions(db.getSubmissions(effectiveUserId));
-    setLeaderboard(db.getLeaderboard());
+      const filteredUsers = allUsers.filter(u => u.id !== 'admin');
+      setAllCatalysts(filteredUsers);
+      setTasks(fetchedTasks);
+      
+      const catalyst = await db.getUserById(selectedCatalystId);
+      setSelectedCatalyst(catalyst);
+
+      const userId = user.id || '';
+      // Admin view for dashboard/tasks shows the selected intern's data
+      const effectiveUserId = (isAdmin && ['dashboard', 'tasks', 'admin'].includes(activeTab)) 
+        ? selectedCatalystId 
+        : (userId === 'admin' ? undefined : userId);
+        
+      const [fetchedSubmissions, fetchedLeaderboard] = await Promise.all([
+        db.getSubmissions(effectiveUserId),
+        db.getLeaderboard()
+      ]);
+      
+      setSubmissions(fetchedSubmissions);
+      setLeaderboard(fetchedLeaderboard);
+    } catch (e) {
+      console.error("Data refresh failed", e);
+    }
   };
 
   useEffect(() => {
     refreshData();
   }, [user, activeTab, selectedCatalystId]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoggingIn(true);
     setError(null);
     
-    setTimeout(() => {
-      const loggedInUser = db.login(loginData.identifier, loginData.password);
+    try {
+      const loggedInUser = await db.login(loginData.identifier, loginData.password);
       if (loggedInUser) {
         setUser(loggedInUser);
       } else {
         setError('Invalid credentials. Hint: catalyst_iitd / swiggy_iitd');
       }
+    } catch (err: any) {
+      setError(err.message || 'Connection error. Please check if Supabase tables are created.');
+    } finally {
       setIsLoggingIn(false);
-    }, 600);
+    }
   };
 
   const handleLogout = () => {
+    // Fixed: calling db.logout() which is now defined in MockDatabase
     db.logout();
     setUser(null);
     setLoginData({ identifier: '', password: '' });
     setActiveTab('dashboard');
   };
 
-  const handleSubmitTask = (data: any) => {
+  const handleSubmitTask = async (data: any) => {
     if (user) {
-      db.submitTask({
+      await db.submitTask({
         userId: user.id,
         campusId: user.campusId,
         taskId: data.taskId,
@@ -92,20 +120,16 @@ const App: React.FC = () => {
     if (user?.id === updatedUser.id) {
         setUser({ ...updatedUser });
     }
-    setLeaderboard(db.getLeaderboard());
     refreshData();
   };
 
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-tr from-[#FFF8F2] via-[#FFF8F2] to-[#FFEBD6] flex items-center justify-center p-6 relative overflow-hidden">
-        {/* Modern high-fidelity background elements */}
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-swiggy-light/30 rounded-full blur-[120px]"></div>
         <div className="absolute bottom-[-5%] right-[-5%] w-[30%] h-[30%] bg-[#FFD7BA]/20 rounded-full blur-[100px]"></div>
 
         <div className="bg-white w-full max-w-[480px] rounded-[64px] p-12 md:p-16 premium-card-shadow relative z-10 border border-white/50 animate-in fade-in zoom-in-95 duration-500">
-          
-          {/* Header Section */}
           <div className="flex flex-col items-center mb-14">
             <div className="w-24 h-24 bg-swiggy-orange rounded-[36px] flex items-center justify-center logo-inner-glow mb-10 overflow-hidden p-4 group cursor-default">
               <SwiggyLogo size={64} className="group-hover:scale-110 transition-transform duration-500" />
@@ -122,7 +146,7 @@ const App: React.FC = () => {
             {error && (
               <div className="bg-red-50 text-red-600 px-6 py-4 rounded-[24px] text-xs font-bold flex items-center gap-3 border border-red-100 animate-in slide-in-from-top-2 duration-300">
                 <AlertCircle size={20} />
-                {error}
+                <span className="leading-tight">{error}</span>
               </div>
             )}
             
@@ -165,8 +189,6 @@ const App: React.FC = () => {
             >
               <span>{isLoggingIn ? "Signing in..." : "Sign In"}</span>
               <ChevronRight size={22} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-              
-              {/* Dynamic Shine Animation */}
               <div className="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] group-hover:left-[100%] transition-all duration-[800ms] ease-in-out"></div>
             </button>
           </form>
@@ -207,12 +229,13 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {activeTab === 'dashboard' && <Dashboard submissions={submissions} leaderboard={leaderboard} user={isAdmin ? selectedCatalyst : user} isAdmin={isAdmin} />}
-      {activeTab === 'tasks' && <TaskSubmission onSubmit={handleSubmitTask} isAdmin={isAdmin} selectedCatalyst={isAdmin ? selectedCatalyst : null} submissions={submissions} />}
+      {/* Passed missing tasks prop to components */}
+      {activeTab === 'dashboard' && <Dashboard submissions={submissions} leaderboard={leaderboard} user={isAdmin ? selectedCatalyst : user} isAdmin={isAdmin} tasks={tasks} />}
+      {activeTab === 'tasks' && <TaskSubmission onSubmit={handleSubmitTask} isAdmin={isAdmin} selectedCatalyst={isAdmin ? selectedCatalyst : null} submissions={submissions} tasks={tasks} />}
       {activeTab === 'leaderboard' && <Leaderboard data={leaderboard} isAdmin={isAdmin} />}
       {activeTab === 'notifications' && <Notifications userId={user.id} onRead={refreshData} />}
       {activeTab === 'profile' && <Profile user={user} onUserUpdate={handleUserUpdate} />}
-      {activeTab === 'admin' && isAdmin && <AdminReview submissions={db.getSubmissions()} onUpdate={refreshData} selectedCatalyst={selectedCatalyst} onUserUpdate={handleUserUpdate} />}
+      {activeTab === 'admin' && isAdmin && <AdminReview submissions={submissions} onUpdate={refreshData} selectedCatalyst={selectedCatalyst} onUserUpdate={handleUserUpdate} tasks={tasks} />}
     </Layout>
   );
 };

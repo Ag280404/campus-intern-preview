@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import { Bell, Clock, Calendar, Mail, CheckCircle, Info, MessageSquare, ChevronLeft, Inbox, X } from 'lucide-react';
+import { Bell, Clock, Calendar, Mail, CheckCircle, Info, Inbox, X } from 'lucide-react';
 import { Notification } from '../types';
 import { db } from '../services/mockDatabase';
 
@@ -12,18 +13,19 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
   const [localNotifications, setLocalNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    // Initial fetch
-    const fetched = db.getNotifications(userId);
-    setLocalNotifications(fetched);
-    
-    // Mark as read when component mounts
-    db.markAllNotificationsRead(userId);
-    onRead();
+    const fetchNotifications = async () => {
+      const fetched = await db.getNotifications(userId);
+      setLocalNotifications(fetched);
+      
+      await db.markAllNotificationsRead(userId);
+      onRead();
+    };
+    fetchNotifications();
   }, [userId]);
 
-  const handleDelete = (id: string, e: React.MouseEvent) => {
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    db.deleteNotification(id);
+    await db.deleteNotification(id);
     setLocalNotifications(prev => prev.filter(n => n.id !== id));
   };
 
@@ -54,7 +56,6 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
                   isUnread ? 'border-l-swiggy-orange' : 'border-l-slate-200 opacity-90'
                 }`}
               >
-                {/* Clear off button */}
                 <button 
                   onClick={(e) => handleDelete(n.id, e)}
                   className="absolute top-8 right-8 p-2 rounded-xl text-slate-300 hover:text-swiggy-orange hover:bg-swiggy-light transition-all duration-300"

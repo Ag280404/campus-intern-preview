@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Home, ClipboardList, Trophy, User as UserIcon, LogOut, ShieldCheck, Bell } from 'lucide-react';
 import { db } from '../services/mockDatabase';
 
@@ -20,7 +21,18 @@ const SwiggyLogo = ({ size = 24, className = "" }: { size?: number, className?: 
 );
 
 const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user, onLogout }) => {
-  const unreadCount = user ? db.getNotifications(user.id).filter(n => !n.isRead).length : 0;
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch notifications asynchronously to count unread items
+  useEffect(() => {
+    const fetchUnread = async () => {
+      if (user) {
+        const notes = await db.getNotifications(user.id);
+        setUnreadCount(notes.filter(n => !n.isRead).length);
+      }
+    };
+    fetchUnread();
+  }, [user]);
 
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },

@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trophy, Medal, Crown, MapPin, Search, TrendingUp, User as UserIcon, ChevronRight, Calculator, PieChart, Activity, Star, Clock, ChevronDown, BarChart3 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { MetricRollup } from '../types';
+import { MetricRollup, User } from '../types';
 import { db } from '../services/mockDatabase';
 
 interface LeaderboardProps {
@@ -11,8 +11,20 @@ interface LeaderboardProps {
 }
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
+  const [userMap, setUserMap] = useState<Record<string, User>>({});
   const leaderboardData = data || [];
   const topThree = leaderboardData.slice(0, 3);
+
+  // Pre-fetch all users to avoid sync calls in render
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const users = await db.getAllUsers();
+      const map: Record<string, User> = {};
+      users.forEach(u => map[u.id] = u);
+      setUserMap(map);
+    };
+    fetchUsers();
+  }, []);
 
   const growthData = [
     { month: 'Jan', score: 45 },
@@ -24,7 +36,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
   ];
 
   const Avatar = ({ userId, size = 20 }: { userId: string, size?: number }) => {
-    const user = db.getUserById(userId);
+    const user = userMap[userId];
     return (
       <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
         {user?.avatarUrl ? (
@@ -129,9 +141,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                   <span className="text-white font-black text-[13px]">2</span>
                 </div>
               </div>
-              <h4 className="font-black text-slate-900 text-lg mb-1 tracking-tight">{db.getUserById(topThree[1].userId)?.displayName}</h4>
+              <h4 className="font-black text-slate-900 text-lg mb-1 tracking-tight">{userMap[topThree[1].userId]?.displayName}</h4>
               <p className="text-[11px] text-slate-400 font-bold flex items-center justify-center gap-1.5 tracking-tight">
-                <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(db.getUserById(topThree[1].userId)?.campusId || '')}
+                <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(userMap[topThree[1].userId]?.campusId || '')}
               </p>
               <div className="mt-6 bg-white px-8 py-3 rounded-[24px] shadow-lg border border-slate-100 group-hover:swiggy-shadow transition-all">
                 <span className="font-black text-slate-400 text-lg tracking-tight">Second position</span>
@@ -153,9 +165,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                   <span className="text-white font-black text-lg leading-none">1</span>
                 </div>
               </div>
-              <h4 className="font-black text-2xl text-slate-900 mb-1.5 tracking-tighter">{db.getUserById(topThree[0].userId)?.displayName}</h4>
+              <h4 className="font-black text-2xl text-slate-900 mb-1.5 tracking-tighter">{userMap[topThree[0].userId]?.displayName}</h4>
               <p className="text-xs text-slate-400 font-bold flex items-center justify-center gap-2 tracking-tight">
-                <MapPin size={14} strokeWidth={3} className="text-swiggy-orange" /> {db.getCampusName(db.getUserById(topThree[0].userId)?.campusId || '')}
+                <MapPin size={14} strokeWidth={3} className="text-swiggy-orange" /> {db.getCampusName(userMap[topThree[0].userId]?.campusId || '')}
               </p>
               <div className="mt-8 swiggy-btn-gradient px-10 py-4 rounded-[28px] shadow-2xl shadow-orange-200 scale-110 active:scale-105 transition-transform cursor-default">
                 <span className="font-black text-white text-xl tracking-tight">Champion</span>
@@ -174,9 +186,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                   <span className="text-white font-black text-[13px]">3</span>
                 </div>
               </div>
-              <h4 className="font-black text-slate-900 text-lg mb-1 tracking-tight">{db.getUserById(topThree[2].userId)?.displayName}</h4>
+              <h4 className="font-black text-slate-900 text-lg mb-1 tracking-tight">{userMap[topThree[2].userId]?.displayName}</h4>
               <p className="text-[11px] text-slate-400 font-bold flex items-center justify-center gap-1.5 tracking-tight">
-                <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(db.getUserById(topThree[2].userId)?.campusId || '')}
+                <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(userMap[topThree[2].userId]?.campusId || '')}
               </p>
               <div className="mt-6 bg-white px-8 py-3 rounded-[24px] shadow-lg border border-slate-100 group-hover:swiggy-shadow transition-all">
                 <span className="font-black text-slate-400 text-lg tracking-tight">Third position</span>
@@ -194,7 +206,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
         </div>
         <div className="divide-y divide-slate-50">
           {leaderboardData.map((catalyst, idx) => {
-            const u = db.getUserById(catalyst.userId);
+            const u = userMap[catalyst.userId];
             return (
               <div key={catalyst.userId} className="grid grid-cols-12 px-10 py-6 items-center hover:bg-slate-50/50 transition-all group cursor-default">
                 <div className="col-span-2 font-black text-slate-300 text-2xl group-hover:text-swiggy-orange transition-colors">#{idx + 1}</div>
