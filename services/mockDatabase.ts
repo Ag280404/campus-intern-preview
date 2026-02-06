@@ -104,7 +104,6 @@ class MockDatabase {
       campus_id: submission.campusId,
       task_id: submission.taskId,
       status: 'submitted',
-      // Map individual fields to dedicated columns
       recipient_name: submission.payload?.recipientName || null,
       recipient_phone: submission.payload?.recipientPhone || null,
       recipient_email: submission.payload?.recipientEmail || null,
@@ -132,27 +131,22 @@ class MockDatabase {
     const { data, error } = await query;
     if (error) throw error;
     
-    return (data || []).map(s => {
-      // Re-map dedicated columns back into the payload for frontend compatibility
-      const extendedPayload = {
+    return (data || []).map(s => ({
+      id: s.id,
+      userId: s.user_id,
+      campusId: s.campus_id,
+      taskId: s.task_id,
+      status: s.status,
+      payload: {
         ...s.payload,
         recipientName: s.recipient_name || s.payload?.recipientName,
         recipientPhone: s.recipient_phone || s.payload?.recipientPhone,
         recipientEmail: s.recipient_email || s.payload?.recipientEmail
-      };
-
-      return {
-        id: s.id,
-        userId: s.user_id,
-        campusId: s.campus_id,
-        taskId: s.task_id,
-        status: s.status,
-        payload: extendedPayload,
-        location: s.location,
-        createdAt: s.created_at,
-        reviewerNote: s.reviewer_note
-      };
-    });
+      },
+      location: s.location,
+      createdAt: s.created_at,
+      reviewerNote: s.reviewer_note
+    }));
   }
 
   async getLeaderboard(): Promise<MetricRollup[]> {

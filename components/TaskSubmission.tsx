@@ -9,14 +9,13 @@ import {
   FileText, 
   Flame, 
   ClipboardList, 
-  Clock, 
   CheckCircle, 
-  XCircle, 
   Info, 
   Calendar,
   Check,
   Send,
-  AlertCircle
+  // Added missing ChevronDown import
+  ChevronDown
 } from 'lucide-react';
 import { Task, TaskType, User, Submission } from '../types';
 import { db } from '../services/mockDatabase';
@@ -33,7 +32,6 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [formData, setFormData] = useState<any>({});
   const [hasConsent, setHasConsent] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
   const currentUser = db.getCurrentUser();
@@ -66,34 +64,28 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
     }
   };
 
-  const getSectionTitle = (type: TaskType) => {
+  const getWarningText = (type: TaskType) => {
+    switch (type) {
+      case 'offline_activation':
+        return "Please focus on high-visibility campus zones such as hostel notice boards, mess entrances, and library gates, as well as digital channels like WhatsApp and social media to maximize impact";
+      case 'social_media':
+        return "Ensure your post clearly features Swiggy branding. Your profile must be set to public for verification purpose.";
+      default:
+        return "Please ensure submissions are accurate and verifiable to facilitate smooth assessment. Submissions will be verified every Wednesday.";
+    }
+  };
+
+  const getDetailLabel = (type: TaskType) => {
     switch (type) {
       case 'referral': return "REFERRAL DETAILS";
       case 'student_rewards': return "COUPON RECIPIENT DETAILS";
-      case 'social_media': return "POST DETAILS";
-      case 'offline_activation': return "DISTRIBUTION DETAILS";
       case 'streaks': return "MONTH";
       default: return "DETAILS";
     }
   };
 
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (['referral', 'student_rewards'].includes(selectedTask?.type || '')) {
-      if (!formData.recipientName) newErrors.recipientName = "Full Name is required.";
-      if (!formData.recipientEmail) newErrors.recipientEmail = "Email ID is required.";
-      if (!formData.recipientPhone) newErrors.recipientPhone = "Phone Number is required.";
-      if (!hasConsent) newErrors.hasConsent = "Consent is mandatory.";
-    }
-    if (selectedTask?.type === 'social_media' && !formData.url) newErrors.url = "URL is required.";
-    if (selectedTask?.type === 'offline_activation' && !formData.count) newErrors.count = "Count is required.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
     setLoading(true);
 
     navigator.geolocation.getCurrentPosition(
@@ -121,36 +113,37 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
     const completionPercent = calculateCompletion(selectedTask.id);
     return (
       <div className="animate-in slide-in-from-right duration-500 max-w-5xl mx-auto pb-20">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 px-2">
           <div className="space-y-4">
             <button 
               onClick={() => setSelectedTask(null)} 
-              className="bg-[#F1F5F9] text-[#64748B] text-[10px] font-black px-5 py-2 rounded-full flex items-center gap-2 uppercase tracking-[0.15em] hover:bg-slate-200 transition-colors"
+              className="bg-[#F1F5F9] text-[#64748B] text-[10px] font-black px-6 py-2.5 rounded-full flex items-center gap-2 uppercase tracking-[0.15em] hover:bg-slate-200 transition-all shadow-sm"
             >
-              <ChevronLeft size={14} strokeWidth={3} /> Back to task grid
+              <ChevronLeft size={14} strokeWidth={3} /> BACK TO TASK GRID
             </button>
             <div className="flex items-center gap-3">
               <h2 className="text-[42px] font-black text-slate-900 tracking-tighter leading-none">{selectedTask.name}</h2>
-              <Info size={20} className="text-slate-300 mt-1 cursor-help" />
+              <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mt-1 cursor-help">
+                <Info size={14} />
+              </div>
             </div>
           </div>
 
-          <div className="bg-white px-8 py-5 rounded-[32px] swiggy-shadow flex items-center gap-5 border border-slate-50">
+          <div className="bg-white px-8 py-5 rounded-[32px] swiggy-shadow flex items-center gap-5 border border-slate-50 premium-card-shadow">
             <div className="text-right">
-              <div className="text-[16px] font-black text-slate-900 leading-none">{completionPercent}%</div>
-              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Completion</div>
+              <div className="text-[18px] font-black text-slate-900 leading-none">{completionPercent}%</div>
+              <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">COMPLETION</div>
             </div>
             <div className="w-10 h-10 rounded-full bg-orange-50 text-swiggy-orange flex items-center justify-center border border-orange-100/50">
-              <CheckCircle size={20} strokeWidth={2.5} />
+              <CheckCircle size={22} strokeWidth={3} />
             </div>
           </div>
         </div>
 
         <div className="bg-white p-12 md:p-16 rounded-[60px] swiggy-shadow border border-slate-50 premium-card-shadow">
           <form onSubmit={handleSubmit} className="space-y-12">
-            {/* Instructions Section */}
             <div className="space-y-6">
-              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Submission Instructions</h4>
+              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">SUBMISSION INSTRUCTIONS</h4>
               <div className="p-8 bg-[#F8FAFC] rounded-[32px] border border-slate-100">
                 <p className="text-[15px] text-slate-600 font-bold leading-relaxed">
                   {selectedTask.instructions}
@@ -158,9 +151,8 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
               </div>
             </div>
 
-            {/* Form Fields Section */}
             <div className="space-y-8">
-              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{getSectionTitle(selectedTask.type)}</h4>
+              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{getDetailLabel(selectedTask.type)}</h4>
               
               {selectedTask.type === 'streaks' && (
                 <div className="space-y-8">
@@ -177,11 +169,11 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     {[1, 2, 3].map(i => (
                       <div key={i} className="space-y-2.5">
                         <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Preferred streak day {i}</label>
-                        <div className="relative group">
+                        <div className="relative">
                           <select className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-white font-black text-slate-400 outline-none appearance-none cursor-pointer focus:border-swiggy-orange/50 transition-colors text-[15px]">
                             <option>Choose activation day</option>
                           </select>
-                          <ChevronRight size={20} className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-300 rotate-90" />
+                          <ChevronDown size={20} className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
                         </div>
                       </div>
                     ))}
@@ -253,9 +245,9 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     <button 
                       type="button"
                       onClick={() => setHasConsent(!hasConsent)}
-                      className={`w-7 h-7 rounded-xl border-2 shrink-0 flex items-center justify-center transition-all ${hasConsent ? 'bg-swiggy-orange border-swiggy-orange text-white' : 'bg-white border-slate-200'}`}
+                      className={`w-6 h-6 rounded-lg border-2 shrink-0 flex items-center justify-center transition-all ${hasConsent ? 'bg-swiggy-orange border-swiggy-orange text-white' : 'bg-white border-slate-200'}`}
                     >
-                      {hasConsent && <Check size={16} strokeWidth={4} />}
+                      {hasConsent && <Check size={14} strokeWidth={4} />}
                     </button>
                     <span className="text-[13px] font-black text-slate-500 leading-tight">
                       I confirm that the referred user has consented to sharing their phone number and other required details for this submission.
@@ -265,30 +257,23 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
               )}
             </div>
 
-            {/* Warning Alert */}
-            <div className="bg-[#FFFBEB] border border-[#FEF3C7] p-8 rounded-[32px] flex items-start gap-5">
+            <div className="bg-[#FFFBEB] border border-[#FEF3C7] p-8 rounded-[32px] flex items-start gap-5 shadow-sm">
               <div className="w-10 h-10 bg-[#FEF3C7] rounded-full flex items-center justify-center shrink-0">
                 <Info size={20} className="text-[#D97706]" strokeWidth={2.5} />
               </div>
               <p className="text-[13px] font-black text-[#D97706] leading-relaxed">
-                {selectedTask.type === 'offline_activation' 
-                  ? "Please focus on high-visibility campus zones such as hostel notice boards, mess entrances, and library gates, as well as digital channels like WhatsApp and social media to maximize impact"
-                  : selectedTask.type === 'social_media'
-                    ? "Ensure your post clearly features Swiggy branding. Your profile must be set to public for verification purpose."
-                    : "Please ensure submissions are accurate and verifiable to facilitate smooth assessment. Submissions will be verified every Wednesday."
-                }
+                {getWarningText(selectedTask.type)}
               </p>
             </div>
 
-            {/* Submit Button */}
             <div className="pt-6">
               <button 
                 type="submit" 
                 disabled={loading} 
-                className="w-full swiggy-btn-gradient text-white font-black py-7 rounded-[36px] flex items-center justify-center gap-3 group uppercase tracking-[0.2em] shadow-2xl transition-all"
+                className="w-full swiggy-btn-gradient text-white font-black py-7 rounded-[36px] flex items-center justify-center gap-3 group uppercase tracking-[0.2em] shadow-2xl transition-all disabled:opacity-50"
               >
                 <Send size={20} strokeWidth={3} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                <span>{loading ? 'Submitting...' : 'Submit'}</span>
+                <span>{loading ? 'SUBMITTING...' : 'SUBMIT'}</span>
               </button>
             </div>
           </form>
@@ -298,33 +283,33 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   }
 
   return (
-    <div className="space-y-12 pb-20">
-      <h2 className="text-[36px] font-black text-slate-900 tracking-tighter leading-none px-2">Tasks</h2>
-      <div className="grid grid-cols-1 gap-8">
+    <div className="space-y-12 pb-20 px-2 animate-in fade-in duration-700">
+      <h2 className="text-[36px] font-black text-slate-900 tracking-tighter leading-none">Tasks</h2>
+      <div className="grid grid-cols-1 gap-6">
         {tasks.map(task => {
           const completion = calculateCompletion(task.id);
           return (
             <button 
               key={task.id} 
               onClick={() => setSelectedTask(task)} 
-              className="bg-white px-10 py-9 rounded-[48px] swiggy-shadow border border-slate-50 flex items-center justify-between group hover:border-swiggy-orange/30 hover:scale-[1.01] transition-all premium-card-shadow"
+              className="bg-white px-10 py-9 rounded-[48px] swiggy-shadow border border-slate-50/50 flex items-center justify-between group hover:border-swiggy-orange/30 hover:scale-[1.01] transition-all premium-card-shadow"
             >
               <div className="flex items-center gap-10">
-                <div className="w-16 h-16 rounded-full bg-[#F8FAFC] flex items-center justify-center text-slate-400 group-hover:bg-swiggy-light group-hover:text-swiggy-orange transition-all shadow-inner">
-                  {getTaskIcon(task.type, 28)}
+                <div className="w-16 h-16 rounded-[24px] bg-[#F8FAFC] flex items-center justify-center text-slate-400 group-hover:bg-swiggy-light group-hover:text-swiggy-orange transition-all shadow-inner">
+                  {getTaskIcon(task.type, 32)}
                 </div>
                 <div className="text-left">
-                  <h3 className="text-xl font-black text-slate-900 group-hover:text-swiggy-orange transition-colors tracking-tight">{task.name}</h3>
+                  <h3 className="text-[22px] font-black text-slate-900 group-hover:text-swiggy-orange transition-colors tracking-tight leading-tight">{task.name}</h3>
                 </div>
               </div>
               
               <div className="flex items-center gap-10">
                 <div className="text-right">
                    <div className="text-[16px] font-black text-slate-900 leading-none group-hover:text-swiggy-orange transition-colors">{completion}%</div>
-                   <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1.5 opacity-60">Complete</div>
+                   <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1.5 opacity-60">COMPLETE</div>
                 </div>
                 <div className="w-12 h-12 rounded-full bg-[#F8FAFC] flex items-center justify-center text-slate-200 group-hover:bg-swiggy-orange group-hover:text-white transition-all shadow-inner">
-                   <ChevronRight size={24} strokeWidth={3} />
+                   <ChevronRight size={24} strokeWidth={4} />
                 </div>
               </div>
             </button>
