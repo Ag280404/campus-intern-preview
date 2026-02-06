@@ -58,6 +58,7 @@ const App: React.FC = () => {
         setSelectedCatalystId(filteredUsers[0].id);
       }
 
+      // If admin, we fetch submissions for the selected catalyst in context
       const effectiveUserId = (isAdmin && ['dashboard', 'tasks', 'admin'].includes(activeTab)) 
         ? selectedCatalystId 
         : (user.id === 'admin' ? undefined : user.id);
@@ -142,14 +143,28 @@ const App: React.FC = () => {
             <div className="space-y-2.5">
               <label className="block text-[10px] font-bold text-slate-400 ml-3 uppercase tracking-widest">User ID</label>
               <div className="relative group">
-                <input type="text" required value={loginData.identifier} onChange={e => setLoginData({...loginData, identifier: e.target.value})} className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 focus:bg-white" placeholder="e.g. catalyst_iitd" />
+                <input 
+                  type="text" 
+                  required 
+                  value={loginData.identifier} 
+                  onChange={e => setLoginData({...loginData, identifier: e.target.value})} 
+                  className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 focus:bg-white" 
+                  placeholder="e.g. catalyst_iitd" 
+                />
                 <div className="absolute left-5.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-swiggy-orange transition-colors"><UserIcon size={19} /></div>
               </div>
             </div>
             <div className="space-y-2.5">
               <label className="block text-[10px] font-bold text-slate-400 ml-3 uppercase tracking-widest">Password</label>
               <div className="relative group">
-                <input type="password" required value={loginData.password} onChange={e => setLoginData({...loginData, password: e.target.value})} className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 focus:bg-white" placeholder="••••••••" />
+                <input 
+                  type="password" 
+                  required 
+                  value={loginData.password} 
+                  onChange={e => setLoginData({...loginData, password: e.target.value})} 
+                  className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 focus:bg-white" 
+                  placeholder="••••••••" 
+                />
                 <div className="absolute left-5.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-swiggy-orange transition-colors"><Lock size={19} /></div>
               </div>
             </div>
@@ -181,7 +196,11 @@ const App: React.FC = () => {
                 <h4 className="text-[13px] font-black text-slate-900 leading-none uppercase tracking-tight">Catalyst Context</h4>
               </div>
               <div className="relative">
-                <select value={selectedCatalystId} onChange={(e) => setSelectedCatalystId(e.target.value)} className="pl-5 pr-12 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-800 min-w-[240px] appearance-none">
+                <select 
+                  value={selectedCatalystId} 
+                  onChange={(e) => setSelectedCatalystId(e.target.value)} 
+                  className="pl-5 pr-12 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-800 min-w-[240px] appearance-none"
+                >
                   {allCatalysts.map(c => <option key={c.id} value={c.id}>{c.displayName}</option>)}
                 </select>
                 <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />

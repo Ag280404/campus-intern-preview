@@ -14,7 +14,6 @@ import {
   Calendar,
   Check,
   Send,
-  // Added missing ChevronDown import
   ChevronDown
 } from 'lucide-react';
 import { Task, TaskType, User, Submission } from '../types';
@@ -67,20 +66,11 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   const getWarningText = (type: TaskType) => {
     switch (type) {
       case 'offline_activation':
-        return "Please focus on high-visibility campus zones such as hostel notice boards, mess entrances, and library gates, as well as digital channels like WhatsApp and social media to maximize impact";
+        return "Please focus on high-visibility campus zones such as hostel notice boards, mess entrances, and library gates to maximize impact.";
       case 'social_media':
         return "Ensure your post clearly features Swiggy branding. Your profile must be set to public for verification purpose.";
       default:
-        return "Please ensure submissions are accurate and verifiable to facilitate smooth assessment. Submissions will be verified every Wednesday.";
-    }
-  };
-
-  const getDetailLabel = (type: TaskType) => {
-    switch (type) {
-      case 'referral': return "REFERRAL DETAILS";
-      case 'student_rewards': return "COUPON RECIPIENT DETAILS";
-      case 'streaks': return "MONTH";
-      default: return "DETAILS";
+        return "Please ensure submissions are accurate and verifiable. Submissions will be verified every Wednesday.";
     }
   };
 
@@ -152,7 +142,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
             </div>
 
             <div className="space-y-8">
-              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{getDetailLabel(selectedTask.type)}</h4>
+              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">DETAILS</h4>
               
               {selectedTask.type === 'streaks' && (
                 <div className="space-y-8">
