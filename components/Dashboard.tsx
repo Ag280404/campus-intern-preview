@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ExternalLink, RefreshCw, Info, LayoutDashboard } from 'lucide-react';
+import { ExternalLink, RefreshCw } from 'lucide-react';
 import { Submission, MetricRollup, User, Task } from '../types';
 import { db } from '../services/mockDatabase';
 
@@ -19,15 +19,15 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks
 
   if (isAdmin && user) {
     const campusName = db.getCampusName(user.campusId);
-    const approvedCount = submissions.filter(s => s.status === 'approved').length;
+    const approvedCount = submissions.filter((s: Submission) => s.status === 'approved').length;
     
     return (
       <div className="space-y-8 animate-in fade-in duration-700 pb-12">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-5 px-1 py-4">
           <h2 className="text-[28px] font-black text-slate-900 tracking-tight">Campus Insights</h2>
           <div className="flex gap-3 shrink-0">
-            <button onClick={() => setRefreshKey(k => k + 1)} className="flex items-center gap-2 px-5 py-2.5 bg-white border rounded-[18px] text-[11px] font-black text-slate-600"><RefreshCw size={14} /> Refresh</button>
-            <a href={publicUrl} target="_blank" className="bg-swiggy-orange text-white px-6 py-2.5 rounded-[18px] font-black text-[11px] tracking-widest"><ExternalLink size={14} /> Full screen</a>
+            <button onClick={() => setRefreshKey((k: number) => k + 1)} className="flex items-center gap-2 px-5 py-2.5 bg-white border rounded-[18px] text-[11px] font-black text-slate-600"><RefreshCw size={14} /> Refresh</button>
+            <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="bg-swiggy-orange text-white px-6 py-2.5 rounded-[18px] font-black text-[11px] tracking-widest flex items-center gap-2"><ExternalLink size={14} /> Full screen</a>
           </div>
         </header>
 
@@ -44,7 +44,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks
              </div>
              <div className="bg-amber-50/30 p-8 rounded-[32px] border border-amber-200/50 text-center">
                 <p className="text-amber-600 font-bold text-[10px] tracking-widest">In review</p>
-                <p className="text-6xl font-black text-slate-900">{submissions.filter(s => s.status === 'submitted').length}</p>
+                <p className="text-6xl font-black text-slate-900">{submissions.filter((s: Submission) => s.status === 'submitted').length}</p>
              </div>
           </div>
 
@@ -59,7 +59,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
-                  {tasks.map((task, idx) => (
+                  {tasks.map((task: Task, idx: number) => (
                     <tr key={idx} className="hover:bg-slate-50/50">
                       <td className="px-8 py-5 text-sm font-black text-slate-800">{task.name}</td>
                       <td className="px-8 py-5 text-center font-black text-swiggy-orange text-sm">{task.points}</td>
@@ -78,7 +78,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks
     <div className="space-y-8 animate-in fade-in duration-700">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-5 px-1 py-4">
         <h2 className="text-[28px] font-black text-slate-900 tracking-tight">Analytics Dashboard</h2>
-        <a href={publicUrl} target="_blank" className="bg-swiggy-orange text-white px-6 py-2.5 rounded-[18px] font-black text-[11px] tracking-widest">Full screen</a>
+        <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="bg-swiggy-orange text-white px-6 py-2.5 rounded-[18px] font-black text-[11px] tracking-widest flex items-center gap-2">Full screen</a>
       </header>
       <div className="bg-white rounded-[48px] overflow-hidden swiggy-shadow min-h-[720px] border border-slate-50">
         <iframe key={refreshKey} src={embedUrl} frameBorder="0" style={{ border: 0, width: '100%', height: '720px' }} title="Analytics"></iframe>

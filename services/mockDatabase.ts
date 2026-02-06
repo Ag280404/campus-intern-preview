@@ -30,13 +30,13 @@ class MockDatabase {
   async getAllUsers(): Promise<User[]> {
     const { data, error } = await supabase.from('users').select('*');
     if (error) throw error;
-    return (data || []).map(u => this.mapUser(u));
+    return (data || []).map((u: any) => this.mapUser(u));
   }
 
   async getTasks(): Promise<Task[]> {
     const { data, error } = await supabase.from('tasks').select('*');
     if (error) throw error;
-    return (data || []).map(t => ({
+    return (data || []).map((t: any) => ({
       id: t.id,
       type: t.type,
       name: t.name,
@@ -131,7 +131,7 @@ class MockDatabase {
     const { data, error } = await query;
     if (error) throw error;
     
-    return (data || []).map(s => ({
+    return (data || []).map((s: any) => ({
       id: s.id,
       userId: s.user_id,
       campusId: s.campus_id,
@@ -218,10 +218,16 @@ class MockDatabase {
     await supabase.from('submissions').update({ status: 'rejected', reviewer_note: note }).eq('id', id);
   }
 
-  async getNotifications(userId: string) {
+  async getNotifications(userId: string): Promise<Notification[]> {
     const { data, error } = await supabase.from('notifications').select('*').or(`recipient_id.eq.all,recipient_id.eq.${userId}`).order('created_at', { ascending: false });
     if (error) throw error;
-    return (data || []).map(n => ({ id: n.id, recipientId: n.recipient_id, content: n.content, createdAt: n.created_at, isRead: n.is_read }));
+    return (data || []).map((n: any) => ({ 
+      id: n.id, 
+      recipientId: n.recipient_id, 
+      content: n.content, 
+      createdAt: n.created_at, 
+      isRead: n.is_read 
+    }));
   }
 
   async markAllNotificationsRead(userId: string) {

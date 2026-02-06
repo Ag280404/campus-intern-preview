@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Bell, Clock, Calendar, Mail, CheckCircle, Info, Inbox, X } from 'lucide-react';
+import { Calendar, Clock, Inbox, Mail, X, CheckCircle } from 'lucide-react';
 import { Notification } from '../types';
 import { db } from '../services/mockDatabase';
 
@@ -21,12 +21,12 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
       onRead();
     };
     fetchNotifications();
-  }, [userId]);
+  }, [userId, onRead]);
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     await db.deleteNotification(id);
-    setLocalNotifications(prev => prev.filter(n => n.id !== id));
+    setLocalNotifications((prev: Notification[]) => prev.filter((n: Notification) => n.id !== id));
   };
 
   const formatDate = (ts: number) => {
@@ -46,7 +46,7 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
 
       <div className="max-w-4xl space-y-6">
         {localNotifications.length > 0 ? (
-          localNotifications.map(n => {
+          localNotifications.map((n: Notification) => {
             const fd = formatDate(n.createdAt);
             const isUnread = !n.isRead;
             return (
@@ -57,7 +57,7 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
                 }`}
               >
                 <button 
-                  onClick={(e) => handleDelete(n.id, e)}
+                  onClick={(e: React.MouseEvent) => handleDelete(n.id, e)}
                   className="absolute top-8 right-8 p-2 rounded-xl text-slate-300 hover:text-swiggy-orange hover:bg-swiggy-light transition-all duration-300"
                 >
                   <X size={20} strokeWidth={3} />

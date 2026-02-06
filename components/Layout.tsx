@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Home, ClipboardList, Trophy, User as UserIcon, LogOut, ShieldCheck, Bell } from 'lucide-react';
 import { db } from '../services/mockDatabase';
+import { Notification, User } from '../types';
 
 interface LayoutProps {
   children: React.ReactNode;
   activeTab: string;
   onTabChange: (tab: string) => void;
-  user: any;
+  user: User | null;
   onLogout: () => void;
 }
 
@@ -23,12 +24,11 @@ const SwiggyLogo = ({ size = 24, className = "" }: { size?: number, className?: 
 const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user, onLogout }) => {
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Fetch notifications asynchronously to count unread items
   useEffect(() => {
     const fetchUnread = async () => {
       if (user) {
         const notes = await db.getNotifications(user.id);
-        setUnreadCount(notes.filter(n => !n.isRead).length);
+        setUnreadCount(notes.filter((n: Notification) => !n.isRead).length);
       }
     };
     fetchUnread();
@@ -101,7 +101,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
           <div className="bg-slate-50 rounded-2xl p-4 mb-4 flex items-center gap-3">
              <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 border border-slate-200 bg-white flex items-center justify-center">
                 {user?.avatarUrl ? (
-                  <img src={user.avatarUrl} className="w-full h-full object-cover" />
+                  <img src={user.avatarUrl} className="w-full h-full object-cover" alt="User Avatar" />
                 ) : (
                   <UserIcon size={20} className="text-slate-300" />
                 )}

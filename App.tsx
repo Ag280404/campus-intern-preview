@@ -46,7 +46,7 @@ const App: React.FC = () => {
         db.getTasks()
       ]);
       
-      const filteredUsers = allUsers.filter(u => u.id !== 'admin');
+      const filteredUsers = allUsers.filter((u: User) => u.id !== 'admin');
       setAllCatalysts(filteredUsers);
       setTasks(fetchedTasks);
       
@@ -58,7 +58,6 @@ const App: React.FC = () => {
         setSelectedCatalystId(filteredUsers[0].id);
       }
 
-      // If admin, we fetch submissions for the selected catalyst in context
       const effectiveUserId = (isAdmin && ['dashboard', 'tasks', 'admin'].includes(activeTab)) 
         ? selectedCatalystId 
         : (user.id === 'admin' ? undefined : user.id);
@@ -147,7 +146,7 @@ const App: React.FC = () => {
                   type="text" 
                   required 
                   value={loginData.identifier} 
-                  onChange={e => setLoginData({...loginData, identifier: e.target.value})} 
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({...loginData, identifier: e.target.value})} 
                   className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 focus:bg-white" 
                   placeholder="e.g. catalyst_iitd" 
                 />
@@ -161,7 +160,7 @@ const App: React.FC = () => {
                   type="password" 
                   required 
                   value={loginData.password} 
-                  onChange={e => setLoginData({...loginData, password: e.target.value})} 
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({...loginData, password: e.target.value})} 
                   className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 focus:bg-white" 
                   placeholder="••••••••" 
                 />
@@ -198,10 +197,10 @@ const App: React.FC = () => {
               <div className="relative">
                 <select 
                   value={selectedCatalystId} 
-                  onChange={(e) => setSelectedCatalystId(e.target.value)} 
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCatalystId(e.target.value)} 
                   className="pl-5 pr-12 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-800 min-w-[240px] appearance-none"
                 >
-                  {allCatalysts.map(c => <option key={c.id} value={c.id}>{c.displayName}</option>)}
+                  {allCatalysts.map((c: User) => <option key={c.id} value={c.id}>{c.displayName}</option>)}
                 </select>
                 <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
               </div>
