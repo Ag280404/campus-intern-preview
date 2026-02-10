@@ -1,6 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js';
-import { User, Submission, Campus, MetricRollup, Notification, Task } from '../types';
+import { User, Submission, Campus, MetricRollup, Notification, Task, CampusEvent } from '../types';
 import { CAMPUSES } from '../constants';
 
 const SUPABASE_URL = 'https://vecxlslkdyqtuxhrvcuz.supabase.co';
@@ -250,6 +250,83 @@ class MockDatabase {
     const { data, error } = await supabase.from('users').select('*').eq('id', id).maybeSingle();
     if (error || !data) return null;
     return this.mapUser(data);
+  }
+
+  // --- CALENDAR EVENTS ---
+
+  async getEvents(campusId?: string): Promise<CampusEvent[]> {
+    let query = supabase.from('events').select('*').order('start_date', { ascending: true });
+    if (campusId) query = query.eq('campus_id', campusId);
+    
+    const { data, error } = await query;
+    if (error) {
+      // If table doesn't exist yet, return empty but log
+      console.warn("Events table might not exist in Supabase yet.");
+      return [];
+    }
+    
+    return (data || []).map((e: any) => ({
+      id: e.id,
+      campusId: e.campus_id,
+      createdBy: e.created_by,
+      createdByName: e.created_by_name,
+      eventType: e.event_type,
+      eventName: e.event_name,
+      startDate: e.start_date,
+      endDate: e.end_date,
+      notes: e.notes,
+      createdAt: e.created_at,
+      updatedAt: e.updated_at
+    }));
+  }
+
+  async submitEvent(event: Omit<CampusEvent, 'id' | 'createdAt' | 'updatedAt'>): Promise<CampusEvent> {
+    const dbEvent = {
+      campus_id: event.campusId,
+      created_by: event.createdBy,
+      created_by_name: event.createdByName,
+      event_type: event.eventType,
+      event_name: event.eventName,
+      start_date: event.startDate,
+      end_date: event.endDate,
+      notes: event.notes,
+      created_at: Date.now(),
+      updated_at: Date.now()
+    };
+    
+    const { data, error } = await supabase.from('events').insert(dbEvent).select().single();
+    if (error) throw error;
+    
+    return {
+      id: data.id,
+      campusId: data.campus_id,
+      createdBy: data.created_by,
+      createdByName: data.created_by_name,
+      eventType: data.event_type,
+      eventName: data.event_name,
+      startDate: data.start_date,
+      endDate: data.end_date,
+      notes: data.notes,
+      createdAt: data.created_at,
+      updatedAt: data.updated_at
+    };
+  }
+
+  async updateEvent(id: string, updates: Partial<CampusEvent>): Promise<void> {
+    const dbUpdates: any = { updated_at: Date.now() };
+    if (updates.eventName !== undefined) dbUpdates.event_name = updates.eventName;
+    if (updates.eventType !== undefined) dbUpdates.event_type = updates.eventType;
+    if (updates.startDate !== undefined) dbUpdates.start_date = updates.startDate;
+    if (updates.endDate !== undefined) dbUpdates.end_date = updates.endDate;
+    if (updates.notes !== undefined) dbUpdates.notes = updates.notes;
+    
+    const { error } = await supabase.from('events').update(dbUpdates).eq('id', id);
+    if (error) throw error;
+  }
+
+  async deleteEvent(id: string): Promise<void> {
+    const { error } = await supabase.from('events').delete().eq('id', id);
+    if (error) throw error;
   }
 }
 

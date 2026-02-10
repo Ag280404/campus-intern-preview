@@ -8,6 +8,7 @@ import Leaderboard from './components/Leaderboard';
 import Profile from './components/Profile';
 import AdminReview from './components/AdminReview';
 import Notifications from './components/Notifications';
+import CampusCalendar from './components/CampusCalendar';
 import { User, Submission, MetricRollup, Task } from './types';
 import { ChevronRight, Lock, User as UserIcon, AlertCircle, Users, ChevronDown, Loader2 } from 'lucide-react';
 
@@ -58,7 +59,7 @@ const App: React.FC = () => {
         setSelectedCatalystId(filteredUsers[0].id);
       }
 
-      const effectiveUserId = (isAdmin && ['dashboard', 'tasks', 'admin'].includes(activeTab)) 
+      const effectiveUserId = (isAdmin && ['dashboard', 'tasks', 'admin', 'calendar'].includes(activeTab)) 
         ? selectedCatalystId 
         : (user.id === 'admin' ? undefined : user.id);
         
@@ -186,7 +187,7 @@ const App: React.FC = () => {
         </div>
       ) : (
         <>
-          {isAdmin && ['dashboard', 'tasks', 'admin'].includes(activeTab) && (
+          {isAdmin && ['dashboard', 'tasks', 'admin', 'calendar'].includes(activeTab) && (
             <div className="mb-8 flex items-center justify-between bg-white px-6 py-4.5 rounded-[28px] swiggy-shadow border border-slate-50/80">
               <div className="flex items-center gap-4">
                 <div className="w-11 h-11 bg-swiggy-light text-swiggy-orange rounded-[14px] flex items-center justify-center shadow-inner shadow-orange-100/50">
@@ -210,6 +211,7 @@ const App: React.FC = () => {
           {activeTab === 'dashboard' && <Dashboard submissions={submissions} leaderboard={leaderboard} user={isAdmin ? selectedCatalyst : user} isAdmin={isAdmin} tasks={tasks} />}
           {activeTab === 'tasks' && <TaskSubmission onSubmit={handleSubmitTask} isAdmin={isAdmin} selectedCatalyst={isAdmin ? selectedCatalyst : null} submissions={submissions} tasks={tasks} />}
           {activeTab === 'leaderboard' && <Leaderboard data={leaderboard} isAdmin={isAdmin} />}
+          {activeTab === 'calendar' && <CampusCalendar user={user} isAdmin={isAdmin} currentCampus={isAdmin ? selectedCatalyst : user} />}
           {activeTab === 'notifications' && <Notifications userId={user.id} onRead={refreshData} />}
           {activeTab === 'profile' && <Profile user={user} onUserUpdate={handleUserUpdate} />}
           {activeTab === 'admin' && isAdmin && <AdminReview submissions={submissions} onUpdate={refreshData} selectedCatalyst={selectedCatalyst} onUserUpdate={handleUserUpdate} tasks={tasks} />}

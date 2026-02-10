@@ -1,3 +1,4 @@
+
 export type TaskType = 'offline_activation' | 'streaks' | 'social_media' | 'student_rewards' | 'referral';
 
 export interface Campus {
@@ -76,4 +77,20 @@ export interface MetricRollup {
     signups: number;
     coupons: number;
   };
+}
+
+export type EventType = 'Placements' | 'Exams' | 'Cultural Fest' | 'Sports Fest' | 'Holidays' | 'Other';
+
+export interface CampusEvent {
+  id: string;
+  campusId: string;
+  createdBy: string;
+  createdByName: string;
+  eventType: EventType;
+  eventName: string;
+  startDate: string; // YYYY-MM-DD
+  endDate: string;   // YYYY-MM-DD
+  notes?: string;
+  createdAt: number;
+  updatedAt: number;
 }

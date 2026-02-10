@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Home, ClipboardList, Trophy, User as UserIcon, LogOut, ShieldCheck, Bell } from 'lucide-react';
+import { Home, ClipboardList, Trophy, User as UserIcon, LogOut, ShieldCheck, Bell, Calendar as CalendarIcon } from 'lucide-react';
 import { db } from '../services/mockDatabase';
 import { Notification, User } from '../types';
 
@@ -37,6 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'tasks', label: 'Tasks', icon: ClipboardList },
+    { id: 'calendar', label: 'Calendar', icon: CalendarIcon },
     { id: 'leaderboard', label: 'Ranks', icon: Trophy },
     { id: 'notifications', label: 'Notifications', icon: Bell, badge: unreadCount },
     { id: 'profile', label: 'Profile', icon: UserIcon },
