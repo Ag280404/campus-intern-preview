@@ -124,55 +124,67 @@ const App: React.FC = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-[#FFF9F5] flex items-center justify-center p-6 relative overflow-hidden">
+        {/* Background blobs */}
         <div className="absolute top-[-15%] left-[-15%] w-[50%] h-[50%] bg-swiggy-light/40 rounded-full blur-[140px]"></div>
-        <div className="bg-white w-full max-w-[460px] rounded-[56px] p-12 md:p-14 premium-card-shadow relative z-10 border border-white/80">
-          <div className="flex flex-col items-center mb-12">
-            <div className="w-22 h-22 bg-swiggy-orange rounded-[32px] flex items-center justify-center logo-inner-glow mb-8 overflow-hidden p-4.5 group cursor-default transition-transform hover:rotate-3 duration-500">
-              <SwiggyLogo size={64} className="group-hover:scale-110 transition-transform duration-500" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-orange-100/30 rounded-full blur-[100px]"></div>
+        
+        <div className="bg-white w-full max-w-[420px] rounded-[16px] p-10 shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_10px_10px_-5px_rgba(0,0,0,0.04)] relative z-10 border border-gray-100">
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-20 h-20 bg-swiggy-orange rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(251,84,4,0.3)] mb-6 overflow-hidden p-4 group cursor-default transition-transform hover:scale-105 duration-500">
+              <SwiggyLogo size={48} className="group-hover:rotate-6 transition-transform duration-500" />
             </div>
-            <h1 className="text-[32px] font-black text-slate-900 text-center uppercase leading-[1.1] tracking-tight">CATALYST PORTAL</h1>
+            <h1 className="text-[28px] font-bold text-gray-900 text-center uppercase tracking-tight">CATALYST PORTAL</h1>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-7">
+          <form onSubmit={handleLogin} className="space-y-5">
             {error && (
-              <div className="bg-red-50 text-red-600 px-6 py-4 rounded-[22px] text-xs font-bold flex items-center gap-3.5 border border-red-100">
-                <AlertCircle size={18} strokeWidth={2.5} />
+              <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-[13px] font-semibold flex items-center gap-3 border border-red-100 mb-4">
+                <AlertCircle size={18} strokeWidth={2.5} className="shrink-0" />
                 <span className="flex-1">{error}</span>
               </div>
             )}
-            <div className="space-y-2.5">
-              <label className="block text-[10px] font-bold text-slate-400 ml-3 uppercase tracking-widest">User ID</label>
+            
+            <div className="space-y-2">
+              <label className="block text-[12px] font-semibold text-gray-500 ml-1 uppercase tracking-wider">USER ID</label>
               <div className="relative group">
                 <input 
                   type="text" 
                   required 
                   value={loginData.identifier} 
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({...loginData, identifier: e.target.value})} 
-                  className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 focus:bg-white" 
+                  className="w-full h-12 px-4 rounded-lg border border-gray-200 outline-none transition-all bg-white font-medium text-gray-800 placeholder-gray-400 focus:border-swiggy-orange focus:ring-4 focus:ring-swiggy-orange/10" 
                   placeholder="e.g. catalyst_iitd" 
                 />
-                <div className="absolute left-5.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-swiggy-orange transition-colors"><UserIcon size={19} /></div>
               </div>
             </div>
-            <div className="space-y-2.5">
-              <label className="block text-[10px] font-bold text-slate-400 ml-3 uppercase tracking-widest">Password</label>
+
+            <div className="space-y-2">
+              <label className="block text-[12px] font-semibold text-gray-500 ml-1 uppercase tracking-wider">PASSWORD</label>
               <div className="relative group">
                 <input 
                   type="password" 
                   required 
                   value={loginData.password} 
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({...loginData, password: e.target.value})} 
-                  className="w-full pl-13 pr-6 py-4.5 rounded-[26px] border border-slate-100 outline-none transition-all bg-slate-50/60 font-bold text-slate-800 focus:bg-white" 
+                  className="w-full h-12 px-4 rounded-lg border border-gray-200 outline-none transition-all bg-white font-medium text-gray-800 placeholder-gray-400 focus:border-swiggy-orange focus:ring-4 focus:ring-swiggy-orange/10" 
                   placeholder="••••••••" 
                 />
-                <div className="absolute left-5.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-swiggy-orange transition-colors"><Lock size={19} /></div>
               </div>
             </div>
-            <button type="submit" disabled={isLoggingIn} className="w-full swiggy-btn-gradient text-white font-black py-5.5 rounded-[28px] flex items-center justify-center gap-3 mt-4 text-sm uppercase tracking-widest group">
+
+            <button 
+              type="submit" 
+              disabled={isLoggingIn} 
+              className="w-full h-12 bg-gradient-to-r from-[#FB5404] to-[#FF6B35] text-white font-semibold rounded-lg flex items-center justify-center gap-2 mt-7 text-base shadow-lg hover:shadow-[0_8px_16px_rgba(251,84,4,0.3)] hover:-translate-y-0.5 transition-all disabled:opacity-70 group"
+            >
               <span>{isLoggingIn ? "Verifying..." : "Sign in"}</span>
-              <ChevronRight size={20} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+              <ChevronRight size={18} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
+          
+          <p className="mt-8 text-center text-gray-400 text-[11px] font-medium tracking-wide">
+            Internal Portal • Swiggy Campus Program
+          </p>
         </div>
       </div>
     );
