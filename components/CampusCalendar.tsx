@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   ChevronLeft, 
   ChevronRight, 
+  ChevronDown,
   Plus, 
   X, 
   Calendar as CalendarIcon, 
@@ -12,7 +13,8 @@ import {
   Trash2,
   Edit3,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Check
 } from 'lucide-react';
 import { db } from '../services/mockDatabase';
 import { User, CampusEvent, EventType } from '../types';
@@ -24,12 +26,14 @@ interface CampusCalendarProps {
 }
 
 const EVENT_TYPE_COLORS: Record<EventType, string> = {
-  'Placements': '#3B82F6',
-  'Exams': '#EF4444',
-  'Cultural Fest': '#8B5CF6',
-  'Sports Fest': '#10B981',
-  'Holidays': '#F59E0B',
-  'Other': '#6B7280',
+  'Placements': '#3B82F6',        // Blue
+  'Exams': '#EF4444',             // Red
+  'Cultural Fest': '#8B5CF6',     // Purple
+  'Sports Fest': '#10B981',       // Green
+  'Tech Fest': '#06B6D4',         // Cyan/Teal
+  'Regional Festival': '#F97316', // Orange
+  'Holidays': '#F59E0B',          // Amber
+  'Other': '#6B7280',             // Gray
 };
 
 const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentCampus }) => {
@@ -40,6 +44,7 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [selectedDateEvents, setSelectedDateEvents] = useState<CampusEvent[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [deleteConfirm, setDeleteConfirm] = useState<{id: string, name: string} | null>(null);
 
   // Form states
   const [formData, setFormData] = useState({
@@ -58,6 +63,13 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
       // If admin, filter by selected catalyst campus
       const filtered = isAdmin ? fetched.filter(e => e.campusId === currentCampus?.campusId) : fetched;
       setEvents(filtered);
+      
+      // Update selected date events if selectedDate is set
+      if (selectedDate) {
+        const dateStr = selectedDate.toISOString().split('T')[0];
+        const dayEvents = filtered.filter(e => dateStr >= e.startDate && dateStr <= e.endDate);
+        setSelectedDateEvents(dayEvents);
+      }
     } catch (err) {
       console.error("Failed to fetch events", err);
     } finally {
@@ -78,6 +90,11 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
     const today = new Date();
     setCurrentDate(today);
     setSelectedDate(today);
+    
+    // Refresh day list
+    const dateStr = today.toISOString().split('T')[0];
+    const dayEvents = events.filter(e => dateStr >= e.startDate && dateStr <= e.endDate);
+    setSelectedDateEvents(dayEvents);
   };
 
   const handleDayClick = (day: number) => {
@@ -143,12 +160,15 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this event?")) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirm) return;
     setLoading(true);
     try {
-      await db.deleteEvent(id);
-      fetchEvents();
+      await db.deleteEvent(deleteConfirm.id);
+      setDeleteConfirm(null);
+      await fetchEvents();
+      // Show local toast (simulated with alert for brevity or console)
+      console.log('Event deleted successfully');
     } catch (err) {
       alert("Error deleting event.");
     } finally {
@@ -189,11 +209,6 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
             <span className={`text-sm font-black ${isToday ? 'bg-swiggy-orange text-white w-7 h-7 flex items-center justify-center rounded-full shadow-lg' : 'text-slate-900'}`}>
               {day}
             </span>
-            {dayEvents.length > 0 && (
-               <span className="text-[10px] font-black text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity">
-                  {dayEvents.length}
-               </span>
-            )}
           </div>
           
           <div className="mt-2 flex flex-wrap gap-1">
@@ -292,26 +307,39 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
               <div className="space-y-4">
                  {selectedDateEvents.length > 0 ? (
                     selectedDateEvents.map((event) => (
-                       <div key={event.id} className="p-6 bg-slate-50/50 border border-slate-100 rounded-[32px] group hover:bg-white hover:swiggy-shadow transition-all duration-300">
-                          <div className="flex justify-between items-start mb-4">
-                             <div 
-                                className="px-3 py-1 rounded-full text-[9px] font-black text-white uppercase tracking-widest"
-                                style={{ backgroundColor: EVENT_TYPE_COLORS[event.eventType] }}
+                       <div key={event.id} className="p-6 bg-slate-50/50 border border-slate-100 rounded-[32px] group hover:bg-white hover:swiggy-shadow transition-all duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                          <div className="flex-1 min-w-0">
+                             <div className="flex items-center gap-2 mb-2">
+                                <div 
+                                    className="px-3 py-1 rounded-full text-[9px] font-black text-white uppercase tracking-widest"
+                                    style={{ backgroundColor: EVENT_TYPE_COLORS[event.eventType] }}
+                                >
+                                    {event.eventType}
+                                </div>
+                             </div>
+                             <h5 className="font-black text-slate-900 text-base mb-1 tracking-tight truncate">{event.eventName}</h5>
+                             <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 mb-1">
+                                <Clock size={14} /> {event.startDate === event.endDate ? 'One-day event' : `${event.startDate} to ${event.endDate}`}
+                             </div>
+                          </div>
+                          
+                          {/* ACTION BUTTONS: Always visible, 44px on mobile */}
+                          <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                             <button 
+                                onClick={() => openEditModal(event)} 
+                                title="Edit Event"
+                                className="w-[44px] h-[44px] md:w-9 md:h-9 bg-white border border-slate-200 text-slate-500 hover:text-swiggy-orange hover:border-swiggy-orange hover:bg-orange-50 rounded-xl flex items-center justify-center transition-all shadow-sm active:scale-95"
                              >
-                                {event.eventType}
-                             </div>
-                             <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onClick={() => openEditModal(event)} className="p-2 hover:bg-blue-50 text-slate-300 hover:text-blue-500 rounded-lg transition-colors"><Edit3 size={16} /></button>
-                                <button onClick={() => handleDelete(event.id)} className="p-2 hover:bg-red-50 text-slate-300 hover:text-red-500 rounded-lg transition-colors"><Trash2 size={16} /></button>
-                             </div>
+                                <Edit3 size={18} />
+                             </button>
+                             <button 
+                                onClick={() => setDeleteConfirm({id: event.id, name: event.eventName})} 
+                                title="Delete Event"
+                                className="w-[44px] h-[44px] md:w-9 md:h-9 bg-white border border-slate-200 text-slate-500 hover:text-red-500 hover:border-red-500 hover:bg-red-50 rounded-xl flex items-center justify-center transition-all shadow-sm active:scale-95"
+                             >
+                                <Trash2 size={18} />
+                             </button>
                           </div>
-                          <h5 className="font-black text-slate-900 text-base mb-2 tracking-tight">{event.eventName}</h5>
-                          <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 mb-3">
-                             <Clock size={14} /> {event.startDate === event.endDate ? 'One-day event' : `${event.startDate} to ${event.endDate}`}
-                          </div>
-                          {event.notes && (
-                             <p className="text-[12px] text-slate-500 font-bold leading-relaxed opacity-80">{event.notes}</p>
-                          )}
                        </div>
                     ))
                  ) : (
@@ -335,7 +363,39 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
         </div>
       </div>
 
-      {/* Modal Overlay */}
+      {/* Delete Confirmation Modal - High Fidelity */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-white w-full max-w-sm rounded-[40px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-white/20">
+            <div className="p-8 text-center">
+              <div className="w-16 h-16 bg-red-50 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+                <Trash2 size={32} strokeWidth={2.5} />
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2">Delete Event?</h3>
+              <p className="text-sm text-slate-500 font-bold leading-relaxed mb-8">
+                Are you sure you want to delete <span className="text-slate-900 font-black">"{deleteConfirm.name}"</span>? This action cannot be undone.
+              </p>
+              
+              <div className="flex gap-3">
+                 <button 
+                  onClick={() => setDeleteConfirm(null)}
+                  className="flex-1 py-4 bg-slate-100 text-slate-500 rounded-[20px] font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95"
+                 >
+                   Cancel
+                 </button>
+                 <button 
+                  onClick={confirmDelete}
+                  className="flex-1 py-4 bg-red-500 text-white rounded-[20px] font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-all shadow-lg shadow-red-100 active:scale-95"
+                 >
+                   Delete
+                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Overlay for Add/Edit */}
       {showModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
           <div className="bg-white w-full max-w-lg rounded-[48px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-white/20">
@@ -351,16 +411,19 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
              <form onSubmit={handleSubmit} className="p-10 space-y-6">
                 <div className="space-y-2">
                    <label className="block text-[10px] font-bold text-slate-400 ml-3 uppercase tracking-widest">Event Type</label>
-                   <select 
-                      required
-                      value={formData.eventType}
-                      onChange={(e) => setFormData({...formData, eventType: e.target.value as EventType})}
-                      className="w-full px-6 py-4.5 bg-slate-50 border border-slate-100 rounded-[24px] outline-none font-black text-slate-800 focus:bg-white transition-all appearance-none"
-                   >
-                      {Object.keys(EVENT_TYPE_COLORS).map(type => (
-                         <option key={type} value={type}>{type}</option>
-                      ))}
-                   </select>
+                   <div className="relative">
+                      <select 
+                         required
+                         value={formData.eventType}
+                         onChange={(e) => setFormData({...formData, eventType: e.target.value as EventType})}
+                         className="w-full px-6 py-4.5 bg-slate-50 border border-slate-100 rounded-[24px] outline-none font-black text-slate-800 focus:bg-white transition-all appearance-none cursor-pointer pr-12"
+                      >
+                         {Object.keys(EVENT_TYPE_COLORS).map(type => (
+                            <option key={type} value={type}>{type}</option>
+                         ))}
+                      </select>
+                      <ChevronDown size={20} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                   </div>
                 </div>
 
                 <div className="space-y-2">
@@ -419,7 +482,7 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
                    <button 
                       type="button"
                       onClick={() => setShowModal(false)}
-                      className="px-10 py-5 bg-slate-100 text-slate-500 rounded-[26px] font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all"
+                      className="px-10 py-5 bg-slate-100 text-slate-500 rounded-[26px] font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95"
                    >
                       Cancel
                    </button>
