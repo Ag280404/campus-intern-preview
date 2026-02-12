@@ -49,7 +49,13 @@ const App: React.FC = () => {
       
       const filteredUsers = allUsers.filter((u: User) => u.id !== 'admin');
       setAllCatalysts(filteredUsers);
-      setTasks(fetchedTasks);
+      
+      // Sort tasks based on the requested order: t5 (New User), t4 (Student Rewards), t3 (Social), t1 (Flyer), t2 (Streak)
+      const taskOrder = ['t5', 't4', 't3', 't1', 't2'];
+      const sortedTasks = [...fetchedTasks].sort((a, b) => 
+        taskOrder.indexOf(a.id) - taskOrder.indexOf(b.id)
+      );
+      setTasks(sortedTasks);
       
       const catalyst = await db.getUserById(selectedCatalystId);
       if (catalyst) {

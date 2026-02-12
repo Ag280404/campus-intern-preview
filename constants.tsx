@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Campus, Task } from './types';
 
@@ -31,15 +32,6 @@ export const CAMPUSES: Campus[] = [
 
 export const TASKS: Task[] = [
   {
-    id: 't4',
-    type: 'referral',
-    name: 'Student Rewards Referrals',
-    description: 'Get your friends to sign up for the Student Rewards program.',
-    instructions: "Refer your peers to sign up for Swiggy Student Rewards. Points will be awarded upon successful verification.",
-    points: 5,
-    deadlineDays: 2
-  },
-  {
     id: 't5',
     type: 'student_rewards',
     name: 'New User Coupon Distribution',
@@ -47,6 +39,15 @@ export const TASKS: Task[] = [
     instructions: 'Please enter the details of the student receiving the coupon. Coupon will be deemed verified upon successful redemption',
     points: 15,
     deadlineDays: 3
+  },
+  {
+    id: 't4',
+    type: 'referral',
+    name: 'Student Rewards Referrals',
+    description: 'Get your friends to sign up for the Student Rewards program.',
+    instructions: "Refer your peers to sign up for Swiggy Student Rewards. Points will be awarded upon successful verification.",
+    points: 5,
+    deadlineDays: 2
   },
   {
     id: 't3',

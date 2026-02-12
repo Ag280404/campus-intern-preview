@@ -357,7 +357,7 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
               <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12"><CalendarIcon size={120} /></div>
               <h4 className="text-lg font-black mb-4 relative z-10">Pro Planning Tip</h4>
               <p className="text-sm text-slate-400 font-bold leading-relaxed relative z-10">
-                 Adding events like "End Term Exams" helps Swiggy planners schedule **Exam Breaks** campaigns specifically for your campus.
+                 Adding events such as ‘End Term Exams’ enables Swiggy to schedule campaigns tailored specifically for your campus.
               </p>
            </section>
         </div>

@@ -211,21 +211,20 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                       />
                     </div>
                     <div className="space-y-3">
-                      <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Contact Details *</label>
+                      <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Swiggy Registered Phone Number *</label>
                       <input 
                         type="tel" 
                         required 
-                        placeholder="Contact Details" 
+                        placeholder="Swiggy Registered Phone Number" 
                         className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-[#F8FAFC] font-black text-slate-800 outline-none focus:bg-white focus:border-swiggy-orange/50 transition-all text-[15px]" 
                         onChange={e => setFormData({ ...formData, recipientPhone: e.target.value })} 
                       />
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Email ID *</label>
+                    <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Email ID</label>
                     <input 
                       type="email" 
-                      required 
                       placeholder="Email ID" 
                       className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-[#F8FAFC] font-black text-slate-800 outline-none focus:bg-white focus:border-swiggy-orange/50 transition-all text-[15px]" 
                       onChange={e => setFormData({ ...formData, recipientEmail: e.target.value })} 
