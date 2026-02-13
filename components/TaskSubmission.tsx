@@ -16,7 +16,6 @@ import {
   Send,
   ChevronDown,
   Sparkles,
-  // Fix: Import Clock icon from lucide-react
   Clock
 } from 'lucide-react';
 import { Task, TaskType, User, Submission } from '../types';
@@ -79,7 +78,6 @@ const WeeklyTaskTracker = () => {
           </div>
         </div>
         <div className="hidden md:flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl border border-amber-100">
-          {/* Fix: Use imported Clock icon */}
           <Clock size={14} className="text-amber-600" strokeWidth={2.5} />
           <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Resets every Sunday</span>
         </div>
@@ -114,7 +112,6 @@ const WeeklyTaskTracker = () => {
       
       <div className="mt-8 flex items-center gap-3 justify-center md:hidden">
           <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl border border-amber-100">
-            {/* Fix: Use imported Clock icon */}
             <Clock size={14} className="text-amber-600" strokeWidth={2.5} />
             <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Resets every Sunday</span>
           </div>
@@ -197,6 +194,16 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
 
   if (selectedTask) {
     const completionPercent = calculateCompletion(selectedTask.id);
+    
+    // Updated logic: Using Week Days instead of Month Dates
+    const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+    const getNextMonthLabel = () => {
+      const date = new Date();
+      date.setMonth(date.getMonth() + 1);
+      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    };
+
     return (
       <div className="animate-in slide-in-from-right duration-500 max-w-5xl mx-auto pb-20">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 px-2">
@@ -258,7 +265,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     <input 
                       type="text" 
                       readOnly 
-                      value="March 2026" 
+                      value={getNextMonthLabel()} 
                       className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-slate-50/50 font-black text-slate-900 outline-none text-[15px]" 
                     />
                     <Calendar size={20} className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -268,8 +275,16 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                       <div key={i} className="space-y-2.5">
                         <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Preferred streak day {i}</label>
                         <div className="relative">
-                          <select className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-white font-black text-slate-400 outline-none appearance-none cursor-pointer focus:border-swiggy-orange/50 transition-colors text-[15px]">
-                            <option>Choose activation day</option>
+                          <select 
+                            required
+                            className={`w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-white font-black outline-none appearance-none cursor-pointer focus:border-swiggy-orange/50 transition-colors text-[15px] ${formData[`streakDay${i}`] ? 'text-slate-900' : 'text-slate-400'}`}
+                            onChange={e => setFormData({ ...formData, [`streakDay${i}`]: e.target.value })}
+                            value={formData[`streakDay${i}`] || ""}
+                          >
+                            <option value="">Choose activation day</option>
+                            {weekDays.map(day => (
+                              <option key={day} value={day}>{day}</option>
+                            ))}
                           </select>
                           <ChevronDown size={20} className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
                         </div>
