@@ -16,7 +16,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
   const leaderboardData = data || [];
   const topThree = leaderboardData.slice(0, 3);
 
-  // Pre-fetch all users to avoid sync calls in render
   useEffect(() => {
     const fetchUsers = async () => {
       const users = await db.getAllUsers();
@@ -130,6 +129,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
         </div>
       </section>
 
+      {/* Podium Section - The Top 3 Podium Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-end py-16 px-6 relative">
         <div className="absolute inset-x-0 bottom-0 h-1 bg-slate-100/50 rounded-full"></div>
         
@@ -148,7 +148,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                 <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(userMap[topThree[1].userId]?.campusId || '')}
               </p>
               <div className="mt-6 bg-white px-8 py-3 rounded-[24px] shadow-lg border border-slate-100 group-hover:swiggy-shadow transition-all">
-                <span className="font-black text-slate-400 text-lg tracking-tight">Second position</span>
+                <span className="font-black text-slate-400 text-lg tracking-tight">{topThree[1].score} pts</span>
               </div>
             </div>
           )}
@@ -172,7 +172,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                 <MapPin size={14} strokeWidth={3} className="text-swiggy-orange" /> {db.getCampusName(userMap[topThree[0].userId]?.campusId || '')}
               </p>
               <div className="mt-8 swiggy-btn-gradient px-10 py-4 rounded-[28px] shadow-2xl shadow-orange-200 scale-110 active:scale-105 transition-transform cursor-default">
-                <span className="font-black text-white text-xl tracking-tight">Champion</span>
+                <span className="font-black text-white text-xl tracking-tight">{topThree[0].score} pts</span>
               </div>
             </div>
           )}
@@ -193,21 +193,22 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                 <MapPin size={12} strokeWidth={2.5} /> {db.getCampusName(userMap[topThree[2].userId]?.campusId || '')}
               </p>
               <div className="mt-6 bg-white px-8 py-3 rounded-[24px] shadow-lg border border-slate-100 group-hover:swiggy-shadow transition-all">
-                <span className="font-black text-slate-400 text-lg tracking-tight">Third position</span>
+                <span className="font-black text-slate-400 text-lg tracking-tight">{topThree[2].score} pts</span>
               </div>
             </div>
           )}
         </div>
       </div>
 
+      {/* Full Leaderboard Table */}
       <div className="bg-white rounded-[56px] swiggy-shadow border border-slate-50/80 overflow-hidden premium-card-shadow">
-        <div className="grid grid-cols-12 px-10 py-6 bg-slate-50/50 text-[11px] font-bold text-slate-400 border-b border-slate-100">
+        <div className="grid grid-cols-12 px-10 py-6 bg-slate-50/50 text-[11px] font-bold text-slate-400 border-b border-slate-100 uppercase tracking-widest">
           <div className="col-span-2">Position</div>
           <div className="col-span-7">Name</div>
           <div className="col-span-3 text-right">Score</div>
         </div>
         <div className="divide-y divide-slate-50">
-          {leaderboardData.map((catalyst, idx) => {
+          {leaderboardData.length > 0 ? leaderboardData.map((catalyst, idx) => {
             const u = userMap[catalyst.userId];
             return (
               <div key={catalyst.userId} className="grid grid-cols-12 px-10 py-6 items-center hover:bg-slate-50/50 transition-all group cursor-default">
@@ -221,8 +222,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <h5 className="text-base font-black text-slate-900 truncate mb-0.5 tracking-tight">{u?.displayName}</h5>
-                    <p className="text-[10px] text-slate-400 font-bold truncate">{db.getCampusName(u?.campusId || '')}</p>
+                    <h5 className="text-base font-black text-slate-900 truncate mb-0.5 tracking-tight">{u?.displayName || 'Loading...'}</h5>
+                    <p className="text-[10px] text-slate-400 font-bold truncate tracking-widest uppercase">{db.getCampusName(u?.campusId || '')}</p>
                   </div>
                 </div>
                 <div className="col-span-3 text-right">
@@ -230,7 +231,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
                 </div>
               </div>
             );
-          })}
+          }) : (
+            <div className="p-20 text-center">
+              <p className="text-slate-400 font-bold text-sm">No leaderboard data available yet.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

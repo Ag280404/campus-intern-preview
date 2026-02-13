@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 import { User, Submission, Campus, MetricRollup, Notification, Task, CampusEvent } from '../types';
 import { CAMPUSES, TASKS } from '../constants';
@@ -39,7 +40,6 @@ class MockDatabase {
       return TASKS;
     }
     
-    // Merge database tasks with local constants to ensure the instructions match the code
     return (data || []).map((t: any) => {
       const localTask = TASKS.find(lt => lt.id === t.id);
       return {
@@ -153,7 +153,19 @@ class MockDatabase {
   async getLeaderboard(): Promise<MetricRollup[]> {
     const { data, error } = await supabase.from('leaderboard').select('*').order('score', { ascending: false });
     if (error) throw error;
-    return data || [];
+    
+    // If table is empty, return high-fidelity mock data for demonstration
+    if (!data || data.length === 0) {
+      return [
+        { userId: 'catalyst_iitd', score: 1250, metrics: { flyers: 120, content: 15, scans: 450, signups: 85, coupons: 200 } },
+        { userId: 'catalyst_bits', score: 980, metrics: { flyers: 80, content: 12, scans: 320, signups: 62, coupons: 150 } },
+        { userId: 'catalyst_iitb', score: 850, metrics: { flyers: 75, content: 10, scans: 280, signups: 55, coupons: 120 } },
+        { userId: 'catalyst_bits_p', score: 720, metrics: { flyers: 60, content: 8, scans: 210, signups: 45, coupons: 90 } },
+        { userId: 'catalyst_iit_m', score: 640, metrics: { flyers: 55, content: 7, scans: 190, signups: 38, coupons: 85 } },
+      ];
+    }
+    
+    return data;
   }
 
   async getNotifications(userId: string): Promise<Notification[]> {
