@@ -1,7 +1,6 @@
-
 import { createClient } from '@supabase/supabase-js';
 import { User, Submission, Campus, MetricRollup, Notification, Task, CampusEvent } from '../types';
-import { CAMPUSES } from '../constants';
+import { CAMPUSES, TASKS } from '../constants';
 
 const SUPABASE_URL = 'https://vecxlslkdyqtuxhrvcuz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlY3hsc2xrZHlxdHV4aHJ2Y3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDY2OTAsImV4cCI6MjA4NTY4MjY5MH0.ldSCs5ebGeki_3Ik_X7JRaVlb4sj0GH_u76izRMNKdA'; 
@@ -35,16 +34,34 @@ class MockDatabase {
 
   async getTasks(): Promise<Task[]> {
     const { data, error } = await supabase.from('tasks').select('*');
-    if (error) throw error;
-    return (data || []).map((t: any) => ({
-      id: t.id,
-      type: t.type,
-      name: t.name,
-      description: t.description,
-      points: t.points,
-      instructions: t.instructions,
-      deadlineDays: t.deadline_days
-    }));
+    if (error) {
+      console.warn("Could not fetch tasks from Supabase, using local constants.", error);
+      return TASKS;
+    }
+    
+    // Merge database tasks with local constants to ensure the instructions match the code
+    return (data || []).map((t: any) => {
+      const localTask = TASKS.find(lt => lt.id === t.id);
+      return {
+        id: t.id,
+        type: t.type,
+        name: t.name,
+        description: t.description,
+        points: t.points,
+        instructions: localTask ? localTask.instructions : t.instructions,
+        deadlineDays: t.deadline_days
+      };
+    });
+  }
+
+  async getUserById(id: string): Promise<User | null> {
+    const { data, error } = await supabase.from('users').select('*').eq('id', id).maybeSingle();
+    if (error) return null;
+    return data ? this.mapUser(data) : null;
+  }
+
+  getCampusName(id: string): string {
+    return CAMPUSES.find(c => c.id === id)?.name || 'Unknown Campus';
   }
 
   async login(id: string, password?: string): Promise<User | null> {
@@ -60,8 +77,13 @@ class MockDatabase {
       if (!profile || profile.p !== password) throw new Error("Invalid credentials or user not found.");
       
       const newUser = {
-        id, password: profile.p, display_name: profile.n, campus_id: profile.c,
-        email: profile.e, created_at: Date.now(), last_login_at: Date.now(),
+        id, 
+        password: profile.p, 
+        display_name: profile.n, 
+        campus_id: profile.c,
+        email: profile.e, 
+        created_at: Date.now(), 
+        last_login_at: Date.now(),
         task_targets: { 't1': 50, 't2': 1, 't3': 5, 't4': 10, 't5': 10 }
       };
       const { data: seeded, error: iErr } = await supabase.from('users').insert(newUser).select().single();
@@ -98,235 +120,105 @@ class MockDatabase {
     };
   }
 
-  async submitTask(submission: Omit<Submission, 'id' | 'createdAt' | 'status'>): Promise<Submission> {
-    const dbSub = {
-      user_id: submission.userId,
-      campus_id: submission.campusId,
-      task_id: submission.taskId,
+  async submitTask(submission: Omit<Submission, 'id' | 'status' | 'createdAt'>): Promise<Submission> {
+    const newSub = {
+      ...submission,
       status: 'submitted',
-      recipient_name: submission.payload?.recipientName || null,
-      recipient_phone: submission.payload?.recipientPhone || null,
-      recipient_email: submission.payload?.recipientEmail || null,
-      payload: submission.payload,
-      location: submission.location,
-      created_at: Date.now()
+      createdAt: Date.now(),
+      payload: submission.payload || {}
     };
-    const { data, error } = await supabase.from('submissions').insert(dbSub).select().single();
+    const { data, error } = await supabase.from('submissions').insert(newSub).select().single();
     if (error) throw error;
-    return {
-      id: data.id,
-      userId: data.user_id,
-      campusId: data.campus_id,
-      taskId: data.task_id,
-      status: data.status,
-      payload: data.payload,
-      location: data.location,
-      createdAt: data.created_at
-    };
+    return data;
   }
 
   async getSubmissions(userId?: string): Promise<Submission[]> {
-    let query = supabase.from('submissions').select('*').order('created_at', { ascending: false });
-    if (userId) query = query.eq('user_id', userId);
+    let query = supabase.from('submissions').select('*').order('createdAt', { ascending: false });
+    if (userId) query = query.eq('userId', userId);
     const { data, error } = await query;
     if (error) throw error;
-    
-    return (data || []).map((s: any) => ({
-      id: s.id,
-      userId: s.user_id,
-      campusId: s.campus_id,
-      taskId: s.task_id,
-      status: s.status,
-      payload: {
-        ...s.payload,
-        recipientName: s.recipient_name || s.payload?.recipientName,
-        recipientPhone: s.recipient_phone || s.payload?.recipientPhone,
-        recipientEmail: s.recipient_email || s.payload?.recipientEmail
-      },
-      location: s.location,
-      createdAt: s.created_at,
-      reviewerNote: s.reviewer_note
-    }));
+    return data || [];
+  }
+
+  async approveSubmission(id: string, note?: string): Promise<void> {
+    const { error } = await supabase.from('submissions').update({ status: 'approved', reviewerNote: note }).eq('id', id);
+    if (error) throw error;
+  }
+
+  async rejectSubmission(id: string, note?: string): Promise<void> {
+    const { error } = await supabase.from('submissions').update({ status: 'rejected', reviewerNote: note }).eq('id', id);
+    if (error) throw error;
   }
 
   async getLeaderboard(): Promise<MetricRollup[]> {
-    const [users, tasks, subs] = await Promise.all([
-      this.getAllUsers(),
-      this.getTasks(),
-      this.getSubmissions()
-    ]);
-    
-    const rollups: Record<string, MetricRollup> = {};
-    users.filter(u => u.id !== 'admin').forEach(u => {
-      rollups[u.id] = {
-        userId: u.id,
-        score: 0,
-        metrics: { flyers: 0, content: 0, scans: 0, signups: 0, coupons: 0 }
-      };
-    });
-
-    subs.filter(s => s.status === 'approved').forEach(s => {
-      const task = tasks.find(t => t.id === s.taskId);
-      if (!task || !rollups[s.userId]) return;
-
-      rollups[s.userId].score += task.points;
-      if (task.type === 'offline_activation') rollups[s.userId].metrics.flyers += Number(s.payload.count || 0);
-      if (task.type === 'social_media') rollups[s.userId].metrics.content += 1;
-      if (task.type === 'referral') rollups[s.userId].metrics.scans += 1;
-      if (task.type === 'student_rewards') rollups[s.userId].metrics.coupons += 1;
-    });
-    
-    return Object.values(rollups).sort((a, b) => b.score - a.score);
-  }
-
-  async updateUser(userId: string, updates: Partial<User>) {
-    const dbUpdates: any = {};
-    if (updates.displayName !== undefined) dbUpdates.display_name = updates.displayName;
-    if (updates.email !== undefined) dbUpdates.email = updates.email;
-    if (updates.phoneNumber !== undefined) dbUpdates.phone_number = updates.phoneNumber;
-    if (updates.shareContactInfo !== undefined) dbUpdates.share_contact_info = updates.shareContactInfo;
-    if (updates.taskTargets !== undefined) dbUpdates.task_targets = updates.taskTargets;
-    if (updates.rewardsOnelink !== undefined) dbUpdates.rewards_onelink = updates.rewardsOnelink;
-    if (updates.streaksOnelink !== undefined) dbUpdates.streaks_onelink = updates.streaksOnelink;
-    
-    const { data, error } = await supabase.from('users').update(dbUpdates).eq('id', userId).select().single();
+    const { data, error } = await supabase.from('leaderboard').select('*').order('score', { ascending: false });
     if (error) throw error;
-    const mapped = this.mapUser(data);
-    if (this.currentUser?.id === userId) {
-      this.currentUser = mapped;
-      localStorage.setItem('cg_currentUser', JSON.stringify(mapped));
-    }
-    return mapped;
-  }
-
-  async updateUserAvatar(userId: string, avatarUrl: string): Promise<User> {
-    const { data, error } = await supabase.from('users').update({ avatar_url: avatarUrl }).eq('id', userId).select().single();
-    if (error) throw error;
-    const mapped = this.mapUser(data);
-    if (this.currentUser?.id === userId) {
-      this.currentUser = mapped;
-      localStorage.setItem('cg_currentUser', JSON.stringify(mapped));
-    }
-    return mapped;
-  }
-
-  async approveSubmission(id: string, note?: string) {
-    await supabase.from('submissions').update({ status: 'approved', reviewer_note: note }).eq('id', id);
-  }
-
-  async rejectSubmission(id: string, note?: string) {
-    await supabase.from('submissions').update({ status: 'rejected', reviewer_note: note }).eq('id', id);
+    return data || [];
   }
 
   async getNotifications(userId: string): Promise<Notification[]> {
-    const { data, error } = await supabase.from('notifications').select('*').or(`recipient_id.eq.all,recipient_id.eq.${userId}`).order('created_at', { ascending: false });
+    const { data, error } = await supabase.from('notifications').select('*').or(`recipientId.eq.${userId},recipientId.eq.all`).order('createdAt', { ascending: false });
     if (error) throw error;
-    return (data || []).map((n: any) => ({ 
-      id: n.id, 
-      recipientId: n.recipient_id, 
-      content: n.content, 
-      createdAt: n.created_at, 
-      isRead: n.is_read 
-    }));
+    return data || [];
   }
 
-  async markAllNotificationsRead(userId: string) {
-    await supabase.from('notifications').update({ is_read: true }).or(`recipient_id.eq.all,recipient_id.eq.${userId}`);
+  async markAllNotificationsRead(userId: string): Promise<void> {
+    await supabase.from('notifications').update({ isRead: true }).eq('recipientId', userId);
   }
 
-  async sendNotification(recipientId: string, content: string) {
-    await supabase.from('notifications').insert({ recipient_id: recipientId, content, created_at: Date.now(), is_read: false });
-  }
-
-  async deleteNotification(id: string) {
+  async deleteNotification(id: string): Promise<void> {
     await supabase.from('notifications').delete().eq('id', id);
   }
 
-  getCampusName(id: string) {
-    return CAMPUSES.find(c => c.id === id)?.name || 'Unknown Campus';
+  async updateUser(userId: string, updates: Partial<User>): Promise<User | null> {
+    const dbUpdates: any = {};
+    if (updates.displayName) dbUpdates.display_name = updates.displayName;
+    if (updates.email) dbUpdates.email = updates.email;
+    if (updates.phoneNumber) dbUpdates.phone_number = updates.phoneNumber;
+    if (updates.shareContactInfo !== undefined) dbUpdates.share_contact_info = updates.shareContactInfo;
+    if (updates.rewardsOnelink) dbUpdates.rewards_onelink = updates.rewardsOnelink;
+    if (updates.streaksOnelink) dbUpdates.streaks_onelink = updates.streaksOnelink;
+    if (updates.taskTargets) dbUpdates.task_targets = updates.taskTargets;
+
+    const { data, error } = await supabase.from('users').update(dbUpdates).eq('id', userId).select().single();
+    if (error) throw error;
+    
+    const mapped = this.mapUser(data);
+    if (this.currentUser?.id === userId) {
+      this.currentUser = mapped;
+      localStorage.setItem('cg_currentUser', JSON.stringify(mapped));
+    }
+    return mapped;
   }
 
-  async getUserById(id: string) {
-    const { data, error } = await supabase.from('users').select('*').eq('id', id).maybeSingle();
-    if (error || !data) return null;
+  async updateUserAvatar(userId: string, avatarUrl: string): Promise<User | null> {
+    const { data, error } = await supabase.from('users').update({ avatar_url: avatarUrl }).eq('id', userId).select().single();
+    if (error) throw error;
     return this.mapUser(data);
   }
 
-  // --- CALENDAR EVENTS ---
-
   async getEvents(campusId?: string): Promise<CampusEvent[]> {
-    let query = supabase.from('events').select('*').order('start_date', { ascending: true });
-    if (campusId) query = query.eq('campus_id', campusId);
-    
+    let query = supabase.from('campus_events').select('*').order('startDate', { ascending: true });
+    if (campusId) query = query.eq('campusId', campusId);
     const { data, error } = await query;
-    if (error) {
-      // If table doesn't exist yet, return empty but log
-      console.warn("Events table might not exist in Supabase yet.");
-      return [];
-    }
-    
-    return (data || []).map((e: any) => ({
-      id: e.id,
-      campusId: e.campus_id,
-      createdBy: e.created_by,
-      createdByName: e.created_by_name,
-      eventType: e.event_type,
-      eventName: e.event_name,
-      startDate: e.start_date,
-      endDate: e.end_date,
-      notes: e.notes,
-      createdAt: e.created_at,
-      updatedAt: e.updated_at
-    }));
+    if (error) throw error;
+    return data || [];
   }
 
   async submitEvent(event: Omit<CampusEvent, 'id' | 'createdAt' | 'updatedAt'>): Promise<CampusEvent> {
-    const dbEvent = {
-      campus_id: event.campusId,
-      created_by: event.createdBy,
-      created_by_name: event.createdByName,
-      event_type: event.eventType,
-      event_name: event.eventName,
-      start_date: event.startDate,
-      end_date: event.endDate,
-      notes: event.notes,
-      created_at: Date.now(),
-      updated_at: Date.now()
-    };
-    
-    const { data, error } = await supabase.from('events').insert(dbEvent).select().single();
+    const now = Date.now();
+    const { data, error } = await supabase.from('campus_events').insert({ ...event, createdAt: now, updatedAt: now }).select().single();
     if (error) throw error;
-    
-    return {
-      id: data.id,
-      campusId: data.campus_id,
-      createdBy: data.created_by,
-      createdByName: data.created_by_name,
-      eventType: data.event_type,
-      eventName: data.event_name,
-      startDate: data.start_date,
-      endDate: data.end_date,
-      notes: data.notes,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at
-    };
+    return data;
   }
 
   async updateEvent(id: string, updates: Partial<CampusEvent>): Promise<void> {
-    const dbUpdates: any = { updated_at: Date.now() };
-    if (updates.eventName !== undefined) dbUpdates.event_name = updates.eventName;
-    if (updates.eventType !== undefined) dbUpdates.event_type = updates.eventType;
-    if (updates.startDate !== undefined) dbUpdates.start_date = updates.startDate;
-    if (updates.endDate !== undefined) dbUpdates.end_date = updates.endDate;
-    if (updates.notes !== undefined) dbUpdates.notes = updates.notes;
-    
-    const { error } = await supabase.from('events').update(dbUpdates).eq('id', id);
+    const { error } = await supabase.from('campus_events').update({ ...updates, updatedAt: Date.now() }).eq('id', id);
     if (error) throw error;
   }
 
   async deleteEvent(id: string): Promise<void> {
-    const { error } = await supabase.from('events').delete().eq('id', id);
-    if (error) throw error;
+    await supabase.from('campus_events').delete().eq('id', id);
   }
 }
 

@@ -14,10 +14,14 @@ import {
   Calendar,
   Check,
   Send,
-  ChevronDown
+  ChevronDown,
+  Sparkles,
+  // Fix: Import Clock icon from lucide-react
+  Clock
 } from 'lucide-react';
 import { Task, TaskType, User, Submission } from '../types';
 import { db } from '../services/mockDatabase';
+import HandbookLink from './HandbookLink';
 
 interface TaskSubmissionProps {
   onSubmit: (data: any) => void;
@@ -26,6 +30,98 @@ interface TaskSubmissionProps {
   submissions?: Submission[];
   tasks: Task[];
 }
+
+const WeeklyTaskTracker = () => {
+  const getCurrentWeek = () => {
+    const today = new Date();
+    const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday
+    const monday = new Date(today);
+    
+    // Adjust to get Monday of current week
+    const diff = currentDay === 0 ? -6 : 1 - currentDay;
+    monday.setDate(today.getDate() + diff);
+    
+    const week = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + i);
+      week.push(date);
+    }
+    return week;
+  };
+
+  const formatDateRange = (dates: Date[]) => {
+    const start = dates[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const end = dates[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const year = dates[0].getFullYear();
+    return `${start} - ${end}, ${year}`;
+  };
+
+  const isToday = (date: Date) => {
+    const today = new Date();
+    return date.toDateString() === today.toDateString();
+  };
+
+  const weekDaysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const weekDaysInitial = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  const currentWeek = getCurrentWeek();
+
+  return (
+    <div className="bg-white p-8 md:p-10 rounded-[48px] swiggy-shadow border border-slate-50 premium-card-shadow mb-10 animate-in fade-in slide-in-from-top-4 duration-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-swiggy-light text-swiggy-orange rounded-2xl flex items-center justify-center shadow-inner">
+            <Calendar size={24} strokeWidth={2.5} />
+          </div>
+          <div>
+            <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1">Weekly Tasks</h3>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{formatDateRange(currentWeek)}</p>
+          </div>
+        </div>
+        <div className="hidden md:flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl border border-amber-100">
+          {/* Fix: Use imported Clock icon */}
+          <Clock size={14} className="text-amber-600" strokeWidth={2.5} />
+          <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Resets every Sunday</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-7 gap-3 md:gap-4">
+        {currentWeek.map((date, index) => {
+          const today = isToday(date);
+          return (
+            <div 
+              key={index}
+              className={`flex flex-col items-center justify-center py-4 rounded-[24px] transition-all duration-300 ${
+                today 
+                ? 'swiggy-btn-gradient text-white shadow-xl scale-105 z-10' 
+                : 'bg-slate-50 text-slate-400 border border-slate-100 hover:bg-white hover:border-swiggy-orange/20'
+              }`}
+            >
+              <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest mb-1.5 opacity-80">
+                <span className="md:hidden">{weekDaysInitial[index]}</span>
+                <span className="hidden md:inline">{weekDaysShort[index]}</span>
+              </span>
+              <span className={`text-base md:text-xl font-black ${today ? 'text-white' : 'text-slate-900'}`}>
+                {date.getDate()}
+              </span>
+              {today && (
+                <div className="w-1.5 h-1.5 bg-white rounded-full mt-2 animate-pulse"></div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      
+      <div className="mt-8 flex items-center gap-3 justify-center md:hidden">
+          <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl border border-amber-100">
+            {/* Fix: Use imported Clock icon */}
+            <Clock size={14} className="text-amber-600" strokeWidth={2.5} />
+            <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Resets every Sunday</span>
+          </div>
+      </div>
+    </div>
+  );
+};
 
 const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, selectedCatalyst, submissions = [], tasks = [] }) => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -113,9 +209,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
             </button>
             <div className="flex items-center gap-3">
               <h2 className="text-[42px] font-black text-slate-900 tracking-tighter leading-none">{selectedTask.name}</h2>
-              <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mt-1 cursor-help">
-                <Info size={14} />
-              </div>
+              <HandbookLink iconOnly label="Task Guidelines" />
             </div>
           </div>
 
@@ -133,12 +227,26 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
         <div className="bg-white p-12 md:p-16 rounded-[60px] swiggy-shadow border border-slate-50 premium-card-shadow">
           <form onSubmit={handleSubmit} className="space-y-12">
             <div className="space-y-6">
-              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">SUBMISSION INSTRUCTIONS</h4>
+              <div className="flex items-center gap-3">
+                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">SUBMISSION INSTRUCTIONS</h4>
+                <HandbookLink label="Submission Help" className="opacity-60" />
+              </div>
               <div className="p-8 bg-[#F8FAFC] rounded-[32px] border border-slate-100">
                 <p className="text-[15px] text-slate-600 font-bold leading-relaxed">
                   {selectedTask.instructions}
                 </p>
               </div>
+
+              {selectedTask.type === 'social_media' && (
+                <div className="p-5 bg-slate-50 border border-slate-200 rounded-[24px] flex items-center gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
+                  <div className="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center shrink-0 shadow-lg">
+                    <Sparkles size={20} strokeWidth={3} />
+                  </div>
+                  <p className="text-[12px] font-black text-slate-900 uppercase tracking-widest leading-none">
+                    Best performing reels will be selected for boosting.
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="space-y-8">
@@ -273,7 +381,13 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
 
   return (
     <div className="space-y-12 pb-20 px-2 animate-in fade-in duration-700">
-      <h2 className="text-[36px] font-black text-slate-900 tracking-tighter leading-none">Tasks</h2>
+      <div className="flex items-center gap-6">
+        <h2 className="text-[36px] font-black text-slate-900 tracking-tighter leading-none">Tasks</h2>
+        <HandbookLink label="How do tasks work?" />
+      </div>
+
+      <WeeklyTaskTracker />
+
       <div className="grid grid-cols-1 gap-6">
         {tasks.map(task => {
           const completion = calculateCompletion(task.id);

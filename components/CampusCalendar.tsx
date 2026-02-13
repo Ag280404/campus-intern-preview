@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { db } from '../services/mockDatabase';
 import { User, CampusEvent, EventType } from '../types';
+import HandbookLink from './HandbookLink';
 
 interface CampusCalendarProps {
   user: User;
@@ -33,6 +34,8 @@ const EVENT_TYPE_COLORS: Record<EventType, string> = {
   'Tech Fest': '#06B6D4',         // Cyan/Teal
   'Regional Festival': '#F97316', // Orange
   'Holidays': '#F59E0B',          // Amber
+  'Alumni Meet': '#4F46E5',       // Indigo
+  'Semester Break': '#DB2777',     // Pink
   'Other': '#6B7280',             // Gray
 };
 
@@ -246,9 +249,11 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
   return (
     <div className="space-y-10 animate-in fade-in duration-700 pb-20">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-1">
-        <div>
-          <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none mb-2">Campus Calendar</h2>
-          <p className="text-slate-400 font-bold text-sm">Track exams, fests, and placements to plan better campaigns.</p>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-6 mb-2">
+            <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">Campus Calendar</h2>
+            <HandbookLink label="Calendar Guide" />
+          </div>
         </div>
         <div className="flex items-center gap-3">
            <button 
@@ -366,7 +371,7 @@ const CampusCalendar: React.FC<CampusCalendarProps> = ({ user, isAdmin, currentC
       {/* Delete Confirmation Modal - High Fidelity */}
       {deleteConfirm && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-sm rounded-[40px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-white/20">
+          <div className="bg-white w-full max-sm rounded-[40px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-white/20">
             <div className="p-8 text-center">
               <div className="w-16 h-16 bg-red-50 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
                 <Trash2 size={32} strokeWidth={2.5} />

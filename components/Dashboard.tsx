@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ExternalLink, RefreshCw } from 'lucide-react';
 import { Submission, MetricRollup, User, Task } from '../types';
 import { db } from '../services/mockDatabase';
+import HandbookLink from './HandbookLink';
 
 interface DashboardProps {
   submissions: Submission[];
@@ -24,7 +25,10 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks
     return (
       <div className="space-y-8 animate-in fade-in duration-700 pb-12">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-5 px-1 py-4">
-          <h2 className="text-[28px] font-black text-slate-900 tracking-tight">Campus Insights</h2>
+          <div className="flex items-center gap-4">
+            <h2 className="text-[28px] font-black text-slate-900 tracking-tight">Campus Insights</h2>
+            <HandbookLink label="Dashboard Guide" />
+          </div>
           <div className="flex gap-3 shrink-0">
             <button onClick={() => setRefreshKey((k: number) => k + 1)} className="flex items-center gap-2 px-5 py-2.5 bg-white border rounded-[18px] text-[11px] font-black text-slate-600"><RefreshCw size={14} /> Refresh</button>
             <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="bg-swiggy-orange text-white px-6 py-2.5 rounded-[18px] font-black text-[11px] tracking-widest flex items-center gap-2"><ExternalLink size={14} /> Full screen</a>
@@ -77,7 +81,10 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-5 px-1 py-4">
-        <h2 className="text-[28px] font-black text-slate-900 tracking-tight">Analytics Dashboard</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-[28px] font-black text-slate-900 tracking-tight">Analytics Dashboard</h2>
+          <HandbookLink label="Handbook" />
+        </div>
         <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="bg-swiggy-orange text-white px-6 py-2.5 rounded-[18px] font-black text-[11px] tracking-widest flex items-center gap-2">Full screen</a>
       </header>
       <div className="bg-white rounded-[48px] overflow-hidden swiggy-shadow min-h-[720px] border border-slate-50">

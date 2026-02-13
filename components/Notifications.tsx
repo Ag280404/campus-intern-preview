@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, Inbox, Mail, X, CheckCircle } from 'lucide-react';
 import { Notification } from '../types';
 import { db } from '../services/mockDatabase';
+import HandbookLink from './HandbookLink';
 
 interface NotificationsProps {
   userId: string;
@@ -40,8 +41,9 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
 
   return (
     <div className="space-y-10 animate-in fade-in duration-700 pb-16">
-      <header>
+      <header className="flex items-center gap-6">
         <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">Notifications</h2>
+        <HandbookLink label="About updates" />
       </header>
 
       <div className="max-w-4xl space-y-6">

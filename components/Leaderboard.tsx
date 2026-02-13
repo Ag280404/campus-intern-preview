@@ -4,6 +4,7 @@ import { Trophy, Medal, Crown, MapPin, Search, TrendingUp, User as UserIcon, Che
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { MetricRollup, User } from '../types';
 import { db } from '../services/mockDatabase';
+import HandbookLink from './HandbookLink';
 
 interface LeaderboardProps {
   data: MetricRollup[];
@@ -51,10 +52,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
   return (
     <div className="space-y-12 animate-in fade-in duration-700 pb-20">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
-        <div>
+        <div className="flex items-center gap-4">
           <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">
             Ranks
           </h2>
+          <HandbookLink label="Scoring info" />
         </div>
       </header>
 

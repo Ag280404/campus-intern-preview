@@ -79,7 +79,7 @@ export interface MetricRollup {
   };
 }
 
-export type EventType = 'Placements' | 'Exams' | 'Cultural Fest' | 'Sports Fest' | 'Tech Fest' | 'Regional Festival' | 'Holidays' | 'Other';
+export type EventType = 'Placements' | 'Exams' | 'Cultural Fest' | 'Sports Fest' | 'Tech Fest' | 'Regional Festival' | 'Holidays' | 'Alumni Meet' | 'Semester Break' | 'Other';
 
 export interface CampusEvent {
   id: string;

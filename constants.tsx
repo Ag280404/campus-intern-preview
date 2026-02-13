@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Campus, Task } from './types';
 
@@ -54,7 +53,7 @@ export const TASKS: Task[] = [
     type: 'social_media',
     name: 'Social Media Post',
     description: 'Create and post engaging content about Swiggy on your social platforms.',
-    instructions: 'Submit the link to your public social media post or reel promoting Swiggy or Student Rewards. Scores will be determined by the quality of content, relevance to students, and the engagement received',
+    instructions: 'Submit the link to your public social media post or reel promoting Swiggy’s offerings (Student Rewards, Streaks etc).',
     points: 50,
     deadlineDays: 5
   },
