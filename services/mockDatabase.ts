@@ -10,11 +10,51 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const DEFAULT_PROFILES: Record<string, any> = {
   'admin': { p: 'swiggy_admin', n: 'Super Admin', c: 'c1', e: 'admin@campus.swiggy.com' },
-  'catalyst_iitbbs_k7m9': { p: 'Sg@7mK!pL2qR', n: 'IITBBS Catalyst', c: 'c1', e: 'catalyst.iitbbs@campus.com' },
-  'catalyst_jnu_r3t7': { p: 'Rq@3hM!sF8jD', n: 'JNU Catalyst', c: 'c2', e: 'catalyst.jnu@campus.com' },
-  'catalyst_iitbh_s9d3': { p: 'Mw#5gT!qK9xP', n: 'IITBH Catalyst', c: 'c3', e: 'catalyst.iitbh@campus.com' },
-  'catalyst_iitj_x2m5': { p: 'Fd#4bM!wQ7tG', n: 'IITJ Catalyst', c: 'c4', e: 'catalyst.iitj@campus.com' },
-  'catalyst_imtg_w5t8': { p: 'Nk%3xZ!rF8bC', n: 'IMTG Catalyst', c: 'c5', e: 'catalyst.imtg@campus.com' },
+  'catalyst_iitbbs_k7m9': { 
+    p: 'Sg@7mK!pL2qR', 
+    n: 'IITBBS Catalyst', 
+    c: 'c1', 
+    e: 'catalyst.iitbbs@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/9ef96694-3531-4dbf-88a2-fece2cd65638/page/b6wkF',
+    r: 'https://swiggy.onelink.me/888564224/mp03tj84',
+    s: 'https://swiggy.onelink.me/888564224/x9he9ol6'
+  },
+  'catalyst_jnu_r3t7': { 
+    p: 'Rq@3hM!sF8jD', 
+    n: 'JNU Catalyst', 
+    c: 'c2', 
+    e: 'catalyst.jnu@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/2b63d10c-ea17-4a54-866a-78713e9f884c/page/b6wkF',
+    r: 'https://swiggy.onelink.me/888564224/pryikg17',
+    s: 'https://swiggy.onelink.me/888564224/g63vk9ti'
+  },
+  'catalyst_iitbh_s9d3': { 
+    p: 'Mw#5gT!qK9xP', 
+    n: 'IITBH Catalyst', 
+    c: 'c3', 
+    e: 'catalyst.iitbh@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://swiggy.onelink.me/888564224/mn6doql6',
+    s: 'https://swiggy.onelink.me/888564224/o16mj9r7'
+  },
+  'catalyst_iitj_x2m5': { 
+    p: 'Fd#4bM!wQ7tG', 
+    n: 'IITJ Catalyst', 
+    c: 'c4', 
+    e: 'catalyst.iitj@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/c8c59335-cb18-40dc-897d-56cbd7bc1852/page/b6wkF',
+    r: 'https://swiggy.onelink.me/888564224/fb64lh1j',
+    s: 'https://swiggy.onelink.me/888564224/86e1ih0k'
+  },
+  'catalyst_imtg_w5t8': { 
+    p: 'Nk%3xZ!rF8bC', 
+    n: 'IMTG Catalyst', 
+    c: 'c5', 
+    e: 'catalyst.imtg@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/caed7c6b-78d9-4d9b-92c7-bf75059cec89/page/b6wkF',
+    r: 'https://swiggy.onelink.me/888564224/0xgtoe85',
+    s: 'https://swiggy.onelink.me/888564224/yj69bbf6'
+  },
 };
 
 class MockDatabase {
@@ -52,6 +92,7 @@ class MockDatabase {
       streaksQrCode: dbUser.streaks_qr_code || dbUser.streaksQrCode,
       rewardsOnelink: dbUser.rewards_onelink || dbUser.rewardsOnelink,
       streaksOnelink: dbUser.streaks_onelink || dbUser.streaksOnelink,
+      dashboardUrl: dbUser.dashboard_url || dbUser.dashboardUrl,
       avatarUrl: dbUser.avatar_url || dbUser.avatarUrl,
       shareContactInfo: dbUser.share_contact_info !== undefined ? dbUser.share_contact_info : dbUser.shareContactInfo,
       taskTargets: dbUser.task_targets || dbUser.taskTargets
@@ -189,8 +230,11 @@ class MockDatabase {
         display_name: profile.n, 
         campus_id: profile.c,
         email: profile.e, 
-        created_at: new Date().toISOString(), 
-        last_login_at: new Date().toISOString(),
+        dashboard_url: profile.d,
+        rewards_onelink: profile.r,
+        streaks_onelink: profile.s,
+        created_at: Date.now(), 
+        last_login_at: Date.now(),
         task_targets: { 't1': 50, 't2': 1, 't3': 5, 't4': 10, 't5': 10 }
       };
       const { data: seeded, error: iErr } = await supabase.from('users').insert(newUser).select();

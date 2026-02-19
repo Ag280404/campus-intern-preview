@@ -192,6 +192,24 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
     );
   };
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'approved': return 'Verified';
+      case 'submitted': return 'Waiting for Approval';
+      case 'rejected': return 'Rejected';
+      default: return 'Verification in Progress';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'approved': return 'text-green-600 bg-green-50';
+      case 'submitted': return 'text-amber-600 bg-amber-50';
+      case 'rejected': return 'text-red-600 bg-red-50';
+      default: return 'text-blue-600 bg-blue-50';
+    }
+  };
+
   if (selectedTask) {
     const completionPercent = calculateCompletion(selectedTask.id);
     
@@ -406,6 +424,8 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
       <div className="grid grid-cols-1 gap-6">
         {tasks.map(task => {
           const completion = calculateCompletion(task.id);
+          const lastSubmission = submissions.filter(s => s.taskId === task.id).sort((a, b) => b.createdAt - a.createdAt)[0];
+          
           return (
             <button 
               key={task.id} 
@@ -418,6 +438,11 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                 </div>
                 <div className="text-left">
                   <h3 className="text-[22px] font-black text-slate-900 group-hover:text-swiggy-orange transition-colors tracking-tight leading-tight">{task.name}</h3>
+                  {lastSubmission && (
+                    <div className={`mt-2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest inline-block ${getStatusColor(lastSubmission.status)}`}>
+                      {getStatusLabel(lastSubmission.status)}
+                    </div>
+                  )}
                 </div>
               </div>
               

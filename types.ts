@@ -20,6 +20,7 @@ export interface User {
   streaksQrCode?: string;
   rewardsOnelink?: string;
   streaksOnelink?: string;
+  dashboardUrl?: string;
   avatarUrl?: string; // Base64 or URL for the profile picture
   shareContactInfo?: boolean; // Whether the user wants to share details with peers
   taskTargets?: Record<string, number>; // Mapping task ID to a target number

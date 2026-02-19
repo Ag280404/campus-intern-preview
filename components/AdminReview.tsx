@@ -50,6 +50,24 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
 
   const filtered = submissions.filter((s: Submission) => filter === 'all' ? true : s.status === filter);
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'approved': return 'Verified';
+      case 'submitted': return 'Waiting for Approval';
+      case 'rejected': return 'Rejected';
+      default: return 'Verification in Progress';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'approved': return 'bg-green-500 text-white';
+      case 'submitted': return 'bg-amber-500 text-white';
+      case 'rejected': return 'bg-red-500 text-white';
+      default: return 'bg-blue-500 text-white';
+    }
+  };
+
   return (
     <div className="space-y-8">
       <header className="flex justify-between items-end">
@@ -65,7 +83,9 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
         <div className="space-y-4">
           <div className="flex justify-end gap-2">
             {(['submitted', 'approved', 'rejected', 'all'] as FilterType[]).map((f: FilterType) => (
-              <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 rounded-lg text-[10px] font-bold capitalize ${filter === f ? 'bg-slate-900 text-white' : 'bg-white border text-slate-400'}`}>{f}</button>
+              <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 rounded-lg text-[10px] font-bold capitalize ${filter === f ? 'bg-slate-900 text-white' : 'bg-white border text-slate-400'}`}>
+                {f === 'submitted' ? 'Waiting' : f}
+              </button>
             ))}
           </div>
           {filtered.map((sub: Submission) => {
@@ -73,7 +93,12 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
             return (
               <div key={sub.id} className="bg-white p-6 rounded-2xl swiggy-shadow border flex items-center justify-between">
                 <div>
-                  <h4 className="font-black text-slate-900">{task?.name || 'Task'}</h4>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h4 className="font-black text-slate-900">{task?.name || 'Task'}</h4>
+                    <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${getStatusColor(sub.status)}`}>
+                      {getStatusLabel(sub.status)}
+                    </span>
+                  </div>
                   <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{new Date(sub.createdAt).toLocaleString()}</p>
                 </div>
                 {sub.status === 'submitted' && (

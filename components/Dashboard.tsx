@@ -15,8 +15,11 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks }) => {
   const [refreshKey, setRefreshKey] = useState(0);
-  const embedUrl = "https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF";
-  const publicUrl = "https://lookerstudio.google.com/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF";
+  const defaultEmbedUrl = "https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF";
+  const defaultPublicUrl = "https://lookerstudio.google.com/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF";
+
+  const embedUrl = user?.dashboardUrl || defaultEmbedUrl;
+  const publicUrl = embedUrl.replace('/embed/reporting/', '/reporting/');
 
   if (isAdmin && user) {
     const campusName = db.getCampusName(user.campusId);
