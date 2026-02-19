@@ -10,9 +10,11 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const DEFAULT_PROFILES: Record<string, any> = {
   'admin': { p: 'swiggy_admin', n: 'Super Admin', c: 'c1', e: 'admin@campus.swiggy.com' },
-  'catalyst_iitd': { p: 'swiggy_iitd', n: 'Agniswar Das', c: 'c2', e: 'agniswardas28042004@gmail.com' },
-  'catalyst_bits': { p: 'swiggy_bits', n: 'BITS Catalyst', c: 'c3', e: 'catalyst.bits@campus.com' },
-  'catalyst_iitb': { p: 'swiggy_iitb', n: 'Priya Singh', c: 'c1', e: 'priya.iitb@campus.com' },
+  'catalyst_iitbbs_k7m9': { p: 'Sg@7mK!pL2qR', n: 'IITBBS Catalyst', c: 'c1', e: 'catalyst.iitbbs@campus.com' },
+  'catalyst_jnu_r3t7': { p: 'Rq@3hM!sF8jD', n: 'JNU Catalyst', c: 'c2', e: 'catalyst.jnu@campus.com' },
+  'catalyst_iitbh_s9d3': { p: 'Mw#5gT!qK9xP', n: 'IITBH Catalyst', c: 'c3', e: 'catalyst.iitbh@campus.com' },
+  'catalyst_iitj_x2m5': { p: 'Fd#4bM!wQ7tG', n: 'IITJ Catalyst', c: 'c4', e: 'catalyst.iitj@campus.com' },
+  'catalyst_imtg_w5t8': { p: 'Nk%3xZ!rF8bC', n: 'IMTG Catalyst', c: 'c5', e: 'catalyst.imtg@campus.com' },
 };
 
 class MockDatabase {

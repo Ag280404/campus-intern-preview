@@ -2,31 +2,11 @@ import React from 'react';
 import { Campus, Task } from './types';
 
 export const CAMPUSES: Campus[] = [
-  { id: 'c1', name: 'IIT Bombay', city: 'Mumbai' },
-  { id: 'c2', name: 'IIT Delhi', city: 'Delhi' },
-  { id: 'c3', name: 'BITS Pilani', city: 'Pilani' },
-  { id: 'c4', name: 'VIT Vellore', city: 'Vellore' },
-  { id: 'c5', name: 'SRM University', city: 'Chennai' },
-  { id: 'c6', name: 'Manipal Institute', city: 'Manipal' },
-  { id: 'c7', name: 'Delhi University', city: 'Delhi' },
-  { id: 'c8', name: 'Christ University', city: 'Bangalore' },
-  { id: 'c9', name: 'Amity University', city: 'Noida' },
-  { id: 'c10', name: 'LPU', city: 'Phagwara' },
-  { id: 'c11', name: 'Symbiosis', city: 'Pune' },
-  { id: 'c12', name: 'NIT Trichy', city: 'Trichy' },
-  { id: 'c13', name: 'Anna University', city: 'Chennai' },
-  { id: 'c14', name: 'Jadavpur University', city: 'Kolkata' },
-  { id: 'c15', name: 'Osmania University', city: 'Hyderabad' },
-  { id: 'c16', name: 'Panjab University', city: 'Chandigarh' },
-  { id: 'c17', name: 'Loyola College', city: 'Chennai' },
-  { id: 'c18', name: 'St. Stephens', city: 'Delhi' },
-  { id: 'c19', name: 'RVCE', city: 'Bangalore' },
-  { id: 'c20', name: 'PSG Tech', city: 'Coimbatore' },
-  { id: 'c21', name: 'Thapar Institute', city: 'Patiala' },
-  { id: 'c22', name: 'COEP', city: 'Pune' },
-  { id: 'c23', name: 'DTU', city: 'Delhi' },
-  { id: 'c24', name: 'BHU', city: 'Varanasi' },
-  { id: 'c25', name: 'NMIMS', city: 'Mumbai' },
+  { id: 'c1', name: 'IIT Bhubaneswar', city: 'Bhubaneswar' },
+  { id: 'c2', name: 'Jaipur National University', city: 'Jaipur' },
+  { id: 'c3', name: 'IIT Bhilai', city: 'Bhilai' },
+  { id: 'c4', name: 'IIT Jodhpur', city: 'Jodhpur' },
+  { id: 'c5', name: 'IMT Ghaziabad', city: 'Ghaziabad' },
 ];
 
 export const TASKS: Task[] = [

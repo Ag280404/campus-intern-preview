@@ -30,7 +30,7 @@ const App: React.FC = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedCatalystId, setSelectedCatalystId] = useState<string>('catalyst_iitd');
+  const [selectedCatalystId, setSelectedCatalystId] = useState<string>('catalyst_iitbbs_k7m9');
   const [selectedCatalyst, setSelectedCatalyst] = useState<User | null>(null);
   const [allCatalysts, setAllCatalysts] = useState<User[]>([]);
   
