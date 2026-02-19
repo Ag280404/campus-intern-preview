@@ -250,7 +250,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                     <Sparkles size={20} strokeWidth={3} />
                   </div>
                   <p className="text-[12px] font-black text-slate-900 uppercase tracking-widest leading-none">
-                    Best performing reels will be selected for boosting.
+                    Best performing social media post will be selected for boosting.
                   </p>
                 </div>
               )}
