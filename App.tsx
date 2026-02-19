@@ -104,15 +104,21 @@ const App: React.FC = () => {
 
   const handleSubmitTask = async (data: any) => {
     if (user) {
-      await db.submitTask({
-        userId: user.id,
-        campusId: user.campusId,
-        taskId: data.taskId,
-        payload: data.payload,
-        location: data.location
-      });
-      refreshData();
-      setActiveTab('dashboard');
+      try {
+        await db.submitTask({
+          userId: user.id,
+          campusId: user.campusId,
+          taskId: data.taskId,
+          payload: data.payload,
+          location: data.location
+        });
+        await refreshData();
+        setActiveTab('dashboard');
+        alert("Task submitted successfully!");
+      } catch (err: any) {
+        console.error("Submission failed", err);
+        alert("Failed to submit task: " + (err.message || "Unknown error"));
+      }
     }
   };
 

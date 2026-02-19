@@ -32,6 +32,7 @@ class MockDatabase {
   private fromDbTime(val: any): number {
     if (!val) return Date.now();
     if (typeof val === 'number') return val;
+    if (typeof val === 'string' && /^\d+$/.test(val)) return Number(val);
     const parsed = new Date(val).getTime();
     return isNaN(parsed) ? Date.now() : parsed;
   }
@@ -65,7 +66,14 @@ class MockDatabase {
       campusId: db.campus_id || db.campusId,
       taskId: db.task_id || db.taskId,
       status: db.status,
-      payload: db.payload,
+      // Reconstruct payload from flattened columns
+      payload: db.payload || {
+        recipientName: db.recipient_name,
+        recipientPhone: db.recipient_phone,
+        recipientEmail: db.recipient_email,
+        count: db.count,
+        url: db.url
+      },
       proofUrl: db.proof_url || db.proofUrl,
       location: db.location,
       createdAt: this.fromDbTime(db.created_at || db.createdAt),
@@ -74,16 +82,29 @@ class MockDatabase {
   }
 
   private mapToDbSubmission(sub: any): any {
-    return {
+    const dbPayload: any = {
       user_id: sub.userId,
       campus_id: sub.campusId,
       task_id: sub.taskId,
       status: sub.status,
-      payload: sub.payload,
-      proof_url: sub.proofUrl,
-      location: sub.location,
-      created_at: new Date(sub.createdAt).toISOString()
+      created_at: typeof sub.createdAt === 'number' ? sub.createdAt : new Date(sub.createdAt).getTime()
     };
+
+    // Flatten the payload into the specific columns shown in your Supabase screenshots
+    if (sub.payload) {
+      if (sub.payload.recipientName) dbPayload.recipient_name = sub.payload.recipientName;
+      if (sub.payload.recipientPhone) dbPayload.recipient_phone = sub.payload.recipientPhone;
+      if (sub.payload.recipientEmail) dbPayload.recipient_email = sub.payload.recipientEmail;
+      
+      // These columns might also exist for other tasks
+      if (sub.payload.count) dbPayload.count = Number(sub.payload.count);
+      if (sub.payload.url) dbPayload.url = sub.payload.url;
+    }
+
+    if (sub.location) dbPayload.location = sub.location;
+    if (sub.reviewerNote) dbPayload.reviewer_note = sub.reviewerNote;
+    
+    return dbPayload;
   }
 
   private mapDbEvent(dbEvent: any): CampusEvent {
@@ -205,8 +226,10 @@ class MockDatabase {
   async getLeaderboard(): Promise<MetricRollup[]> {
     const { data: users, error: uErr } = await supabase.from('users').select('id, campus_id');
     if (uErr) return [];
-    const { data: submissions, error: sErr } = await supabase.from('submissions').select('*').eq('status', 'approved');
+    const { data: dbSubmissions, error: sErr } = await supabase.from('submissions').select('*').eq('status', 'approved');
     if (sErr) return [];
+
+    const submissions = (dbSubmissions || []).map(s => this.mapSubmission(s));
 
     const rollups: Record<string, MetricRollup> = {};
     users?.forEach(u => {
@@ -215,15 +238,15 @@ class MockDatabase {
     });
 
     const tasks = await this.getTasks();
-    submissions?.forEach(s => {
-      if (!rollups[s.user_id]) return;
-      const task = tasks.find(t => t.id === s.task_id);
+    submissions.forEach(s => {
+      if (!rollups[s.userId]) return;
+      const task = tasks.find(t => t.id === s.taskId);
       if (task) {
-        rollups[s.user_id].score += task.points;
-        if (task.type === 'offline_activation') rollups[s.user_id].metrics.flyers += Number(s.payload.count || 1);
-        if (task.type === 'social_media') rollups[s.user_id].metrics.content += 1;
-        if (task.type === 'referral') rollups[s.user_id].metrics.signups += 1;
-        if (task.type === 'student_rewards') rollups[s.user_id].metrics.coupons += 1;
+        rollups[s.userId].score += task.points;
+        if (task.type === 'offline_activation') rollups[s.userId].metrics.flyers += Number(s.payload?.count || 1);
+        if (task.type === 'social_media') rollups[s.userId].metrics.content += 1;
+        if (task.type === 'referral') rollups[s.userId].metrics.signups += 1;
+        if (task.type === 'student_rewards') rollups[s.userId].metrics.coupons += 1;
       }
     });
     return Object.values(rollups).sort((a, b) => b.score - a.score);
@@ -284,7 +307,7 @@ class MockDatabase {
 
   async submitEvent(event: Omit<CampusEvent, 'id' | 'createdAt' | 'updatedAt'>): Promise<CampusEvent> {
     const dbPayload = this.mapToDbEvent(event);
-    dbPayload.created_at = new Date().toISOString();
+    dbPayload.created_at = Date.now();
     
     const { data, error } = await supabase.from('events').insert(dbPayload).select();
     
