@@ -351,7 +351,7 @@ class MockDatabase {
 
   async submitEvent(event: Omit<CampusEvent, 'id' | 'createdAt' | 'updatedAt'>): Promise<CampusEvent> {
     const dbPayload = this.mapToDbEvent(event);
-    dbPayload.created_at = Date.now();
+    dbPayload.created_at = new Date().toISOString();
     
     const { data, error } = await supabase.from('events').insert(dbPayload).select();
     
@@ -373,6 +373,9 @@ class MockDatabase {
 
   async updateEvent(id: string, event: Partial<CampusEvent>): Promise<CampusEvent> {
     const dbPayload = this.mapToDbEvent(event);
+    // Ensure updated_at is always set on update
+    dbPayload.updated_at = new Date().toISOString();
+    
     const { data, error } = await supabase.from('events').update(dbPayload).eq('id', id).select();
     
     if (error) {
