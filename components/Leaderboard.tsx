@@ -13,27 +13,65 @@ interface LeaderboardProps {
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ data, isAdmin }) => {
   const [userMap, setUserMap] = useState<Record<string, User>>({});
+  const [growthData, setGrowthData] = useState<{ month: string, score: number }[]>([]);
   const leaderboardData = data || [];
   const topThree = leaderboardData.slice(0, 3);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const users = await db.getAllUsers();
+    const fetchData = async () => {
+      const [users, allSubmissions, tasks] = await Promise.all([
+        db.getAllUsers(),
+        db.getSubmissions(),
+        db.getTasks()
+      ]);
+
       const map: Record<string, User> = {};
       users.forEach(u => map[u.id] = u);
       setUserMap(map);
-    };
-    fetchUsers();
-  }, []);
 
-  const growthData = [
-    { month: 'Jan', score: 45 },
-    { month: 'Feb', score: 52 },
-    { month: 'Mar', score: 48 },
-    { month: 'Apr', score: 61 },
-    { month: 'May', score: 75 },
-    { month: 'Jun', score: 88 },
-  ];
+      // Calculate monthly growth data
+      const approvedSubmissions = allSubmissions.filter(s => s.status === 'approved');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const currentMonth = new Date().getMonth();
+      
+      const monthlyScores: Record<string, number> = {};
+      // Initialize months up to current
+      for (let i = 0; i <= currentMonth; i++) {
+        monthlyScores[months[i]] = 0;
+      }
+
+      approvedSubmissions.forEach(s => {
+        const date = new Date(s.createdAt);
+        const monthName = months[date.getMonth()];
+        if (monthlyScores[monthName] !== undefined) {
+          const task = tasks.find(t => t.id === s.taskId);
+          if (task) {
+            monthlyScores[monthName] += task.points;
+          }
+        }
+      });
+
+      const formattedData = Object.keys(monthlyScores).map(m => ({
+        month: m,
+        score: monthlyScores[m]
+      }));
+
+      // If we only have one month of data, add a zero-point previous month for better visualization
+      if (formattedData.length === 1 && currentMonth > 0) {
+        formattedData.unshift({ month: months[currentMonth - 1], score: 0 });
+      } else if (formattedData.length === 0) {
+        // Fallback if no data at all
+        setGrowthData([
+          { month: months[Math.max(0, currentMonth - 1)], score: 0 },
+          { month: months[currentMonth], score: 0 }
+        ]);
+        return;
+      }
+
+      setGrowthData(formattedData);
+    };
+    fetchData();
+  }, []);
 
   const Avatar = ({ userId, size = 20 }: { userId: string, size?: number }) => {
     const user = userMap[userId];
