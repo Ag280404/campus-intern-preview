@@ -122,7 +122,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const campusName = db.getCampusName(user.campusId);
 
-  const rewardsLink = user.rewardsOnelink || `https://swiggy.onelink.me/888564224/u631l8dw?code=${user.rewardsQrCode || 'SWIGGY'}`;
+  const rewardsLink = `https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$`;
   const streaksLink = user.streaksOnelink || `https://swiggy.onelink.me/888564224/h6btndnt?code=${user.streaksQrCode || 'STREAK'}`;
 
   const [isEditing, setIsEditing] = useState(false);
@@ -191,7 +191,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
     fileInputRef.current?.click();
   };
 
-  const getQrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(data)}`;
+  const getQrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(data)}&v=${Date.now()}`;
 
   return (
     <div className="space-y-10 animate-in fade-in duration-700 pb-20">
@@ -474,7 +474,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUserUpdate }) => {
             title="Student Rewards"
             description="Unlock exclusive discounts on Swiggy One, Food Delivery, Dineout and more."
             image="https://i.postimg.cc/Fzyq3L0m/1000173235.jpg"
-            href="https://swiggy.onelink.me/888564224/u631l8dw"
+            href="https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$"
           />
           <InitiativeCard 
             title="Campus Streaks"

@@ -16,7 +16,7 @@ const DEFAULT_PROFILES: Record<string, any> = {
     c: 'c1', 
     e: 'catalyst.iitbbs@campus.com',
     d: 'https://lookerstudio.google.com/embed/reporting/9ef96694-3531-4dbf-88a2-fece2cd65638/page/b6wkF',
-    r: 'https://swiggy.onelink.me/888564224/mp03tj84',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
     s: 'https://swiggy.onelink.me/888564224/x9he9ol6'
   },
   'catalyst_jnu_r3t7': { 
@@ -25,7 +25,7 @@ const DEFAULT_PROFILES: Record<string, any> = {
     c: 'c2', 
     e: 'catalyst.jnu@campus.com',
     d: 'https://lookerstudio.google.com/embed/reporting/2b63d10c-ea17-4a54-866a-78713e9f884c/page/b6wkF',
-    r: 'https://swiggy.onelink.me/888564224/pryikg17',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
     s: 'https://swiggy.onelink.me/888564224/g63vk9ti'
   },
   'catalyst_iitbh_s9d3': { 
@@ -34,7 +34,7 @@ const DEFAULT_PROFILES: Record<string, any> = {
     c: 'c3', 
     e: 'catalyst.iitbh@campus.com',
     d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
-    r: 'https://swiggy.onelink.me/888564224/mn6doql6',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
     s: 'https://swiggy.onelink.me/888564224/o16mj9r7'
   },
   'catalyst_iitj_x2m5': { 
@@ -43,7 +43,7 @@ const DEFAULT_PROFILES: Record<string, any> = {
     c: 'c4', 
     e: 'catalyst.iitj@campus.com',
     d: 'https://lookerstudio.google.com/embed/reporting/c8c59335-cb18-40dc-897d-56cbd7bc1852/page/b6wkF',
-    r: 'https://swiggy.onelink.me/888564224/fb64lh1j',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
     s: 'https://swiggy.onelink.me/888564224/86e1ih0k'
   },
   'catalyst_imtg_w5t8': { 
@@ -52,7 +52,7 @@ const DEFAULT_PROFILES: Record<string, any> = {
     c: 'c5', 
     e: 'catalyst.imtg@campus.com',
     d: 'https://lookerstudio.google.com/embed/reporting/caed7c6b-78d9-4d9b-92c7-bf75059cec89/page/b6wkF',
-    r: 'https://swiggy.onelink.me/888564224/0xgtoe85',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
     s: 'https://swiggy.onelink.me/888564224/yj69bbf6'
   },
 };
