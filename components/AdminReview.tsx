@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Submission, User, Task } from '../types';
 import { db } from '../services/mockDatabase';
-import { ChevronDown, ChevronUp, User as UserIcon, Phone, Mail, Link as LinkIcon, Calendar, Hash, Info, CheckCircle, XCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, User as UserIcon, Phone, Mail, Link as LinkIcon, Calendar, Hash, Info, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 
 interface AdminReviewProps {
   submissions: Submission[];
@@ -23,6 +23,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
   const [taskTargets, setTaskTargets] = useState<Record<string, number>>({});
   const [isSavingConfig, setIsSavingConfig] = useState(false);
   const [expandedSubId, setExpandedSubId] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     if (selectedCatalyst) {
@@ -31,6 +32,12 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
       setTaskTargets(selectedCatalyst.taskTargets || {});
     }
   }, [selectedCatalyst, activeView]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await onUpdate();
+    setTimeout(() => setIsRefreshing(false), 600);
+  };
 
   const handleAction = async (e: React.MouseEvent, id: string, action: 'approve' | 'reject') => {
     e.stopPropagation(); // Prevent toggling expansion when clicking buttons
@@ -85,6 +92,11 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
     if (payload.count) details.push({ icon: <Hash size={14} />, label: 'Count', value: payload.count });
     if (payload.url) details.push({ icon: <LinkIcon size={14} />, label: 'URL', value: payload.url, isLink: true });
     if (payload.date) details.push({ icon: <Calendar size={14} />, label: 'Date', value: payload.date });
+    
+    // Streak days
+    if (payload.streakDay1) details.push({ icon: <Calendar size={14} />, label: 'Streak Day 1', value: payload.streakDay1 });
+    if (payload.streakDay2) details.push({ icon: <Calendar size={14} />, label: 'Streak Day 2', value: payload.streakDay2 });
+    if (payload.streakDay3) details.push({ icon: <Calendar size={14} />, label: 'Streak Day 3', value: payload.streakDay3 });
 
     if (details.length === 0) {
       // If it's just a string or object we don't recognize
@@ -115,7 +127,16 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
   return (
     <div className="space-y-8">
       <header className="flex justify-between items-end">
-        <h2 className="text-3xl font-black text-slate-900">Admin</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-3xl font-black text-slate-900">Admin</h2>
+          <button 
+            onClick={handleRefresh} 
+            className={`p-2 rounded-xl bg-white border swiggy-shadow hover:bg-slate-50 transition-all ${isRefreshing ? 'animate-spin text-swiggy-orange' : 'text-slate-400'}`}
+            title="Sync with Backend"
+          >
+            <RefreshCw size={18} />
+          </button>
+        </div>
         <div className="flex bg-white p-1 rounded-xl border">
           {(['review', 'config', 'notifications'] as AdminView[]).map((v: AdminView) => (
             <button key={v} onClick={() => setActiveView(v)} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase ${activeView === v ? 'bg-swiggy-orange text-white' : 'text-slate-400'}`}>{v}</button>
