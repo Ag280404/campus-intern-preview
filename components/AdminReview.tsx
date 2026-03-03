@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Submission, User, Task } from '../types';
 import { db } from '../services/mockDatabase';
+import { ChevronDown, ChevronUp, User as UserIcon, Phone, Mail, Link as LinkIcon, Calendar, Hash, Info, CheckCircle, XCircle } from 'lucide-react';
 
 interface AdminReviewProps {
   submissions: Submission[];
@@ -21,6 +22,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
   const [configStreaksLink, setConfigStreaksLink] = useState('');
   const [taskTargets, setTaskTargets] = useState<Record<string, number>>({});
   const [isSavingConfig, setIsSavingConfig] = useState(false);
+  const [expandedSubId, setExpandedSubId] = useState<string | null>(null);
 
   useEffect(() => {
     if (selectedCatalyst) {
@@ -30,7 +32,8 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
     }
   }, [selectedCatalyst, activeView]);
 
-  const handleAction = async (id: string, action: 'approve' | 'reject') => {
+  const handleAction = async (e: React.MouseEvent, id: string, action: 'approve' | 'reject') => {
+    e.stopPropagation(); // Prevent toggling expansion when clicking buttons
     const note = prompt('Add reviewer note:');
     if (action === 'approve') await db.approveSubmission(id, note || undefined);
     else await db.rejectSubmission(id, note || undefined);
@@ -68,6 +71,47 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
     }
   };
 
+  const toggleExpand = (id: string) => {
+    setExpandedSubId(expandedSubId === id ? null : id);
+  };
+
+  const renderPayloadDetails = (payload: any) => {
+    if (!payload) return <p className="text-slate-400 italic text-xs">No details provided.</p>;
+
+    const details = [];
+    if (payload.recipientName) details.push({ icon: <UserIcon size={14} />, label: 'Name', value: payload.recipientName });
+    if (payload.recipientPhone) details.push({ icon: <Phone size={14} />, label: 'Phone', value: payload.recipientPhone });
+    if (payload.recipientEmail) details.push({ icon: <Mail size={14} />, label: 'Email', value: payload.recipientEmail });
+    if (payload.count) details.push({ icon: <Hash size={14} />, label: 'Count', value: payload.count });
+    if (payload.url) details.push({ icon: <LinkIcon size={14} />, label: 'URL', value: payload.url, isLink: true });
+    if (payload.date) details.push({ icon: <Calendar size={14} />, label: 'Date', value: payload.date });
+
+    if (details.length === 0) {
+      // If it's just a string or object we don't recognize
+      return <pre className="text-[10px] bg-slate-50 p-3 rounded-lg overflow-auto max-h-32 text-slate-600 font-mono">{JSON.stringify(payload, null, 2)}</pre>;
+    }
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+        {details.map((d, i) => (
+          <div key={i} className="flex items-start gap-3">
+            <div className="mt-0.5 text-slate-400">{d.icon}</div>
+            <div className="min-w-0">
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">{d.label}</p>
+              {d.isLink ? (
+                <a href={d.value} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-swiggy-orange hover:underline truncate block">
+                  {d.value}
+                </a>
+              ) : (
+                <p className="text-xs font-bold text-slate-700 truncate">{d.value}</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-8">
       <header className="flex justify-between items-end">
@@ -88,28 +132,96 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
               </button>
             ))}
           </div>
-          {filtered.map((sub: Submission) => {
+          {filtered.length > 0 ? filtered.map((sub: Submission) => {
             const task = tasks.find((t: Task) => t.id === sub.taskId);
+            const isExpanded = expandedSubId === sub.id;
+            
             return (
-              <div key={sub.id} className="bg-white p-6 rounded-2xl swiggy-shadow border flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <h4 className="font-black text-slate-900">{task?.name || 'Task'}</h4>
-                    <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${getStatusColor(sub.status)}`}>
-                      {getStatusLabel(sub.status)}
-                    </span>
+              <div 
+                key={sub.id} 
+                className={`bg-white rounded-2xl swiggy-shadow border transition-all duration-300 overflow-hidden cursor-pointer ${isExpanded ? 'ring-2 ring-swiggy-orange/20 border-swiggy-orange/30' : 'hover:border-slate-200'}`}
+                onClick={() => toggleExpand(sub.id)}
+              >
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isExpanded ? 'bg-swiggy-orange text-white' : 'bg-slate-50 text-slate-400'}`}>
+                      <Info size={20} />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        <h4 className="font-black text-slate-900">{task?.name || 'Task'}</h4>
+                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${getStatusColor(sub.status)}`}>
+                          {getStatusLabel(sub.status)}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{new Date(sub.createdAt).toLocaleString()}</p>
+                    </div>
                   </div>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{new Date(sub.createdAt).toLocaleString()}</p>
+                  
+                  <div className="flex items-center gap-4">
+                    {sub.status === 'submitted' && !isExpanded && (
+                      <div className="hidden md:flex gap-2">
+                        <button onClick={(e) => handleAction(e, sub.id, 'approve')} className="bg-green-500 text-white px-4 py-2 rounded-lg font-bold text-xs hover:bg-green-600 transition-colors">Approve</button>
+                        <button onClick={(e) => handleAction(e, sub.id, 'reject')} className="bg-red-50 text-red-500 px-4 py-2 rounded-lg font-bold text-xs hover:bg-red-100 transition-colors">Reject</button>
+                      </div>
+                    )}
+                    <div className="text-slate-300">
+                      {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </div>
+                  </div>
                 </div>
-                {sub.status === 'submitted' && (
-                  <div className="flex gap-2">
-                    <button onClick={() => handleAction(sub.id, 'approve')} className="bg-green-500 text-white px-4 py-2 rounded-lg font-bold text-xs">Approve</button>
-                    <button onClick={() => handleAction(sub.id, 'reject')} className="bg-red-50 text-red-500 px-4 py-2 rounded-lg font-bold text-xs">Reject</button>
+
+                {isExpanded && (
+                  <div className="px-6 pb-6 pt-0 animate-in slide-in-from-top-2 duration-300">
+                    <div className="h-px bg-slate-100 mb-6"></div>
+                    
+                    <div className="space-y-6">
+                      <div>
+                        <h5 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-3 flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-swiggy-orange"></div>
+                          Submission Details
+                        </h5>
+                        {renderPayloadDetails(sub.payload)}
+                      </div>
+
+                      {sub.reviewerNote && (
+                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Reviewer Note</p>
+                          <p className="text-xs font-bold text-slate-600 italic">"{sub.reviewerNote}"</p>
+                        </div>
+                      )}
+
+                      {sub.status === 'submitted' && (
+                        <div className="flex gap-3 pt-2">
+                          <button 
+                            onClick={(e) => handleAction(e, sub.id, 'approve')} 
+                            className="flex-1 bg-green-500 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg shadow-green-100 hover:bg-green-600 transition-all flex items-center justify-center gap-2"
+                          >
+                            <CheckCircle size={16} />
+                            Approve Task
+                          </button>
+                          <button 
+                            onClick={(e) => handleAction(e, sub.id, 'reject')} 
+                            className="flex-1 bg-red-50 text-red-500 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest border border-red-100 hover:bg-red-100 transition-all flex items-center justify-center gap-2"
+                          >
+                            <XCircle size={16} />
+                            Reject Task
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
             );
-          })}
+          }) : (
+            <div className="bg-white p-20 rounded-[40px] swiggy-shadow border border-slate-50 text-center">
+              <div className="w-16 h-16 bg-slate-50 text-slate-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Info size={32} />
+              </div>
+              <p className="text-slate-400 font-bold text-sm">No tasks found for this filter.</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -133,3 +245,4 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
 };
 
 export default AdminReview;
+
