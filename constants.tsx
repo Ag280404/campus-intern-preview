@@ -7,6 +7,14 @@ export const CAMPUSES: Campus[] = [
   { id: 'c3', name: 'IIT Bhilai', city: 'Bhilai' },
   { id: 'c4', name: 'IIT Jodhpur', city: 'Jodhpur' },
   { id: 'c5', name: 'IMT Ghaziabad', city: 'Ghaziabad' },
+  { id: 'c6', name: "St. Xavier's College (Autonomous), Kolkata", city: 'Kolkata' },
+  { id: 'c7', name: "St. Xavier's University, Kolkata", city: 'Kolkata' },
+  { id: 'c8', name: 'Institute of Engineering and Management', city: 'Kolkata' },
+  { id: 'c9', name: 'University of Lucknow', city: 'Lucknow' },
+  { id: 'c10', name: 'Vivekananda Global University Jaipur', city: 'Jaipur' },
+  { id: 'c11', name: 'Rajasthan Institute of Engine and Technology', city: 'Jaipur' },
+  { id: 'c12', name: 'SKIT JAIPUR', city: 'Jaipur' },
+  { id: 'c13', name: 'JECRC FOUNDATION COLLEGE', city: 'Jaipur' },
 ];
 
 export const TASKS: Task[] = [

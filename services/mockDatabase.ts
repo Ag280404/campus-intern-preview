@@ -55,6 +55,87 @@ const DEFAULT_PROFILES: Record<string, any> = {
     r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
     s: 'https://swiggy.onelink.me/888564224/yj69bbf6'
   },
+  'catalyst_sxc_a9b2': { 
+    p: 'Xv@9mK!pL2qR', 
+    n: "St. Xavier's College (Autonomous), Kolkata Catalyst", 
+    c: 'c6', 
+    e: 'catalyst.sxc@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_sxu_m4n8': { 
+    p: 'Ux@4hM!sF8jD', 
+    n: "St. Xavier's University, Kolkata Catalyst", 
+    c: 'c7', 
+    e: 'catalyst.sxu@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_iem_v7x3': { 
+    p: 'Im@7gT!qK9xP', 
+    n: 'IEM Catalyst', 
+    c: 'c8', 
+    e: 'catalyst.iem@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_uol_k5r1': { 
+    p: 'Ul@5bM!wQ7tG', 
+    n: 'UOL Catalyst', 
+    c: 'c9', 
+    e: 'catalyst.uol@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_vgu_p2w9': { 
+    p: 'Vg@2xZ!rF8bC', 
+    n: 'VGU Catalyst', 
+    c: 'c10', 
+    e: 'catalyst.vgu@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_jnu_z4x1': { 
+    p: 'Jn@4tY!uI6oP', 
+    n: 'JNU Catalyst (New)', 
+    c: 'c2', 
+    e: 'catalyst.jnu.new@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_riet_h8s4': { 
+    p: 'Rt@8kL!pM3qW', 
+    n: 'RIET Catalyst', 
+    c: 'c11', 
+    e: 'catalyst.riet@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_skit_f6g1': { 
+    p: 'Sk@6mN!jH4vB', 
+    n: 'SKIT Catalyst', 
+    c: 'c12', 
+    e: 'catalyst.skit@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_jecrc_t9y5': { 
+    p: 'Jc@9pQ!rL5sK', 
+    n: 'JECRC Catalyst', 
+    c: 'c13', 
+    e: 'catalyst.jecrc@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
 };
 
 class MockDatabase {
