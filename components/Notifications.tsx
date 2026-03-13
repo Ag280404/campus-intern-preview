@@ -55,7 +55,7 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
               <div
                 key={n.id}
                 className={`bg-white p-7 md:p-9 rounded-2xl border-l-4 transition-all duration-300 premium-card-shadow hover:-translate-y-0.5 relative ${
-                  isUnread ? ‘border-l-swiggy-orange border-[#E3DDD5]’ : ‘border-l-[#E3DDD5] border-[#E3DDD5] opacity-85’
+                  isUnread ? 'border-l-swiggy-orange border-[#E3DDD5]' : 'border-l-[#E3DDD5] border-[#E3DDD5] opacity-85'
                 }`}
               >
                 <button
@@ -96,9 +96,9 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
             <div className="w-16 h-16 bg-[#F8F5F1] rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#D4CEC7] group-hover:scale-105 transition-transform duration-300">
               <Inbox size={36} strokeWidth={1.5} />
             </div>
-            <h3 className="text-[22px] font-black text-[#141414] tracking-tight leading-none mb-3">You’re all caught up</h3>
+            <h3 className="text-[22px] font-black text-[#141414] tracking-tight leading-none mb-3">You&apos;re all caught up</h3>
             <p className="text-[#A09488] text-[13px] font-semibold max-w-sm mx-auto leading-relaxed">
-              No updates right now. We’ll notify you here when there’s something new from the Swiggy Campus team.
+              No updates right now. We'll notify you here when there's something new from the Swiggy Campus team.
             </p>
           </div>
         )}
