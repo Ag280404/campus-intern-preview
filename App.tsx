@@ -129,67 +129,64 @@ const App: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#FFF9F5] flex items-center justify-center p-6 relative overflow-hidden">
-        {/* Background blobs */}
-        <div className="absolute top-[-15%] left-[-15%] w-[50%] h-[50%] bg-swiggy-light/40 rounded-full blur-[140px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-orange-100/30 rounded-full blur-[100px]"></div>
-        
-        <div className="bg-white w-full max-w-[420px] rounded-[16px] p-10 shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_10px_10px_-5px_rgba(0,0,0,0.04)] relative z-10 border border-gray-100">
+      <div className="min-h-screen bg-[#F8F5F1] flex items-center justify-center p-6 relative overflow-hidden">
+        {/* Warm ambient glow — restrained, not blobby */}
+        <div className="absolute top-0 right-0 w-[480px] h-[480px] bg-[#FDE8D5]/30 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[320px] h-[320px] bg-[#F5E8D8]/20 rounded-full blur-[80px] pointer-events-none"></div>
+
+        <div className="bg-white w-full max-w-[420px] rounded-2xl p-10 premium-card-shadow relative z-10 border border-[#E3DDD5]">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-20 h-20 bg-swiggy-orange rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(251,84,4,0.3)] mb-6 overflow-hidden p-4 group cursor-default transition-transform hover:scale-105 duration-500">
-              <SwiggyLogo size={48} className="group-hover:rotate-6 transition-transform duration-500" />
+            <div className="w-16 h-16 bg-swiggy-orange rounded-2xl flex items-center justify-center mb-5 overflow-hidden p-3 group cursor-default transition-all duration-300 hover:scale-105 hover:rounded-[20px]" style={{boxShadow:'0 6px 20px rgba(251,84,4,0.28)'}}>
+              <SwiggyLogo size={36} className="group-hover:rotate-6 transition-transform duration-500" />
             </div>
-            <h1 className="text-[28px] font-bold text-gray-900 text-center uppercase tracking-tight">CATALYST PORTAL</h1>
+            <h1 className="heading-display text-[26px] text-[#141414] text-center tracking-tight">CATALYST PORTAL</h1>
+            <p className="text-[11px] text-[#A09488] font-bold uppercase tracking-[0.15em] mt-1.5">Swiggy Campus Program</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
             {error && (
-              <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-[13px] font-semibold flex items-center gap-3 border border-red-100 mb-4">
-                <AlertCircle size={18} strokeWidth={2.5} className="shrink-0" />
+              <div className="bg-red-50/80 text-red-600 px-4 py-3 rounded-xl text-[13px] font-semibold flex items-center gap-3 border border-red-200/60 mb-4">
+                <AlertCircle size={16} strokeWidth={2.5} className="shrink-0" />
                 <span className="flex-1">{error}</span>
               </div>
             )}
-            
+
             <div className="space-y-2">
-              <label className="block text-[12px] font-semibold text-gray-500 ml-1 uppercase tracking-wider">USER ID</label>
-              <div className="relative group">
-                <input 
-                  type="text" 
-                  required 
-                  value={loginData.identifier} 
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({...loginData, identifier: e.target.value})} 
-                  className="w-full h-12 px-4 rounded-lg border border-gray-200 outline-none transition-all bg-white font-medium text-gray-800 placeholder-gray-400 focus:border-swiggy-orange focus:ring-4 focus:ring-swiggy-orange/10" 
-                  placeholder="e.g. catalyst_iitd" 
-                />
-              </div>
+              <label className="block text-[11px] font-bold text-[#8B7E74] ml-1 uppercase tracking-[0.12em]">User ID</label>
+              <input
+                type="text"
+                required
+                value={loginData.identifier}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({...loginData, identifier: e.target.value})}
+                className="w-full h-12 px-4 rounded-xl border border-[#E3DDD5] outline-none transition-all bg-white font-semibold text-[#141414] placeholder-[#C5BDB6] focus:border-swiggy-orange"
+                placeholder="e.g. catalyst_iitd"
+              />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-[12px] font-semibold text-gray-500 ml-1 uppercase tracking-wider">PASSWORD</label>
-              <div className="relative group">
-                <input 
-                  type="password" 
-                  required 
-                  value={loginData.password} 
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({...loginData, password: e.target.value})} 
-                  className="w-full h-12 px-4 rounded-lg border border-gray-200 outline-none transition-all bg-white font-medium text-gray-800 placeholder-gray-400 focus:border-swiggy-orange focus:ring-4 focus:ring-swiggy-orange/10" 
-                  placeholder="••••••••" 
-                />
-              </div>
+              <label className="block text-[11px] font-bold text-[#8B7E74] ml-1 uppercase tracking-[0.12em]">Password</label>
+              <input
+                type="password"
+                required
+                value={loginData.password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({...loginData, password: e.target.value})}
+                className="w-full h-12 px-4 rounded-xl border border-[#E3DDD5] outline-none transition-all bg-white font-semibold text-[#141414] placeholder-[#C5BDB6] focus:border-swiggy-orange"
+                placeholder="••••••••"
+              />
             </div>
 
-            <button 
-              type="submit" 
-              disabled={isLoggingIn} 
-              className="w-full h-12 bg-gradient-to-r from-[#FB5404] to-[#FF6B35] text-white font-semibold rounded-lg flex items-center justify-center gap-2 mt-7 text-base shadow-lg hover:shadow-[0_8px_16px_rgba(251,84,4,0.3)] hover:-translate-y-0.5 transition-all disabled:opacity-70 group"
+            <button
+              type="submit"
+              disabled={isLoggingIn}
+              className="w-full h-12 swiggy-btn-gradient text-white font-bold rounded-xl flex items-center justify-center gap-2 mt-6 text-[14px] transition-all disabled:opacity-60 group"
             >
               <span>{isLoggingIn ? "Verifying..." : "Sign in"}</span>
-              <ChevronRight size={18} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+              <ChevronRight size={16} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
             </button>
           </form>
-          
-          <p className="mt-8 text-center text-gray-400 text-[11px] font-medium tracking-wide">
-            Internal Portal • Swiggy Campus Program
+
+          <p className="mt-7 text-center text-[#C0B6AE] text-[10px] font-bold tracking-[0.12em] uppercase">
+            Internal Portal
           </p>
         </div>
       </div>
@@ -199,29 +196,29 @@ const App: React.FC = () => {
   return (
     <Layout activeTab={activeTab} onTabChange={setActiveTab} user={user} onLogout={handleLogout}>
       {isLoading ? (
-        <div className="h-[60vh] flex flex-col items-center justify-center gap-4 text-slate-400">
-          <Loader2 className="animate-spin text-swiggy-orange" size={48} />
-          <p className="font-bold text-xs uppercase tracking-widest">Synchronizing Database...</p>
+        <div className="h-[60vh] flex flex-col items-center justify-center gap-4 text-[#A09488]">
+          <Loader2 className="animate-spin text-swiggy-orange" size={36} />
+          <p className="font-bold text-[11px] uppercase tracking-[0.18em]">Synchronizing...</p>
         </div>
       ) : (
         <>
           {isAdmin && ['dashboard', 'tasks', 'admin', 'calendar'].includes(activeTab) && (
-            <div className="mb-8 flex items-center justify-between bg-white px-6 py-4.5 rounded-[28px] swiggy-shadow border border-slate-50/80">
-              <div className="flex items-center gap-4">
-                <div className="w-11 h-11 bg-swiggy-light text-swiggy-orange rounded-[14px] flex items-center justify-center shadow-inner shadow-orange-100/50">
-                  <Users size={22} strokeWidth={2.5} />
+            <div className="mb-8 flex items-center justify-between bg-white px-6 py-4 rounded-xl premium-card-shadow border border-[#E3DDD5]">
+              <div className="flex items-center gap-3.5">
+                <div className="w-9 h-9 bg-[#FEF0E6] text-swiggy-orange rounded-lg flex items-center justify-center">
+                  <Users size={18} strokeWidth={2.5} />
                 </div>
-                <h4 className="text-[13px] font-black text-slate-900 leading-none uppercase tracking-tight">Catalyst Context</h4>
+                <h4 className="text-[12px] font-black text-[#141414] leading-none uppercase tracking-[0.1em]">Catalyst Context</h4>
               </div>
               <div className="relative">
-                <select 
-                  value={selectedCatalystId} 
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCatalystId(e.target.value)} 
-                  className="pl-5 pr-12 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-800 min-w-[240px] appearance-none"
+                <select
+                  value={selectedCatalystId}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCatalystId(e.target.value)}
+                  className="pl-4 pr-10 py-2.5 bg-[#F8F5F1] border border-[#E3DDD5] rounded-lg text-[13px] font-bold text-[#141414] min-w-[240px] appearance-none outline-none focus:border-swiggy-orange transition-colors"
                 >
                   {allCatalysts.map((c: User) => <option key={c.id} value={c.id}>{c.displayName}</option>)}
                 </select>
-                <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <ChevronDown size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09488] pointer-events-none" />
               </div>
             </div>
           )}

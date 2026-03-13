@@ -104,7 +104,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
     }
 
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 bg-[#F8F5F1] p-4 rounded-xl border border-[#E3DDD5]">
         {details.map((d, i) => (
           <div key={i} className="flex items-start gap-3">
             <div className="mt-0.5 text-slate-400">{d.icon}</div>
@@ -127,19 +127,19 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
   return (
     <div className="space-y-8">
       <header className="flex justify-between items-end">
-        <div className="flex items-center gap-4">
-          <h2 className="text-3xl font-black text-slate-900">Admin</h2>
-          <button 
-            onClick={handleRefresh} 
-            className={`p-2 rounded-xl bg-white border swiggy-shadow hover:bg-slate-50 transition-all ${isRefreshing ? 'animate-spin text-swiggy-orange' : 'text-slate-400'}`}
+        <div className="flex items-center gap-3.5">
+          <h2 className="heading-display text-[30px] text-[#141414] leading-none">Admin</h2>
+          <button
+            onClick={handleRefresh}
+            className={`p-2 rounded-lg bg-white border border-[#E3DDD5] hover:bg-[#F8F5F1] transition-all ${isRefreshing ? 'animate-spin text-swiggy-orange' : 'text-[#A09488]'}`}
             title="Sync with Backend"
           >
-            <RefreshCw size={18} />
+            <RefreshCw size={16} />
           </button>
         </div>
-        <div className="flex bg-white p-1 rounded-xl border">
+        <div className="flex bg-white p-1 rounded-lg border border-[#E3DDD5]">
           {(['review', 'config', 'notifications'] as AdminView[]).map((v: AdminView) => (
-            <button key={v} onClick={() => setActiveView(v)} className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase ${activeView === v ? 'bg-swiggy-orange text-white' : 'text-slate-400'}`}>{v}</button>
+            <button key={v} onClick={() => setActiveView(v)} className={`px-4 py-2 rounded-md text-[10px] font-bold uppercase tracking-[0.08em] transition-all ${activeView === v ? 'bg-swiggy-orange text-white' : 'text-[#A09488] hover:text-[#141414]'}`}>{v}</button>
           ))}
         </div>
       </header>
@@ -148,7 +148,7 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
         <div className="space-y-4">
           <div className="flex justify-end gap-2">
             {(['submitted', 'approved', 'rejected', 'all'] as FilterType[]).map((f: FilterType) => (
-              <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 rounded-lg text-[10px] font-bold capitalize ${filter === f ? 'bg-slate-900 text-white' : 'bg-white border text-slate-400'}`}>
+              <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1.5 rounded-lg text-[10px] font-bold capitalize tracking-wide transition-all ${filter === f ? 'bg-[#141414] text-white' : 'bg-white border border-[#E3DDD5] text-[#A09488] hover:text-[#141414]'}`}>
                 {f === 'submitted' ? 'Waiting' : f}
               </button>
             ))}
@@ -156,49 +156,49 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
           {filtered.length > 0 ? filtered.map((sub: Submission) => {
             const task = tasks.find((t: Task) => t.id === sub.taskId);
             const isExpanded = expandedSubId === sub.id;
-            
+
             return (
-              <div 
-                key={sub.id} 
-                className={`bg-white rounded-2xl swiggy-shadow border transition-all duration-300 overflow-hidden cursor-pointer ${isExpanded ? 'ring-2 ring-swiggy-orange/20 border-swiggy-orange/30' : 'hover:border-slate-200'}`}
+              <div
+                key={sub.id}
+                className={`bg-white rounded-xl border transition-all duration-200 overflow-hidden cursor-pointer ${isExpanded ? 'border-swiggy-orange/40 premium-card-shadow' : 'border-[#E3DDD5] hover:border-[#D4CEC7] swiggy-shadow'}`}
                 onClick={() => toggleExpand(sub.id)}
               >
-                <div className="p-6 flex items-center justify-between">
+                <div className="p-5 flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isExpanded ? 'bg-swiggy-orange text-white' : 'bg-slate-50 text-slate-400'}`}>
-                      <Info size={20} />
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${isExpanded ? 'bg-swiggy-orange text-white' : 'bg-[#F8F5F1] text-[#A09488]'}`}>
+                      <Info size={17} />
                     </div>
                     <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <h4 className="font-black text-slate-900">{task?.name || 'Task'}</h4>
-                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${getStatusColor(sub.status)}`}>
+                      <div className="flex items-center gap-2.5 mb-0.5">
+                        <h4 className="font-black text-[#141414] text-[14px]">{task?.name || 'Task'}</h4>
+                        <span className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wide ${getStatusColor(sub.status)}`}>
                           {getStatusLabel(sub.status)}
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{new Date(sub.createdAt).toLocaleString()}</p>
+                      <p className="text-[10px] text-[#A09488] font-bold tracking-wide">{new Date(sub.createdAt).toLocaleString()}</p>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center gap-4">
+
+                  <div className="flex items-center gap-3">
                     {sub.status === 'submitted' && !isExpanded && (
                       <div className="hidden md:flex gap-2">
-                        <button onClick={(e) => handleAction(e, sub.id, 'approve')} className="bg-green-500 text-white px-4 py-2 rounded-lg font-bold text-xs hover:bg-green-600 transition-colors">Approve</button>
-                        <button onClick={(e) => handleAction(e, sub.id, 'reject')} className="bg-red-50 text-red-500 px-4 py-2 rounded-lg font-bold text-xs hover:bg-red-100 transition-colors">Reject</button>
+                        <button onClick={(e) => handleAction(e, sub.id, 'approve')} className="bg-green-500 text-white px-3.5 py-1.5 rounded-lg font-bold text-[11px] hover:bg-green-600 transition-colors">Approve</button>
+                        <button onClick={(e) => handleAction(e, sub.id, 'reject')} className="bg-red-50 text-red-500 px-3.5 py-1.5 rounded-lg font-bold text-[11px] hover:bg-red-100 border border-red-100 transition-colors">Reject</button>
                       </div>
                     )}
-                    <div className="text-slate-300">
-                      {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    <div className="text-[#D4CEC7]">
+                      {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                     </div>
                   </div>
                 </div>
 
                 {isExpanded && (
-                  <div className="px-6 pb-6 pt-0 animate-in slide-in-from-top-2 duration-300">
-                    <div className="h-px bg-slate-100 mb-6"></div>
-                    
-                    <div className="space-y-6">
+                  <div className="px-5 pb-5 pt-0 animate-in slide-in-from-top-2 duration-200">
+                    <div className="h-px bg-[#F3EFE9] mb-5"></div>
+
+                    <div className="space-y-5">
                       <div>
-                        <h5 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <h5 className="text-[10px] font-black text-[#141414] uppercase tracking-[0.15em] mb-3 flex items-center gap-2">
                           <div className="w-1.5 h-1.5 rounded-full bg-swiggy-orange"></div>
                           Submission Details
                         </h5>
@@ -206,26 +206,26 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
                       </div>
 
                       {sub.reviewerNote && (
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Reviewer Note</p>
-                          <p className="text-xs font-bold text-slate-600 italic">"{sub.reviewerNote}"</p>
+                        <div className="bg-[#F8F5F1] p-4 rounded-lg border border-[#E3DDD5]">
+                          <p className="text-[9px] font-black text-[#A09488] uppercase tracking-[0.12em] mb-1.5">Reviewer Note</p>
+                          <p className="text-[12px] font-semibold text-[#72665C] italic">"{sub.reviewerNote}"</p>
                         </div>
                       )}
 
                       {sub.status === 'submitted' && (
-                        <div className="flex gap-3 pt-2">
-                          <button 
-                            onClick={(e) => handleAction(e, sub.id, 'approve')} 
-                            className="flex-1 bg-green-500 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg shadow-green-100 hover:bg-green-600 transition-all flex items-center justify-center gap-2"
+                        <div className="flex gap-3 pt-1">
+                          <button
+                            onClick={(e) => handleAction(e, sub.id, 'approve')}
+                            className="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.1em] hover:bg-green-600 transition-all flex items-center justify-center gap-2"
                           >
-                            <CheckCircle size={16} />
+                            <CheckCircle size={15} />
                             Approve Task
                           </button>
-                          <button 
-                            onClick={(e) => handleAction(e, sub.id, 'reject')} 
-                            className="flex-1 bg-red-50 text-red-500 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest border border-red-100 hover:bg-red-100 transition-all flex items-center justify-center gap-2"
+                          <button
+                            onClick={(e) => handleAction(e, sub.id, 'reject')}
+                            className="flex-1 bg-red-50 text-red-500 py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.1em] border border-red-100 hover:bg-red-100 transition-all flex items-center justify-center gap-2"
                           >
-                            <XCircle size={16} />
+                            <XCircle size={15} />
                             Reject Task
                           </button>
                         </div>
@@ -236,27 +236,27 @@ const AdminReview: React.FC<AdminReviewProps> = ({ submissions, onUpdate, select
               </div>
             );
           }) : (
-            <div className="bg-white p-20 rounded-[40px] swiggy-shadow border border-slate-50 text-center">
-              <div className="w-16 h-16 bg-slate-50 text-slate-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Info size={32} />
+            <div className="bg-white p-16 rounded-2xl premium-card-shadow border border-[#E3DDD5] text-center">
+              <div className="w-12 h-12 bg-[#F8F5F1] text-[#D4CEC7] rounded-xl flex items-center justify-center mx-auto mb-5">
+                <Info size={24} />
               </div>
-              <p className="text-slate-400 font-bold text-sm">No tasks found for this filter.</p>
+              <p className="text-[#A09488] font-bold text-[13px]">No tasks found for this filter.</p>
             </div>
           )}
         </div>
       )}
 
       {activeView === 'config' && selectedCatalyst && (
-        <div className="bg-white p-10 rounded-[40px] swiggy-shadow border space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white p-8 rounded-2xl premium-card-shadow border border-[#E3DDD5] space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {tasks.map((t: Task) => (
-              <div key={t.id} className="p-4 bg-slate-50 rounded-xl flex justify-between items-center">
-                <span className="text-xs font-black">{t.name}</span>
-                <input type="number" value={taskTargets[t.id] || 0} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTaskTargets({...taskTargets, [t.id]: parseInt(e.target.value) || 0})} className="w-16 p-2 rounded-lg border text-center font-bold" />
+              <div key={t.id} className="p-4 bg-[#F8F5F1] rounded-xl flex justify-between items-center border border-[#E3DDD5]">
+                <span className="text-[13px] font-bold text-[#141414]">{t.name}</span>
+                <input type="number" value={taskTargets[t.id] || 0} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTaskTargets({...taskTargets, [t.id]: parseInt(e.target.value) || 0})} className="w-16 p-2 rounded-lg border border-[#E3DDD5] text-center font-bold text-[#141414] outline-none focus:border-swiggy-orange transition-colors bg-white text-[13px]" />
               </div>
             ))}
           </div>
-          <button disabled={isSavingConfig} onClick={handleSaveConfig} className="w-full bg-slate-900 text-white py-4 rounded-xl font-black uppercase tracking-widest disabled:opacity-50">
+          <button disabled={isSavingConfig} onClick={handleSaveConfig} className="w-full bg-[#141414] text-white py-3.5 rounded-xl font-bold uppercase tracking-[0.12em] text-[12px] hover:bg-black transition-all disabled:opacity-50">
             {isSavingConfig ? 'Saving...' : 'Save Settings'}
           </button>
         </div>

@@ -29,47 +29,47 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks
       <div className="space-y-8 animate-in fade-in duration-700 pb-12">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-5 px-1 py-4">
           <div className="flex items-center gap-4">
-            <h2 className="text-[28px] font-black text-slate-900 tracking-tight">Campus Insights</h2>
+            <h2 className="heading-display text-[30px] text-[#141414]">Campus Insights</h2>
             <HandbookLink label="Dashboard Guide" />
           </div>
           <div className="flex gap-3 shrink-0">
-            <button onClick={() => setRefreshKey((k: number) => k + 1)} className="flex items-center gap-2 px-5 py-2.5 bg-white border rounded-[18px] text-[11px] font-black text-slate-600"><RefreshCw size={14} /> Refresh</button>
-            <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="bg-swiggy-orange text-white px-6 py-2.5 rounded-[18px] font-black text-[11px] tracking-widest flex items-center gap-2"><ExternalLink size={14} /> Full screen</a>
+            <button onClick={() => setRefreshKey((k: number) => k + 1)} className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E3DDD5] rounded-lg text-[11px] font-bold text-[#72665C] hover:border-[#D4CEC7] hover:bg-[#FAF8F5] transition-all"><RefreshCw size={13} /> Refresh</button>
+            <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="swiggy-btn-gradient text-white px-5 py-2.5 rounded-lg font-bold text-[11px] tracking-wide flex items-center gap-2"><ExternalLink size={13} /> Full screen</a>
           </div>
         </header>
 
-        <div className="bg-white rounded-[48px] p-10 md:p-14 swiggy-shadow border border-slate-100 relative overflow-hidden">
-          <div className="bg-slate-900 text-white px-8 py-3.5 rounded-[20px] mb-12 inline-block"><h3 className="text-xl font-black">{campusName}</h3></div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-             <div className="bg-slate-50/50 p-8 rounded-[32px] border border-slate-100 text-center">
-                <p className="text-slate-400 font-bold text-[10px] tracking-widest">Total tasks</p>
-                <p className="text-6xl font-black text-slate-900">{tasks.length}</p>
-             </div>
-             <div className="bg-swiggy-light/30 p-8 rounded-[32px] border border-swiggy-orange/10 text-center">
-                <p className="text-swiggy-orange font-bold text-[10px] tracking-widest">Approved</p>
-                <p className="text-6xl font-black text-swiggy-orange">{approvedCount}</p>
-             </div>
-             <div className="bg-amber-50/30 p-8 rounded-[32px] border border-amber-200/50 text-center">
-                <p className="text-amber-600 font-bold text-[10px] tracking-widest">In review</p>
-                <p className="text-6xl font-black text-slate-900">{submissions.filter((s: Submission) => s.status === 'submitted').length}</p>
-             </div>
+        <div className="bg-white rounded-2xl p-8 md:p-12 premium-card-shadow border border-[#E3DDD5] relative overflow-hidden">
+          <div className="bg-[#141414] text-white px-5 py-2.5 rounded-lg mb-10 inline-block"><h3 className="text-[15px] font-bold tracking-tight">{campusName}</h3></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-[#F8F5F1] p-7 rounded-xl border border-[#E3DDD5] text-center">
+              <p className="text-[#A09488] font-bold text-[10px] tracking-[0.15em] uppercase mb-3">Total tasks</p>
+              <p className="text-5xl font-black text-[#141414]">{tasks.length}</p>
+            </div>
+            <div className="bg-[#FEF0E6] p-7 rounded-xl border border-[#FBD4B4]/50 text-center">
+              <p className="text-swiggy-orange font-bold text-[10px] tracking-[0.15em] uppercase mb-3">Approved</p>
+              <p className="text-5xl font-black text-swiggy-orange">{approvedCount}</p>
+            </div>
+            <div className="bg-amber-50/60 p-7 rounded-xl border border-amber-200/40 text-center">
+              <p className="text-amber-600 font-bold text-[10px] tracking-[0.15em] uppercase mb-3">In review</p>
+              <p className="text-5xl font-black text-[#141414]">{submissions.filter((s: Submission) => s.status === 'submitted').length}</p>
+            </div>
           </div>
 
-          <div className="space-y-6">
-            <h4 className="text-xl font-black text-slate-900">Task Overview</h4>
-            <div className="overflow-hidden border border-slate-100 rounded-[32px]">
+          <div className="space-y-5">
+            <h4 className="text-base font-black text-[#141414] tracking-tight">Task Overview</h4>
+            <div className="overflow-hidden border border-[#E3DDD5] rounded-xl">
               <table className="w-full text-left">
-                <thead className="bg-slate-50/80">
+                <thead className="bg-[#F8F5F1]">
                   <tr>
-                    <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase">Task Name</th>
-                    <th className="px-8 py-5 text-[10px] font-bold text-slate-400 text-center uppercase">Points</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-[#A09488] uppercase tracking-[0.12em]">Task Name</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-[#A09488] text-center uppercase tracking-[0.12em]">Points</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50">
+                <tbody className="divide-y divide-[#F3EFE9]">
                   {tasks.map((task: Task, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-50/50">
-                      <td className="px-8 py-5 text-sm font-black text-slate-800">{task.name}</td>
-                      <td className="px-8 py-5 text-center font-black text-swiggy-orange text-sm">{task.points}</td>
+                    <tr key={idx} className="hover:bg-[#FAF8F5] transition-colors">
+                      <td className="px-6 py-4 text-[13px] font-bold text-[#141414]">{task.name}</td>
+                      <td className="px-6 py-4 text-center font-black text-swiggy-orange text-[13px]">{task.points}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -85,12 +85,12 @@ const Dashboard: React.FC<DashboardProps> = ({ user, submissions, isAdmin, tasks
     <div className="space-y-8 animate-in fade-in duration-700">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-5 px-1 py-4">
         <div className="flex items-center gap-4">
-          <h2 className="text-[28px] font-black text-slate-900 tracking-tight">Analytics Dashboard</h2>
+          <h2 className="heading-display text-[30px] text-[#141414]">Analytics Dashboard</h2>
           <HandbookLink label="Handbook" />
         </div>
-        <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="bg-swiggy-orange text-white px-6 py-2.5 rounded-[18px] font-black text-[11px] tracking-widest flex items-center gap-2">Full screen</a>
+        <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="swiggy-btn-gradient text-white px-5 py-2.5 rounded-lg font-bold text-[11px] tracking-wide flex items-center gap-2 self-start">Full screen</a>
       </header>
-      <div className="bg-white rounded-[48px] overflow-hidden swiggy-shadow min-h-[720px] border border-slate-50">
+      <div className="bg-white rounded-2xl overflow-hidden premium-card-shadow border border-[#E3DDD5] min-h-[720px]">
         <iframe key={refreshKey} src={embedUrl} frameBorder="0" style={{ border: 0, width: '100%', height: '720px' }} title="Analytics"></iframe>
       </div>
     </div>

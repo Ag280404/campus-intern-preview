@@ -41,50 +41,50 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
 
   return (
     <div className="space-y-10 animate-in fade-in duration-700 pb-16">
-      <header className="flex items-center gap-6">
-        <h2 className="text-[32px] font-black text-slate-900 tracking-tight leading-none">Notifications</h2>
+      <header className="flex items-center gap-5">
+        <h2 className="heading-display text-[34px] text-[#141414] leading-none">Notifications</h2>
         <HandbookLink label="About updates" />
       </header>
 
-      <div className="max-w-4xl space-y-6">
+      <div className="max-w-4xl space-y-4">
         {localNotifications.length > 0 ? (
           localNotifications.map((n: Notification) => {
             const fd = formatDate(n.createdAt);
             const isUnread = !n.isRead;
             return (
-              <div 
-                key={n.id} 
-                className={`bg-white p-8 md:p-10 rounded-[44px] swiggy-shadow border-l-[6px] transition-all duration-500 premium-card-shadow hover:-translate-y-1 relative ${
-                  isUnread ? 'border-l-swiggy-orange' : 'border-l-slate-200 opacity-90'
+              <div
+                key={n.id}
+                className={`bg-white p-7 md:p-9 rounded-2xl border-l-4 transition-all duration-300 premium-card-shadow hover:-translate-y-0.5 relative ${
+                  isUnread ? ‘border-l-swiggy-orange border-[#E3DDD5]’ : ‘border-l-[#E3DDD5] border-[#E3DDD5] opacity-85’
                 }`}
               >
-                <button 
+                <button
                   onClick={(e: React.MouseEvent) => handleDelete(n.id, e)}
-                  className="absolute top-8 right-8 p-2 rounded-xl text-slate-300 hover:text-swiggy-orange hover:bg-swiggy-light transition-all duration-300"
+                  className="absolute top-6 right-6 p-2 rounded-lg text-[#C5BDB6] hover:text-swiggy-orange hover:bg-[#FEF0E6] transition-all"
                 >
-                  <X size={20} strokeWidth={3} />
+                  <X size={16} strokeWidth={2.5} />
                 </button>
 
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-8">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
-                    <Calendar size={14} className="text-swiggy-orange/60" strokeWidth={3} /> {fd.day}, {fd.date}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-[#A09488]">
+                    <Calendar size={12} className="text-swiggy-orange/70" strokeWidth={2.5} /> {fd.day}, {fd.date}
                   </div>
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-300 bg-slate-50 px-3 py-1 rounded-lg mr-10 sm:mr-0">
-                    <Clock size={14} strokeWidth={3} /> {fd.time}
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#C5BDB6] bg-[#F8F5F1] px-3 py-1.5 rounded-lg mr-8 sm:mr-0 border border-[#E3DDD5]">
+                    <Clock size={12} strokeWidth={2.5} /> {fd.time}
                   </div>
                 </div>
-                
-                <p className="text-slate-800 text-[15px] font-bold leading-relaxed whitespace-pre-wrap tracking-tight pr-10 sm:pr-0">
+
+                <p className="text-[#141414] text-[14px] font-semibold leading-relaxed whitespace-pre-wrap pr-8 sm:pr-0">
                   {n.content}
                 </p>
 
-                <div className="mt-10 pt-6 border-t border-slate-50 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5 text-[10px] font-bold text-swiggy-orange bg-swiggy-light px-4 py-2 rounded-xl shadow-sm transition-transform hover:scale-105 cursor-default">
-                    <Mail size={14} strokeWidth={3} /> Priority dispatch
+                <div className="mt-7 pt-5 border-t border-[#F3EFE9] flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-swiggy-orange bg-[#FEF0E6] px-3.5 py-1.5 rounded-lg">
+                    <Mail size={12} strokeWidth={2.5} /> Priority dispatch
                   </div>
                   {n.isRead && (
-                    <div className="text-[10px] font-bold text-slate-300 flex items-center gap-1.5 opacity-60">
-                      <CheckCircle size={14} strokeWidth={3} /> Delivered
+                    <div className="text-[10px] font-bold text-[#C5BDB6] flex items-center gap-1.5">
+                      <CheckCircle size={12} strokeWidth={2.5} /> Delivered
                     </div>
                   )}
                 </div>
@@ -92,15 +92,14 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
             );
           })
         ) : (
-          <div className="p-24 text-center bg-white rounded-[56px] swiggy-shadow border border-slate-100/50 premium-card-shadow relative overflow-hidden group">
-            <div className="absolute inset-0 bg-slate-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10"></div>
-            <div className="w-22 h-22 bg-slate-50/80 rounded-[32px] flex items-center justify-center mx-auto mb-8 text-slate-200 shadow-inner group-hover:scale-110 transition-transform duration-500">
-               <Inbox size={44} strokeWidth={1.5} />
+          <div className="p-20 text-center bg-white rounded-2xl premium-card-shadow border border-[#E3DDD5] relative overflow-hidden group">
+            <div className="w-16 h-16 bg-[#F8F5F1] rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#D4CEC7] group-hover:scale-105 transition-transform duration-300">
+              <Inbox size={36} strokeWidth={1.5} />
             </div>
-            <h3 className="text-[24px] font-black text-slate-900 tracking-tight leading-none mb-4">You’re all caught up🎉</h3>
-            <div className="text-slate-400 text-sm font-bold max-w-sm mx-auto leading-relaxed">
-              <p>No updates right now. We’ll notify you here when there’s something new from the Swiggy Campus team.</p>
-            </div>
+            <h3 className="text-[22px] font-black text-[#141414] tracking-tight leading-none mb-3">You’re all caught up</h3>
+            <p className="text-[#A09488] text-[13px] font-semibold max-w-sm mx-auto leading-relaxed">
+              No updates right now. We’ll notify you here when there’s something new from the Swiggy Campus team.
+            </p>
           </div>
         )}
       </div>

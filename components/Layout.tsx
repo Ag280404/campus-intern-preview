@@ -47,50 +47,51 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Mobile Header */}
-      <div className="md:hidden bg-white px-4 py-3 border-b flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-2">
+      <div className="md:hidden bg-white px-4 py-3 border-b border-[#E3DDD5] flex justify-between items-center sticky top-0 z-50">
+        <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-swiggy-orange rounded-lg flex items-center justify-center overflow-hidden p-1">
             <SwiggyLogo size={20} />
           </div>
-          <span className="font-bold text-swiggy-orange text-lg tracking-tight">Campus Growth Catalyst</span>
+          <span className="font-bold text-[#141414] text-[15px] tracking-tight">Campus Catalyst</span>
         </div>
-        <div className="flex items-center gap-3">
-          <button onClick={() => onTabChange('notifications')} className="relative p-2 text-slate-500">
+        <div className="flex items-center gap-2">
+          <button onClick={() => onTabChange('notifications')} className="relative p-2 text-[#72665C] hover:text-swiggy-orange transition-colors">
             <Bell size={20} />
             {unreadCount > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-swiggy-orange rounded-full"></span>}
           </button>
-          <button onClick={onLogout} className="p-2 text-slate-500">
+          <button onClick={onLogout} className="p-2 text-[#72665C] hover:text-red-500 transition-colors">
             <LogOut size={20} />
           </button>
         </div>
       </div>
 
-      {/* Sidebar Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r h-screen sticky top-0">
-        <div className="p-6 flex items-center gap-3">
-          <div className="w-10 h-10 bg-swiggy-orange rounded-xl flex items-center justify-center shadow-lg shadow-orange-100 overflow-hidden p-1.5">
-            <SwiggyLogo size={28} />
+      {/* Sidebar Desktop — dark espresso */}
+      <aside className="hidden md:flex flex-col w-60 h-screen sticky top-0" style={{background:'var(--sidebar)'}}>
+        <div className="px-5 py-6 flex items-center gap-3 border-b border-white/8">
+          <div className="w-9 h-9 bg-swiggy-orange rounded-xl flex items-center justify-center overflow-hidden p-1.5 shrink-0" style={{boxShadow:'0 4px 12px rgba(251,84,4,0.35)'}}>
+            <SwiggyLogo size={24} />
           </div>
           <div>
-            <h1 className="font-extrabold text-slate-900 leading-none text-sm tracking-tight">Catalyst Portal</h1>
+            <h1 className="font-extrabold text-white leading-none text-[13px] tracking-tight">Catalyst Portal</h1>
+            <p className="text-[#6B6057] text-[10px] font-bold mt-0.5 tracking-wide">Swiggy Campus</p>
           </div>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-0.5">
           {tabs.filter(t => !t.hidden).map((tab) => (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 relative ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-all duration-150 relative ${
                 activeTab === tab.id
-                  ? 'bg-swiggy-light text-swiggy-orange font-bold shadow-sm'
-                  : 'text-slate-500 hover:bg-slate-50 font-semibold'
+                  ? 'bg-swiggy-orange text-white font-bold'
+                  : 'text-[#A8A09A] hover:bg-white/6 hover:text-white font-semibold'
               }`}
             >
-              <tab.icon size={20} strokeWidth={activeTab === tab.id ? 2.5 : 2} />
-              <span className="text-sm">{tab.label}</span>
+              <tab.icon size={18} strokeWidth={activeTab === tab.id ? 2.5 : 2} />
+              <span className="text-[13px]">{tab.label}</span>
               {tab.badge ? (
-                <span className="absolute right-4 px-1.5 py-0.5 bg-swiggy-orange text-white text-[10px] font-black rounded-full min-w-[18px] text-center">
+                <span className="absolute right-3 px-1.5 py-0.5 bg-white/20 text-white text-[9px] font-black rounded-full min-w-[18px] text-center">
                   {tab.badge}
                 </span>
               ) : null}
@@ -98,27 +99,26 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
           ))}
         </nav>
 
-        <div className="p-4 border-t">
-          <div className="bg-slate-50 rounded-2xl p-4 mb-4 flex items-center gap-3">
-             <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 border border-slate-200 bg-white flex items-center justify-center">
-                {user?.avatarUrl ? (
-                  <img src={user.avatarUrl} className="w-full h-full object-cover" alt="User Avatar" />
-                ) : (
-                  <UserIcon size={20} className="text-slate-300" />
-                )}
-             </div>
-             <div className="min-w-0">
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Signed in</p>
-                <p className="text-xs font-bold text-slate-900 truncate leading-tight">{user?.displayName}</p>
-             </div>
+        <div className="p-3 border-t border-white/8">
+          <div className="rounded-xl p-3.5 mb-3 flex items-center gap-3" style={{background:'rgba(255,255,255,0.07)'}}>
+            <div className="w-9 h-9 rounded-lg overflow-hidden shrink-0 border border-white/10 bg-white/10 flex items-center justify-center">
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} className="w-full h-full object-cover" alt="User Avatar" />
+              ) : (
+                <UserIcon size={16} className="text-white/30" />
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="text-[9px] font-bold text-[#6B6057] uppercase tracking-widest mb-0.5">Signed in</p>
+              <p className="text-[12px] font-bold text-white truncate leading-tight">{user?.displayName}</p>
+            </div>
           </div>
           <button
             onClick={onLogout}
-            className="w-full flex items-center justify-center gap-2 text-slate-400 hover:text-red-500 text-xs font-bold py-2 transition-colors uppercase tracking-widest"
+            className="w-full flex items-center justify-center gap-2 text-[#6B6057] hover:text-red-400 text-[11px] font-bold py-2 transition-colors uppercase tracking-widest"
           >
-            <LogOut size={16} /> Log out
+            <LogOut size={14} /> Log out
           </button>
-          <p className="text-[8px] text-slate-300 text-center mt-1 font-bold uppercase">Log out especially on shared devices.</p>
         </div>
       </aside>
 
@@ -130,13 +130,13 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, user,
       </main>
 
       {/* Mobile Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center py-2 px-4 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E3DDD5] flex justify-around items-center py-2 px-4 z-50">
         {tabs.filter(t => !t.hidden).map((tab) => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`flex flex-col items-center gap-1 p-2 min-w-[64px] relative ${
-              activeTab === tab.id ? 'text-swiggy-orange font-bold' : 'text-slate-400'
+            className={`flex flex-col items-center gap-1 p-2 min-w-[56px] relative transition-colors ${
+              activeTab === tab.id ? 'text-swiggy-orange font-bold' : 'text-[#A09488]'
             }`}
           >
             <tab.icon size={20} strokeWidth={activeTab === tab.id ? 2.5 : 2} />

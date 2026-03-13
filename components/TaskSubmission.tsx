@@ -66,55 +66,55 @@ const WeeklyTaskTracker = () => {
   const currentWeek = getCurrentWeek();
 
   return (
-    <div className="bg-white p-8 md:p-10 rounded-[48px] swiggy-shadow border border-slate-50 premium-card-shadow mb-10 animate-in fade-in slide-in-from-top-4 duration-700">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-swiggy-light text-swiggy-orange rounded-2xl flex items-center justify-center shadow-inner">
-            <Calendar size={24} strokeWidth={2.5} />
+    <div className="bg-white p-7 md:p-9 rounded-2xl premium-card-shadow border border-[#E3DDD5] mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-7">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 bg-[#FEF0E6] text-swiggy-orange rounded-xl flex items-center justify-center">
+            <Calendar size={20} strokeWidth={2.5} />
           </div>
           <div>
-            <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1">Weekly Tasks</h3>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{formatDateRange(currentWeek)}</p>
+            <h3 className="text-base font-black text-[#141414] tracking-tight leading-none mb-1">Weekly Tasks</h3>
+            <p className="text-[10px] font-bold text-[#A09488] uppercase tracking-[0.12em]">{formatDateRange(currentWeek)}</p>
           </div>
         </div>
-        <div className="hidden md:flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl border border-amber-100">
-          <Clock size={14} className="text-amber-600" strokeWidth={2.5} />
-          <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Resets every Sunday</span>
+        <div className="hidden md:flex items-center gap-2 bg-amber-50/80 px-3.5 py-2 rounded-lg border border-amber-100">
+          <Clock size={13} className="text-amber-600" strokeWidth={2.5} />
+          <span className="text-[10px] font-bold text-amber-600 uppercase tracking-[0.1em]">Resets every Sunday</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-3 md:gap-4">
+      <div className="grid grid-cols-7 gap-2 md:gap-3">
         {currentWeek.map((date, index) => {
           const today = isToday(date);
           return (
-            <div 
+            <div
               key={index}
-              className={`flex flex-col items-center justify-center py-4 rounded-[24px] transition-all duration-300 ${
-                today 
-                ? 'swiggy-btn-gradient text-white shadow-xl scale-105 z-10' 
-                : 'bg-slate-50 text-slate-400 border border-slate-100 hover:bg-white hover:border-swiggy-orange/20'
+              className={`flex flex-col items-center justify-center py-3.5 rounded-xl transition-all duration-200 ${
+                today
+                ? 'swiggy-btn-gradient text-white z-10'
+                : 'bg-[#F8F5F1] text-[#A09488] border border-[#E3DDD5] hover:border-swiggy-orange/30 hover:bg-white hover:text-[#141414]'
               }`}
             >
-              <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest mb-1.5 opacity-80">
+              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em] mb-1 opacity-80">
                 <span className="md:hidden">{weekDaysInitial[index]}</span>
                 <span className="hidden md:inline">{weekDaysShort[index]}</span>
               </span>
-              <span className={`text-base md:text-xl font-black ${today ? 'text-white' : 'text-slate-900'}`}>
+              <span className={`text-sm md:text-lg font-black ${today ? 'text-white' : 'text-[#141414]'}`}>
                 {date.getDate()}
               </span>
               {today && (
-                <div className="w-1.5 h-1.5 bg-white rounded-full mt-2 animate-pulse"></div>
+                <div className="w-1 h-1 bg-white/80 rounded-full mt-1.5 animate-pulse"></div>
               )}
             </div>
           );
         })}
       </div>
-      
-      <div className="mt-8 flex items-center gap-3 justify-center md:hidden">
-          <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl border border-amber-100">
-            <Clock size={14} className="text-amber-600" strokeWidth={2.5} />
-            <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Resets every Sunday</span>
-          </div>
+
+      <div className="mt-6 flex items-center gap-3 justify-center md:hidden">
+        <div className="flex items-center gap-2 bg-amber-50/80 px-3.5 py-2 rounded-lg border border-amber-100">
+          <Clock size={13} className="text-amber-600" strokeWidth={2.5} />
+          <span className="text-[10px] font-bold text-amber-600 uppercase tracking-[0.1em]">Resets every Sunday</span>
+        </div>
       </div>
     </div>
   );
@@ -224,78 +224,78 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
 
     return (
       <div className="animate-in slide-in-from-right duration-500 max-w-5xl mx-auto pb-20">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 px-2">
-          <div className="space-y-4">
-            <button 
-              onClick={() => setSelectedTask(null)} 
-              className="bg-[#F1F5F9] text-[#64748B] text-[10px] font-black px-6 py-2.5 rounded-full flex items-center gap-2 uppercase tracking-[0.15em] hover:bg-slate-200 transition-all shadow-sm"
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 px-1">
+          <div className="space-y-3">
+            <button
+              onClick={() => setSelectedTask(null)}
+              className="bg-[#F8F5F1] text-[#72665C] text-[10px] font-bold px-4 py-2 rounded-lg flex items-center gap-2 uppercase tracking-[0.12em] hover:bg-[#F0EBE4] transition-all border border-[#E3DDD5]"
             >
-              <ChevronLeft size={14} strokeWidth={3} /> BACK TO TASK GRID
+              <ChevronLeft size={13} strokeWidth={2.5} /> Back to tasks
             </button>
             <div className="flex items-center gap-3">
-              <h2 className="text-[42px] font-black text-slate-900 tracking-tighter leading-none">{selectedTask.name}</h2>
+              <h2 className="heading-display text-[34px] text-[#141414] leading-none">{selectedTask.name}</h2>
               <HandbookLink iconOnly label="Task Guidelines" />
             </div>
           </div>
 
-          <div className="bg-white px-8 py-5 rounded-[32px] swiggy-shadow flex items-center gap-5 border border-slate-50 premium-card-shadow">
+          <div className="bg-white px-7 py-4 rounded-xl premium-card-shadow flex items-center gap-5 border border-[#E3DDD5] self-start">
             <div className="text-right">
-              <div className="text-[18px] font-black text-slate-900 leading-none">{completionPercent}%</div>
-              <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">COMPLETION</div>
+              <div className="text-[20px] font-black text-[#141414] leading-none">{completionPercent}%</div>
+              <div className="text-[9px] font-bold text-[#A09488] uppercase tracking-[0.12em] mt-1">Completion</div>
             </div>
-            <div className="w-10 h-10 rounded-full bg-orange-50 text-swiggy-orange flex items-center justify-center border border-orange-100/50">
-              <CheckCircle size={22} strokeWidth={3} />
+            <div className="w-9 h-9 rounded-lg bg-[#FEF0E6] text-swiggy-orange flex items-center justify-center">
+              <CheckCircle size={19} strokeWidth={2.5} />
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-12 md:p-16 rounded-[60px] swiggy-shadow border border-slate-50 premium-card-shadow">
-          <form onSubmit={handleSubmit} className="space-y-12">
-            <div className="space-y-6">
+        <div className="bg-white p-8 md:p-12 rounded-2xl premium-card-shadow border border-[#E3DDD5]">
+          <form onSubmit={handleSubmit} className="space-y-9">
+            <div className="space-y-5">
               <div className="flex items-center gap-3">
-                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">SUBMISSION INSTRUCTIONS</h4>
+                <h4 className="text-[10px] font-black text-[#A09488] uppercase tracking-[0.18em]">Submission Instructions</h4>
                 <HandbookLink label="Submission Help" className="opacity-60" />
               </div>
-              <div className="p-8 bg-[#F8FAFC] rounded-[32px] border border-slate-100">
-                <p className="text-[15px] text-slate-600 font-bold leading-relaxed">
+              <div className="p-6 bg-[#F8F5F1] rounded-xl border border-[#E3DDD5]">
+                <p className="text-[14px] text-[#72665C] font-semibold leading-relaxed">
                   {selectedTask.instructions}
                 </p>
               </div>
 
               {selectedTask.type === 'social_media' && (
-                <div className="p-5 bg-slate-50 border border-slate-200 rounded-[24px] flex items-center gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
-                  <div className="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center shrink-0 shadow-lg">
-                    <Sparkles size={20} strokeWidth={3} />
+                <div className="p-4 bg-[#141414] border border-[#2E2A24] rounded-xl flex items-center gap-4 animate-in fade-in duration-400">
+                  <div className="w-9 h-9 bg-swiggy-orange rounded-lg flex items-center justify-center shrink-0">
+                    <Sparkles size={17} strokeWidth={2.5} className="text-white" />
                   </div>
-                  <p className="text-[12px] font-black text-slate-900 uppercase tracking-widest leading-none">
+                  <p className="text-[11px] font-bold text-white/80 uppercase tracking-[0.12em] leading-tight">
                     Best performing social media post will be selected for boosting.
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="space-y-8">
-              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">DETAILS</h4>
-              
+            <div className="space-y-6">
+              <h4 className="text-[10px] font-black text-[#A09488] uppercase tracking-[0.18em]">Details</h4>
+
               {selectedTask.type === 'streaks' && (
-                <div className="space-y-8">
-                  <div className="relative group">
-                    <input 
-                      type="text" 
-                      readOnly 
-                      value={getNextMonthLabel()} 
-                      className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-slate-50/50 font-black text-slate-900 outline-none text-[15px]" 
+                <div className="space-y-6">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      readOnly
+                      value={getNextMonthLabel()}
+                      className="w-full px-5 py-4 rounded-xl border border-[#E3DDD5] bg-[#F8F5F1] font-bold text-[#141414] outline-none text-[14px] cursor-default"
                     />
-                    <Calendar size={20} className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Calendar size={17} className="absolute right-5 top-1/2 -translate-y-1/2 text-[#A09488]" />
                   </div>
-                  <div className="grid grid-cols-1 gap-6">
+                  <div className="grid grid-cols-1 gap-4">
                     {[1, 2, 3].map(i => (
-                      <div key={i} className="space-y-2.5">
-                        <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Preferred streak day {i}</label>
+                      <div key={i} className="space-y-2">
+                        <label className="block text-[10px] font-bold text-[#A09488] ml-1 uppercase tracking-[0.12em]">Preferred streak day {i}</label>
                         <div className="relative">
-                          <select 
+                          <select
                             required
-                            className={`w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-white font-black outline-none appearance-none cursor-pointer focus:border-swiggy-orange/50 transition-colors text-[15px] ${formData[`streakDay${i}`] ? 'text-slate-900' : 'text-slate-400'}`}
+                            className={`w-full px-5 py-4 rounded-xl border border-[#E3DDD5] bg-white font-bold outline-none appearance-none cursor-pointer focus:border-swiggy-orange transition-colors text-[14px] ${formData[`streakDay${i}`] ? 'text-[#141414]' : 'text-[#C5BDB6]'}`}
                             onChange={e => setFormData({ ...formData, [`streakDay${i}`]: e.target.value })}
                             value={formData[`streakDay${i}`] || ""}
                           >
@@ -304,7 +304,7 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
                               <option key={day} value={day}>{day}</option>
                             ))}
                           </select>
-                          <ChevronDown size={20} className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+                          <ChevronDown size={17} className="absolute right-5 top-1/2 -translate-y-1/2 text-[#A09488] pointer-events-none" />
                         </div>
                       </div>
                     ))}
@@ -313,73 +313,73 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
               )}
 
               {selectedTask.type === 'offline_activation' && (
-                <div className="space-y-3">
-                  <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Total flyers / posters distributed *</label>
-                  <input 
-                    type="number" 
-                    required 
-                    placeholder="Enter total count placed or shared (e.g. 30)" 
-                    className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-[#F8FAFC] font-black text-slate-800 outline-none focus:bg-white focus:border-swiggy-orange/50 transition-all text-[15px]" 
-                    onChange={e => setFormData({ ...formData, count: e.target.value })} 
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-bold text-[#A09488] ml-1 uppercase tracking-[0.12em]">Total flyers / posters distributed *</label>
+                  <input
+                    type="number"
+                    required
+                    placeholder="Enter total count (e.g. 30)"
+                    className="w-full px-5 py-4 rounded-xl border border-[#E3DDD5] bg-[#F8F5F1] font-bold text-[#141414] outline-none focus:bg-white focus:border-swiggy-orange transition-all text-[14px] placeholder-[#C5BDB6]"
+                    onChange={e => setFormData({ ...formData, count: e.target.value })}
                   />
                 </div>
               )}
 
               {selectedTask.type === 'social_media' && (
-                <div className="space-y-3">
-                  <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Social Media Post URL *</label>
-                  <input 
-                    type="url" 
-                    required 
-                    placeholder="Paste link here" 
-                    className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-[#F8FAFC] font-black text-slate-800 outline-none focus:bg-white focus:border-swiggy-orange/50 transition-all text-[15px]" 
-                    onChange={e => setFormData({ ...formData, url: e.target.value })} 
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-bold text-[#A09488] ml-1 uppercase tracking-[0.12em]">Social Media Post URL *</label>
+                  <input
+                    type="url"
+                    required
+                    placeholder="Paste link here"
+                    className="w-full px-5 py-4 rounded-xl border border-[#E3DDD5] bg-[#F8F5F1] font-bold text-[#141414] outline-none focus:bg-white focus:border-swiggy-orange transition-all text-[14px] placeholder-[#C5BDB6]"
+                    onChange={e => setFormData({ ...formData, url: e.target.value })}
                   />
                 </div>
               )}
 
               {(selectedTask.type === 'referral' || selectedTask.type === 'student_rewards') && (
-                <div className="space-y-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                      <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Full name *</label>
-                      <input 
-                        type="text" 
-                        required 
-                        placeholder="Full name" 
-                        className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-[#F8FAFC] font-black text-slate-800 outline-none focus:bg-white focus:border-swiggy-orange/50 transition-all text-[15px]" 
-                        onChange={e => setFormData({ ...formData, recipientName: e.target.value })} 
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-[#A09488] ml-1 uppercase tracking-[0.12em]">Full name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Full name"
+                        className="w-full px-5 py-4 rounded-xl border border-[#E3DDD5] bg-[#F8F5F1] font-bold text-[#141414] outline-none focus:bg-white focus:border-swiggy-orange transition-all text-[14px] placeholder-[#C5BDB6]"
+                        onChange={e => setFormData({ ...formData, recipientName: e.target.value })}
                       />
                     </div>
-                    <div className="space-y-3">
-                      <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Swiggy Registered Phone Number *</label>
-                      <input 
-                        type="tel" 
-                        required 
-                        placeholder="Swiggy Registered Phone Number" 
-                        className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-[#F8FAFC] font-black text-slate-800 outline-none focus:bg-white focus:border-swiggy-orange/50 transition-all text-[15px]" 
-                        onChange={e => setFormData({ ...formData, recipientPhone: e.target.value })} 
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-[#A09488] ml-1 uppercase tracking-[0.12em]">Phone Number *</label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="Swiggy Registered Phone Number"
+                        className="w-full px-5 py-4 rounded-xl border border-[#E3DDD5] bg-[#F8F5F1] font-bold text-[#141414] outline-none focus:bg-white focus:border-swiggy-orange transition-all text-[14px] placeholder-[#C5BDB6]"
+                        onChange={e => setFormData({ ...formData, recipientPhone: e.target.value })}
                       />
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    <label className="block text-[11px] font-black text-slate-400 ml-3 uppercase tracking-widest">Email ID</label>
-                    <input 
-                      type="email" 
-                      placeholder="Email ID" 
-                      className="w-full px-8 py-5 rounded-[24px] border border-slate-100 bg-[#F8FAFC] font-black text-slate-800 outline-none focus:bg-white focus:border-swiggy-orange/50 transition-all text-[15px]" 
-                      onChange={e => setFormData({ ...formData, recipientEmail: e.target.value })} 
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-[#A09488] ml-1 uppercase tracking-[0.12em]">Email ID</label>
+                    <input
+                      type="email"
+                      placeholder="Email ID"
+                      className="w-full px-5 py-4 rounded-xl border border-[#E3DDD5] bg-[#F8F5F1] font-bold text-[#141414] outline-none focus:bg-white focus:border-swiggy-orange transition-all text-[14px] placeholder-[#C5BDB6]"
+                      onChange={e => setFormData({ ...formData, recipientEmail: e.target.value })}
                     />
                   </div>
-                  <div className="flex items-start gap-5 pt-2">
-                    <button 
+                  <div className="flex items-start gap-4 pt-1">
+                    <button
                       type="button"
                       onClick={() => setHasConsent(!hasConsent)}
-                      className={`w-6 h-6 rounded-lg border-2 shrink-0 flex items-center justify-center transition-all ${hasConsent ? 'bg-swiggy-orange border-swiggy-orange text-white' : 'bg-white border-slate-200'}`}
+                      className={`w-5 h-5 rounded-md border-2 shrink-0 flex items-center justify-center transition-all mt-0.5 ${hasConsent ? 'bg-swiggy-orange border-swiggy-orange text-white' : 'bg-white border-[#D4CEC7]'}`}
                     >
-                      {hasConsent && <Check size={14} strokeWidth={4} />}
+                      {hasConsent && <Check size={11} strokeWidth={3.5} />}
                     </button>
-                    <span className="text-[13px] font-black text-slate-500 leading-tight">
+                    <span className="text-[12px] font-semibold text-[#72665C] leading-snug">
                       I confirm that the referred user has consented to sharing their phone number and other required details for this submission.
                     </span>
                   </div>
@@ -387,23 +387,23 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
               )}
             </div>
 
-            <div className="bg-[#FFFBEB] border border-[#FEF3C7] p-8 rounded-[32px] flex items-start gap-5 shadow-sm">
-              <div className="w-10 h-10 bg-[#FEF3C7] rounded-full flex items-center justify-center shrink-0">
-                <Info size={20} className="text-[#D97706]" strokeWidth={2.5} />
+            <div className="bg-amber-50/60 border border-amber-200/50 p-5 rounded-xl flex items-start gap-4">
+              <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <Info size={16} className="text-amber-600" strokeWidth={2.5} />
               </div>
-              <p className="text-[13px] font-black text-[#D97706] leading-relaxed">
+              <p className="text-[12px] font-semibold text-amber-700 leading-relaxed">
                 {getWarningText(selectedTask.type)}
               </p>
             </div>
 
-            <div className="pt-6">
-              <button 
-                type="submit" 
-                disabled={loading} 
-                className="w-full swiggy-btn-gradient text-white font-black py-7 rounded-[36px] flex items-center justify-center gap-3 group uppercase tracking-[0.2em] shadow-2xl transition-all disabled:opacity-50"
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full swiggy-btn-gradient text-white font-black py-5 rounded-xl flex items-center justify-center gap-3 group uppercase tracking-[0.15em] transition-all disabled:opacity-50"
               >
-                <Send size={20} strokeWidth={3} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                <span>{loading ? 'SUBMITTING...' : 'SUBMIT'}</span>
+                <Send size={17} strokeWidth={2.5} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <span>{loading ? 'Submitting...' : 'Submit'}</span>
               </button>
             </div>
           </form>
@@ -413,46 +413,46 @@ const TaskSubmission: React.FC<TaskSubmissionProps> = ({ onSubmit, isAdmin, sele
   }
 
   return (
-    <div className="space-y-12 pb-20 px-2 animate-in fade-in duration-700">
-      <div className="flex items-center gap-6">
-        <h2 className="text-[36px] font-black text-slate-900 tracking-tighter leading-none">Tasks</h2>
+    <div className="space-y-8 pb-20 px-2 animate-in fade-in duration-500">
+      <div className="flex items-center gap-5">
+        <h2 className="heading-display text-[34px] text-[#141414] leading-none">Tasks</h2>
         <HandbookLink label="How do tasks work?" />
       </div>
 
       <WeeklyTaskTracker />
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-4">
         {tasks.map(task => {
           const completion = calculateCompletion(task.id);
           const lastSubmission = submissions.filter(s => s.taskId === task.id).sort((a, b) => b.createdAt - a.createdAt)[0];
-          
+
           return (
-            <button 
-              key={task.id} 
-              onClick={() => setSelectedTask(task)} 
-              className="bg-white px-10 py-9 rounded-[48px] swiggy-shadow border border-slate-50/50 flex items-center justify-between group hover:border-swiggy-orange/30 hover:scale-[1.01] transition-all premium-card-shadow"
+            <button
+              key={task.id}
+              onClick={() => setSelectedTask(task)}
+              className="bg-white px-7 py-6 rounded-xl premium-card-shadow border border-[#E3DDD5] flex items-center justify-between group hover:border-swiggy-orange/40 hover:-translate-y-0.5 transition-all duration-200"
             >
-              <div className="flex items-center gap-10">
-                <div className="w-16 h-16 rounded-[24px] bg-[#F8FAFC] flex items-center justify-center text-slate-400 group-hover:bg-swiggy-light group-hover:text-swiggy-orange transition-all shadow-inner">
-                  {getTaskIcon(task.type, 32)}
+              <div className="flex items-center gap-6">
+                <div className="w-12 h-12 rounded-xl bg-[#F8F5F1] flex items-center justify-center text-[#A09488] group-hover:bg-[#FEF0E6] group-hover:text-swiggy-orange transition-all">
+                  {getTaskIcon(task.type, 22)}
                 </div>
                 <div className="text-left">
-                  <h3 className="text-[22px] font-black text-slate-900 group-hover:text-swiggy-orange transition-colors tracking-tight leading-tight">{task.name}</h3>
+                  <h3 className="text-[17px] font-black text-[#141414] group-hover:text-swiggy-orange transition-colors tracking-tight leading-tight">{task.name}</h3>
                   {lastSubmission && (
-                    <div className={`mt-2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest inline-block ${getStatusColor(lastSubmission.status)}`}>
+                    <div className={`mt-1.5 px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-[0.1em] inline-block ${getStatusColor(lastSubmission.status)}`}>
                       {getStatusLabel(lastSubmission.status)}
                     </div>
                   )}
                 </div>
               </div>
-              
-              <div className="flex items-center gap-10">
+
+              <div className="flex items-center gap-7 shrink-0">
                 <div className="text-right">
-                   <div className="text-[16px] font-black text-slate-900 leading-none group-hover:text-swiggy-orange transition-colors">{completion}%</div>
-                   <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1.5 opacity-60">COMPLETE</div>
+                  <div className="text-[15px] font-black text-[#141414] leading-none group-hover:text-swiggy-orange transition-colors">{completion}%</div>
+                  <div className="text-[9px] font-bold text-[#A09488] uppercase tracking-[0.1em] mt-1">Done</div>
                 </div>
-                <div className="w-12 h-12 rounded-full bg-[#F8FAFC] flex items-center justify-center text-slate-200 group-hover:bg-swiggy-orange group-hover:text-white transition-all shadow-inner">
-                   <ChevronRight size={24} strokeWidth={4} />
+                <div className="w-9 h-9 rounded-lg bg-[#F8F5F1] flex items-center justify-center text-[#D4CEC7] group-hover:bg-swiggy-orange group-hover:text-white transition-all">
+                  <ChevronRight size={18} strokeWidth={3} />
                 </div>
               </div>
             </button>
