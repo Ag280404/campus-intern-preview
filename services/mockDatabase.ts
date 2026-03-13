@@ -136,6 +136,123 @@ const DEFAULT_PROFILES: Record<string, any> = {
     r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
     s: 'https://swiggy.onelink.me/888564224/h6btndnt'
   },
+  'catalyst_scet_w2x9': { 
+    p: 'Sw@2xN!pL5qR', 
+    n: 'Swarnandhra Catalyst', 
+    c: 'c14', 
+    e: 'catalyst.scet@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_iimi_r5t1': { 
+    p: 'Im@5tI!sF8jD', 
+    n: 'IIM Indore Catalyst', 
+    c: 'c15', 
+    e: 'catalyst.iimi@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_iimj_k8m4': { 
+    p: 'Jm@8mJ!qK9xP', 
+    n: 'IIM Jammu Catalyst', 
+    c: 'c16', 
+    e: 'catalyst.iimj@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_nits_v3n7': { 
+    p: 'Nt@3nS!wQ7tG', 
+    n: 'NIT Silchar Catalyst', 
+    c: 'c17', 
+    e: 'catalyst.nits@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_iima_p6q2': { 
+    p: 'Am@6qA!rF8bC', 
+    n: 'IIM Amritsar Catalyst', 
+    c: 'c18', 
+    e: 'catalyst.iima@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_iimk_z9f5': { 
+    p: 'Ks@9fK!uI6oP', 
+    n: 'IIM Kashipur Catalyst', 
+    c: 'c19', 
+    e: 'catalyst.iimk@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_rsmt_h4s8': { 
+    p: 'Rs@4sM!pM3qW', 
+    n: 'RSMT Catalyst', 
+    c: 'c20', 
+    e: 'catalyst.rsmt@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_scitr_j2k5': { 
+    p: 'Sc@2kR!jH4vB', 
+    n: 'SCITR Catalyst', 
+    c: 'c21', 
+    e: 'catalyst.scitr@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_bml_m7n3': { 
+    p: 'Bm@7nM!rL5sK', 
+    n: 'BML Munjal Catalyst', 
+    c: 'c22', 
+    e: 'catalyst.bml@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_parul_u1v4': { 
+    p: 'Pu@1vU!kP9zX', 
+    n: 'Parul University Catalyst', 
+    c: 'c23', 
+    e: 'catalyst.parul@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_pcte_x5y8': { 
+    p: 'Pc@5yE!mN2bV', 
+    n: 'PCTE Catalyst', 
+    c: 'c24', 
+    e: 'catalyst.pcte@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_gec_t2w9': { 
+    p: 'Ge@2wG!hT7fD', 
+    n: 'GEC Catalyst', 
+    c: 'c25', 
+    e: 'catalyst.gec@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
+  'catalyst_oist_q8r4': { 
+    p: 'Oi@8rT!vC4xS', 
+    n: 'OIST Catalyst', 
+    c: 'c26', 
+    e: 'catalyst.oist@campus.com',
+    d: 'https://lookerstudio.google.com/embed/reporting/d36af50c-a8e4-4d3a-93fb-c19135b70d7d/page/b6wkF',
+    r: 'https://urldefense.com/v3/__https://swiggy.onelink.me/888564224/Creative1__;!!BeGeivfSdT4o5A!hsxs5FkMWacQ0_KK95igsSofwQH8Eg88CS-ThbSwXWr-lNTXw3a0dSmPTTAPfznnsxldSstcCcD2WXyjzdzvH58g4g2nK1GGlg$',
+    s: 'https://swiggy.onelink.me/888564224/h6btndnt'
+  },
 };
 
 class MockDatabase {

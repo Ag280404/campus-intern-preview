@@ -15,6 +15,19 @@ export const CAMPUSES: Campus[] = [
   { id: 'c11', name: 'Rajasthan Institute of Engine and Technology', city: 'Jaipur' },
   { id: 'c12', name: 'SKIT JAIPUR', city: 'Jaipur' },
   { id: 'c13', name: 'JECRC FOUNDATION COLLEGE', city: 'Jaipur' },
+  { id: 'c14', name: 'Swarnandhra college of engineering and technology', city: 'Narsapur' },
+  { id: 'c15', name: 'IIM Indore', city: 'Indore' },
+  { id: 'c16', name: 'IIM Jammu', city: 'Jammu' },
+  { id: 'c17', name: 'National Institute of Technology Silchar', city: 'Silchar' },
+  { id: 'c18', name: 'IIM Amritsar', city: 'Amritsar' },
+  { id: 'c19', name: 'Indian Institute of Management Kashipur', city: 'Kashipur' },
+  { id: 'c20', name: 'Rajarshi school of management and technology', city: 'Varanasi' },
+  { id: 'c21', name: 'Sri Chaitanya institute of technology and research', city: 'Khammam' },
+  { id: 'c22', name: 'BML Munjal University', city: 'Gurugram' },
+  { id: 'c23', name: 'Parul University', city: 'Vadodara' },
+  { id: 'c24', name: 'pcte', city: 'Ludhiana' },
+  { id: 'c25', name: 'Gandhi engineering College', city: 'Bhubaneswar' },
+  { id: 'c26', name: 'ORIENTAL INSTITUTE OF SCIENCE AND TECHNOLOGY', city: 'Bhopal' },
 ];
 
 export const TASKS: Task[] = [
